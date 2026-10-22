@@ -1,0 +1,11 @@
+# Python 3.12. Versions of the environment the shared pipeline was built and tested in (22 Oct 2026).
+numpy==1.26.4
+pandas==2.3.3
+pyarrow==22.0.0
+scipy==1.16.3
+scikit-learn==1.7.2
+lightgbm==4.6.0
+matplotlib==3.10.8
+seaborn==0.13.2
+notebook==7.4.7
+ipykernel==6.30.1

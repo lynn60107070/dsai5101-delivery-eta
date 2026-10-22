@@ -1,0 +1,24 @@
+# data: CC BY-NC 4.0, must not be redistributed. Everyone downloads it (common/data.py does it for you)
+data/
+
+# environments
+.venv/
+venv/
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# scratch runs and tuning logs (final runs go to results/final/ and are committed)
+results/runs/
+results/tuning/
+*.pkl
+*.joblib
+
+# OS / editors
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
