@@ -1,0 +1,29 @@
+% [Lynn] Methodology (rubric: 3 marks).
+% Top band: features, baseline, 2+ approaches, hyperparameters AND how they were tuned, validation
+%   strategy, metrics: all specified and justified. Reproducible.
+% FB3: cyclical time of day; every fitted step learned from training days only; why is_weekend was dropped.
+% FB4: the proposal was too dense, so use numbered steps + one table, not packed prose.
+% Lec 7: baseline ladder, loss vs metric (MAE), train-vs-CV error curve (from M4).
+\section{Methodology}
+
+\subsection{Prediction setting and features}
+TODO. % order-time-only rule; feature table (README F1-F9)
+
+\subsection{Baselines and models}
+TODO. All models are implemented in scikit-learn~\cite{pedregosa2011scikit}. % median predictor, platform promise; Elastic-Net, Random Forest, gradient boosting; q80 model
+
+\subsection{Validation, tuning and metrics}
+TODO. % forward-chaining CV on 17-22 Oct, test 23-24 Oct once; random search; MAE/RMSE/R^2, late rate; bootstrap CIs
+
+% \begin{table}[t]
+% \centering
+% \caption{Models, tuned hyperparameters and search ranges.}
+% \label{tab:models}
+% \begin{tabular}{lll}
+% \toprule
+% Model & Hyperparameters & Search range \\
+% \midrule
+% ... \\
+% \bottomrule
+% \end{tabular}
+% \end{table}

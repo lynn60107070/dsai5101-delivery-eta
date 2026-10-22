@@ -1,0 +1,23 @@
+% [Mahmoud] Results and Discussion (rubric: 3 marks), with paragraphs from Sumaiya (leakage audit,
+% stage analysis) and Lynn (promise test).
+% Top band: clear labelled figures and tables; FAIR comparison against the baseline; error analysis and
+%   interpretation of what the model learned; robustness; whether differences are MEANINGFUL (bootstrap CIs).
+% Rubric note: a report whose only result is a single model score cannot reach the top band.
+% Say whether each proposal expectation held (distance/peaks/load top drivers; -20% MAE; errors up at peaks).
+% All numbers from results/final/ (CP4), never v0.
+\section{Results and Discussion}
+
+\subsection{Model comparison}
+TODO. % Table: test MAE/RMSE/R^2/late rate for median, promise, Elastic-Net, RF, boosting + bootstrap CIs
+
+\subsection{Delay drivers}
+TODO. % grouped permutation importance (M5)
+
+\subsection{Where the model fails}
+TODO. % errors by district, hour, distance, test day (M6)
+
+\subsection{Leakage audit and delivery stages}
+TODO. % [Sumaiya] S5, S6
+
+\subsection{Promise setting}
+TODO. % [Lynn] L4: q80 vs platform at the same mean promised time

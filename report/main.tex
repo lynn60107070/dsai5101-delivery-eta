@@ -1,0 +1,50 @@
+% DSAI 5101 final report: IEEE two-column conference format, 4-6 pages excluding references and appendices.
+% Each section lives in its own file (owner in brackets). Edit only your own file; Lynn assembles.
+% Checklist per section: DELIVERABLES.md section 2 and ALIGNMENT.md.
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{booktabs}   % \toprule \midrule \bottomrule for tables
+\usepackage{amsmath}
+\usepackage{siunitx}    % \SI{6.3}{\minute}, \num{546340}
+\usepackage{cite}
+\usepackage{url}
+\graphicspath{{figures/}}  % upload figures/eda/*.pdf and figures/results/*.pdf here
+
+\begin{document}
+
+\title{Predicting Food Delivery Time and Its Key Delay Drivers\\for ETA and Dispatch Support}
+
+\author{
+\IEEEauthorblockN{Lynn Younes}
+\IEEEauthorblockA{60107070}
+\and
+\IEEEauthorblockN{Sumaiya Rizwan}
+\IEEEauthorblockA{60102626}
+\and
+\IEEEauthorblockN{Mahmoud Abdelaziz}
+\IEEEauthorblockA{60328910}
+\and
+\IEEEauthorblockA{DSAI 5101 Principles of Data Science and Machine Learning, Fall 2026\\
+University of Doha for Science and Technology}
+}
+
+\maketitle
+
+\input{abstract}      % [Lynn]
+\input{intro}         % [Lynn]
+\input{related}       % [Sumaiya]
+\input{data}          % [Sumaiya]
+\input{method}        % [Lynn]
+\input{results}       % [Mahmoud, with Sumaiya: audit/stages, Lynn: promise test]
+\input{conclusion}    % [Lynn]
+
+\section*{Acknowledgements}
+This research was supported by data provided by Meituan.  % required by the dataset licence
+% AI use (required by the guidelines, section 4): fill from README section 6 before submitting [Lynn, L9].
+% Code and data: give the repository link and the dataset link here (instructor must have access).
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}
