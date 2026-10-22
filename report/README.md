@@ -6,7 +6,7 @@ comments on what the rubric's top band needs and which proposal-feedback point (
 
 **Set up on Overleaf (L2):** zip this `report/` folder → Overleaf → New Project → Upload Project → share
 with Sumaiya and Mahmoud (Share → edit access). Create a `figures/` folder there for exported PDFs.
-Overleaf link: TODO(Lynn, L2)
+Overleaf link: https://www.overleaf.com/project/6ada6c3267d51580a9db57f5 (ask Lynn for edit access)
 
 Overleaf is the working copy from then on. Copy the `.tex` files back here before submitting, so the repo
 holds the final source.
