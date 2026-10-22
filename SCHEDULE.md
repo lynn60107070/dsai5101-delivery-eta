@@ -24,6 +24,7 @@ the EDA, encode time carefully, fit only on training days, and plan what to cut.
 | Checkpoint | Date | Where the team should be |
 |---|---|---|
 | Kick-off | Thu 22 Oct | Repo handed over; everyone sets up (30 min) |
+| **CP0** | **Fri 23 Oct** | **Everyone set up**: proof posted in the group chat (no call) |
 | **CP1** | **Sun 25 Oct** | Everyone set up and has run their own model on the full data; data audit numbers done; report skeleton on Overleaf |
 | **CP2** | **Thu 29 Oct** | **Cleaning + features frozen (v1)**; EDA v1; distance method chosen; 2 sources each in `refs.bib` |
 | **CP3** | **Wed 4 Nov** | **All models tuned on CV and frozen**; leakage audit, stage analysis, importance, promise test done on CV |
@@ -60,7 +61,7 @@ Owns `common/clean.py`, `common/features.py`, `notebooks/01_*`–`03_*`, `figure
 
 | ID | Task | Effort | Due |
 |---|---|---|---|
-| S1 | Setup: clone, venv, `python -m unittest` passes, `python -m experiments.run --model median` works | 30 min | Fri 23 |
+| S1 | Setup: clone, venv, `python -m unittest` passes, `python -m experiments.run --model median` works; post the four commands (`shape`, `info`, `describe`, `isna().sum()`) on the raw file [Lec 3] | 30 min | **CP0** |
 | S2 | `notebooks/01_data_audit.ipynb`: the four commands; **data dictionary** (every column: meaning, units, valid range, issues); quantify every quirk (refused dispatches, zeros per column, pre-booked, durations > 3 h, missing prep time, coordinate ranges, timestamp-order checks) as **one before → after table** for the report [FB2, Lec 2–3] | 3–4 h | **CP1** |
 | S3 | `notebooks/02_eda.ipynb`: target centre/spread/shape + log decision (v0 CV says log is *worse* for Elastic-Net), delivery time vs distance / hour / load (Spearman), **Simpson check within districts**, delay (actual − promise) by district and hour, missing-prep rows vs complete rows. **Each figure: a title stating the finding + which modelling choice it informs** [FB2, P, Lec 3–5] | 5–6 h | **CP2** |
 | S4 | Cleaning + features v1: replace the v0 rules in `clean.py` with justified ones (outlier decision tree from Lec 3), add features EDA suggests (any restaurant-level feature must be computed inside CV folds, Lec 6), log each rule in README §4 → **freeze** [FB2, P] | 3–4 h | **CP2** |
@@ -76,7 +77,7 @@ Owns `models/baselines.py`, `models/linear.py`, `models/promise.py`, `experiment
 
 | ID | Task | Effort | Due |
 |---|---|---|---|
-| L1 | Hand over: GitHub repo, add Sumaiya and Mahmoud, fill `.github/CODEOWNERS` | 30 min | Fri 23 |
+| L1 | Hand over: GitHub repo, add Sumaiya and Mahmoud, fill `.github/CODEOWNERS` | 30 min | **CP0** |
 | L2 | Overleaf IEEE two-column skeleton, one file per section, shared with both | 1 h | **CP1** |
 | L3 | Elastic-Net: tune with `experiments.tune`, raw vs log target, interpret coefficients (the interpretable end of Lec 1's prediction/inference trade-off) [P, Lec 7] | 3 h | **CP3** |
 | L4 | Promise test: tune `hgb_q80`; shift its predictions so the mean promised time equals the platform's, then compare late rate, pinball loss, coverage; vary the late threshold (5 / 10 min) [P, Lec 2 business evaluation] | 4–5 h | **CP3** |
@@ -91,7 +92,7 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 
 | ID | Task | Effort | Due |
 |---|---|---|---|
-| M1 | Setup (as S1) | 30 min | Fri 23 |
+| M1 | Setup (tests + median as S1); post one `python -m experiments.run --model hgb --sample 100000` result | 30 min | **CP0** |
 | M2 | Boosting + RF on the full training data; decide HistGradientBoosting vs LightGBM [P] | 2 h | **CP1** |
 | M3 | Distance comparison: `--features base` vs `base_manhattan`, same model, CV MAE + bootstrap (v0: 6.32 vs 6.31, so the bootstrap decides) → pick one, tell Sumaiya [P] | 1 h | **CP2** |
 | M4 | Tune HGB (incl. `loss=absolute_error`, since we report MAE) and RF with `experiments.tune` on the frozen features (start after CP2) + **one training-vs-CV error curve** over a complexity setting for the report [P, Lec 7] | 3 h + run time | **CP3** |
@@ -115,7 +116,10 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 
 ## Checkpoint checklists
 
-**CP1 · Sun 25 Oct:** S1 S2 · L1 L2 · M1 M2 · T2
+**CP0 · Fri 23 Oct (in the chat, by 10 pm):** S1 · L1 · M1. Each person posts a screenshot of
+`python -m unittest` (14 tests OK) and `python -m experiments.run --model median` (MAE 9.26), plus the
+extra output in their task. Stuck on setup? Say so in the chat right away. Don't wait until Sunday.
+**CP1 · Sun 25 Oct:** S2 · L2 · M2 · T2
 **CP2 · Thu 29 Oct:** S3 S4 (freeze) · M3 · T1
 **CP3 · Wed 4 Nov:** S5 S6 S7 · L3 L4 · M4 M5 (models frozen)
 **CP4 · Sun 8 Nov:** S8 · L5 L6 · M6 M7 (all experiments final)
