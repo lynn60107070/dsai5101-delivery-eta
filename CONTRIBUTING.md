@@ -7,8 +7,8 @@ You only build and improve your own part.
 ## 1. One-time setup (Windows, cmd)
 
 ```bat
-git clone <repo url>
-cd <repo folder>
+git clone https://github.com/lynn60107070/dsai5101-delivery-eta.git
+cd dsai5101-delivery-eta
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
