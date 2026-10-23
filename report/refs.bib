@@ -16,3 +16,46 @@
   pages   = {2825--2830},
   year    = {2011}
 }
+
+% --- T1, Lynn (related work: promise setting / on-time delivery, and leakage) ---
+
+% Lynn: Uses a food-delivery platform's data to predict travel times and feeds them into order
+% assignment to improve on-time delivery. Same operational goal as our promise test, but they act on
+% dispatch (who delivers) while we act on the promise itself, using only order-time information.
+@article{liu2021ontime,
+  author  = {Liu, Sheng and He, Long and Shen, Zuo-Jun Max},
+  title   = {On-Time Last-Mile Delivery: Order Assignment with Travel-Time Predictors},
+  journal = {Management Science},
+  volume  = {67},
+  number  = {7},
+  pages   = {4095--4119},
+  year    = {2021},
+  doi     = {10.1287/mnsc.2020.3741}
+}
+
+% Lynn: Surveys leakage across 17 fields (294 affected papers) and gives a taxonomy of eight leakage
+% types; also cited in Lec 6. Motivates our leakage audit: we show how much error drops when
+% after-order times leak in, and why the deployable model must exclude them.
+@article{kapoor2023leakage,
+  author  = {Kapoor, Sayash and Narayanan, Arvind},
+  title   = {Leakage and the Reproducibility Crisis in Machine-Learning-Based Science},
+  journal = {Patterns},
+  volume  = {4},
+  number  = {9},
+  pages   = {100804},
+  year    = {2023},
+  doi     = {10.1016/j.patter.2023.100804}
+}
+
+% Lynn (methods, not related work): quantile regression, the basis of the 80th-percentile promise
+% model and the pinball loss we evaluate it with. Cite in Methodology.
+@article{koenker1978quantiles,
+  author  = {Koenker, Roger and Bassett, Jr., Gilbert},
+  title   = {Regression Quantiles},
+  journal = {Econometrica},
+  volume  = {46},
+  number  = {1},
+  pages   = {33--50},
+  year    = {1978},
+  doi     = {10.2307/1913643}
+}
