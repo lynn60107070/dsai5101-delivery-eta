@@ -29,7 +29,7 @@ platform at the same average promised time.
 | `requirements_rubric/` | Project guidelines + proposal, presentation and report rubrics |
 | `common/` | Shared, tested pipeline: `config.py` (paths, dates, seed), `data.py` (download + cached table), `clean.py`, `features.py`, `split.py`, `evaluate.py` |
 | `models/` | One file per model, all following one contract (see CONTRIBUTING §3) |
-| `experiments/` | `run.py` (fit + score any model), `tune.py` (random search on CV), `compare.py` (paired bootstrap) |
+| `experiments/` | `run.py` (fit + score any model), `tune.py` (random search on CV), `compare.py` (paired bootstrap), `promise_test.py` (L4), `final.py` (every final result + report tables, L5/L6), `final_params/` (frozen settings, CP3) |
 | `notebooks/` | Analysis notebooks, numbered (see `notebooks/README.md`) |
 | `figures/` | Report-quality figures: `eda/` (Sumaiya), `results/` (Mahmoud) |
 | `report/` | `refs.bib` + link to the Overleaf IEEE report |

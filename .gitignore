@@ -22,3 +22,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# final predictions are large and rebuilt by `python -m experiments.final`; summaries, tables and manifest are committed
+results/final/**/predictions.parquet

@@ -80,9 +80,9 @@ Owns `models/baselines.py`, `models/linear.py`, `models/promise.py`, `experiment
 | L1 | Hand over: GitHub repo, add Sumaiya and Mahmoud, fill `.github/CODEOWNERS` | 30 min | **CP0** |
 | L2 | Overleaf IEEE two-column skeleton, one file per section, shared with both | 1 h | **CP1** |
 | L3 | Elastic-Net: tune with `experiments.tune`, raw vs log target, interpret coefficients (the interpretable end of Lec 1's prediction/inference trade-off) [P, Lec 7] | 3 h | **CP3** |
-| L4 | Promise test: tune `hgb_q80`; shift its predictions so the mean promised time equals the platform's, then compare late rate, pinball loss, coverage; vary the late threshold (5 / 10 min) [P, Lec 2 business evaluation] | 4–5 h | **CP3** |
-| L5 | `experiments/final.py`: one command reruns every final model on test into `results/final/` and writes the report tables | 3 h | **CP4** |
-| L6 | Bootstrap table with `experiments.compare`: every model vs median and vs promise, best vs second best | 1 h | **CP4** |
+| L4 | Promise test (**code + figure done 23 Oct**, `experiments/promise_test.py`): tune `hgb_q80`; shift its predictions so the mean promised time equals the platform's, then compare late rate, pinball loss, coverage; vary the late threshold (5 / 10 min) [P, Lec 2 business evaluation] | 4–5 h | **CP3** |
+| L5 | `experiments/final.py`: one command reruns every final model on test into `results/final/` and writes the report tables. **Code done 23 Oct**; at CP4: freeze params in `experiments/final_params/`, run with `--eval test --i-am-at-cp4` | 3 h → 30 min | **CP4** |
+| L6 | Bootstrap table: every model vs median and vs promise (**built into `final.py`, done 23 Oct**); add best vs second best with `experiments.compare` | 1 h → 15 min | **CP4** |
 | L7 | Report: abstract, introduction (**the research question as one sentence**, T/P/E, success criteria, contributions), methodology (numbered steps + one table, not dense prose), conclusion (limitations incl. weekend, ethics, monitoring/drift) [FB1, FB4, Lec 1–2] | 6 h | **CP5** |
 | L8 | Slide template; problem + research question in the first minute, methods, promise test (~3.5 min); one idea per slide; assemble the deck [FB1, FB4] | 2 h | **CP5** |
 | L9 | References + AI-use acknowledgement + Meituan data acknowledgement; submit on D2L | 2 h | Sun 29 Nov |
@@ -117,7 +117,7 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 ## Checkpoint checklists
 
 **CP0 · Fri 23 Oct (in the chat, by 10 pm):** S1 · L1 · M1. Each person posts a screenshot of
-`python -m unittest` (16 tests OK) and `python -m experiments.run --model median` (MAE 9.26), plus the
+`python -m unittest` (17 tests OK) and `python -m experiments.run --model median` (MAE 9.26), plus the
 extra output in their task. Stuck on setup? Say so in the chat right away. Don't wait until Sunday.
 **CP1 · Sun 25 Oct:** S2 · L2 · M2 · T2
 **CP2 · Thu 29 Oct:** S3 S4 (freeze) · M3 · T1

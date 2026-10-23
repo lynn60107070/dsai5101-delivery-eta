@@ -20,7 +20,7 @@ Check that everything works (offline, about 5 s, no data needed):
 python -m unittest -v
 ```
 
-All 16 tests must pass. They also prove two things the proposal feedback asked about: time of day is
+All 17 tests must pass. They also prove two things the proposal feedback asked about: time of day is
 encoded cyclically, and fitted steps (imputer, scaler, encoder) only ever learn from training days. Then run the median baseline on the real data. The first run downloads the
 dataset (39 MB) into `data/raw/` and builds the cached table in `data/processed/` (about 1 min):
 
@@ -89,6 +89,10 @@ python -m experiments.run --model hgb --features leaky                  :: leaka
 :: tuning: random search, scored by mean CV MAE (pinball loss for hgb_q80)
 python -m experiments.tune --model hgb --n-iter 20 --sample 150000
 python -m experiments.run --model hgb --params-from results\tuning\hgb_base.json
+
+:: CP4: every final model, the report tables and figure, from one command (frozen settings in experimentsinal_params\)
+python -m experiments.final                              :: CV mode, safe any time
+python -m experiments.final --eval test --i-am-at-cp4    :: test days, once, at CP4
 
 :: is A really better than B? paired bootstrap on the same orders
 python -m experiments.compare results\runs\hgb_base_cv results\runs\median_base_cv

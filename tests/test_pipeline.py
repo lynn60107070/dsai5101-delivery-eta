@@ -178,6 +178,24 @@ class TestRunner(unittest.TestCase):
             hgb = json.loads((Path(td) / "runs/hgb/summary.json").read_text())["model"]["mae"]
             self.assertLess(hgb, median)  # the fake target depends on distance, so boosting must win
 
+    def test_final_builds_every_table_and_guards_the_test_days(self):
+        from experiments import final
+        table = fake_table()
+        with tempfile.TemporaryDirectory() as td, \
+                mock.patch.object(final, "RESULTS", Path(td)), mock.patch.object(final, "load_table", lambda: table), \
+                mock.patch.object(final, "TABLES_DIR", Path(td) / "tables"), \
+                mock.patch.object(final, "FIGURES_DIR", Path(td) / "figures"), \
+                mock.patch.object(final, "PARAMS_DIR", Path(td) / "params"):
+            with self.assertRaises(SystemExit):
+                final.main(["--eval", "test"])  # test days need --i-am-at-cp4
+            self.assertFalse((Path(td) / "final" / "test").exists())
+            final.main([])
+            manifest = json.loads((Path(td) / "final/cv/manifest.json").read_text())
+            self.assertEqual(set(manifest["models"]), {m["model"] for m in final.FINAL_MODELS})
+            self.assertIn("Gradient boosting", (Path(td) / "tables/main_results_cv.tex").read_text())
+            self.assertTrue((Path(td) / "tables/promise_test_cv.tex").exists())
+            self.assertTrue((Path(td) / "figures/final_cv_gap.pdf").exists())
+
     def test_tune_writes_best_params(self):
         table = fake_table()
         with tempfile.TemporaryDirectory() as td, \
