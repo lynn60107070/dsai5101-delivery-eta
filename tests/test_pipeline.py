@@ -136,6 +136,31 @@ class TestEvaluate(unittest.TestCase):
         self.assertLess(r["ci95"][1], 0)
 
 
+class TestPromiseTest(unittest.TestCase):
+    def test_late_rate_thresholds(self):
+        from experiments.promise_test import late_rate
+        y, promise = [10, 20, 30], [12, 14, 21]  # arrive 2 early, 6 late, 9 late
+        self.assertAlmostEqual(late_rate(y, promise, 0), 2 / 3)
+        self.assertAlmostEqual(late_rate(y, promise, 5), 2 / 3)
+        self.assertAlmostEqual(late_rate(y, promise, 8), 1 / 3)
+
+    def test_same_mean_comparison(self):
+        """The model's promises are shifted so both have the same mean; a model that is the platform
+        minus 3 minutes must then match the platform exactly."""
+        from experiments.promise_test import compare
+        rng = np.random.default_rng(0)
+        y = rng.gamma(9, 3, 2000)
+        platform = y + rng.normal(5, 4, 2000)
+        pred = pd.DataFrame({"y": y, "pred": platform - 3, "promise": platform})
+        r = compare(pred)
+        sm = r["same_mean"]
+        self.assertAlmostEqual(sm["shift_min"], 3.0)
+        self.assertAlmostEqual(sm["model"]["mean_promise"], sm["platform"]["mean_promise"])
+        for t in (0, 5, 10):
+            self.assertAlmostEqual(sm["late_rate_diff"][f"{t}min"]["diff"], 0.0)
+        self.assertGreater(r["as_is"]["model"]["late_rate_0min"], r["as_is"]["platform"]["late_rate_0min"])
+
+
 class TestRunner(unittest.TestCase):
     def test_every_model_runs_end_to_end(self):
         table = fake_table()

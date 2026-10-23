@@ -20,7 +20,7 @@ Check that everything works (offline, about 5 s, no data needed):
 python -m unittest -v
 ```
 
-All 14 tests must pass. They also prove two things the proposal feedback asked about: time of day is
+All 16 tests must pass. They also prove two things the proposal feedback asked about: time of day is
 encoded cyclically, and fitted steps (imputer, scaler, encoder) only ever learn from training days. Then run the median baseline on the real data. The first run downloads the
 dataset (39 MB) into `data/raw/` and builds the cached table in `data/processed/` (about 1 min):
 

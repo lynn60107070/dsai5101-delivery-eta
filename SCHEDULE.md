@@ -117,7 +117,7 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 ## Checkpoint checklists
 
 **CP0 · Fri 23 Oct (in the chat, by 10 pm):** S1 · L1 · M1. Each person posts a screenshot of
-`python -m unittest` (14 tests OK) and `python -m experiments.run --model median` (MAE 9.26), plus the
+`python -m unittest` (16 tests OK) and `python -m experiments.run --model median` (MAE 9.26), plus the
 extra output in their task. Stuck on setup? Say so in the chat right away. Don't wait until Sunday.
 **CP1 · Sun 25 Oct:** S2 · L2 · M2 · T2
 **CP2 · Thu 29 Oct:** S3 S4 (freeze) · M3 · T1

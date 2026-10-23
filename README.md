@@ -116,7 +116,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | `rf` v0, 50k sample | 6.46 | 9.50 | |
 | `hgb` v0 defaults, 100k sample | 6.32 | 9.48 | −32% vs median before any tuning |
 | `hgb` Manhattan distance, 100k sample | 6.31 | 9.48 | distance choice barely matters (M3) |
-| `hgb_q80` v0, 50k sample | 8.25 | 9.50 | late rate 9.4% vs promise 4.8%, but mean promise 35.2 vs 37.6 min: compare at the *same* mean (L4) |
+| `hgb_q80` v0, all training rows | 8.29 | 9.51 | **Promise test (L4)** at the same mean promise (37.7 min): late after the promise 14.6% vs platform 14.9% (−0.3 pp, CI −0.4 to −0.2); late > 5 min 5.6% vs 4.8% (+0.8 pp). The platform is better at avoiding *very* late orders, the risk the proposal named. Untuned; rerun after CP2. `python -m experiments.promise_test results/runs/hgb_q80_base_cv` |
 | `hgb` with `--features leaky`, 50k sample | 4.67 | 9.50 | how much error is information we don't have at order time (S5) |
 
 Final numbers come from `results/final/` at CP4. Never quote these v0 numbers in the report.
