@@ -1,16 +1,15 @@
 # Each file's owner must approve pull requests that touch it.
-# TODO(Lynn): replace @SUMAIYA_GITHUB with her GitHub username (L1).
 *                       @lynn60107070
-/common/clean.py        @SUMAIYA_GITHUB
-/common/features.py     @SUMAIYA_GITHUB @m0d9
+/common/clean.py        @Sumaiya-Riz
+/common/features.py     @Sumaiya-Riz @m0d9
 /models/baselines.py    @lynn60107070
 /models/linear.py       @lynn60107070
 /models/promise.py      @lynn60107070
 /models/boosting.py     @m0d9
 /models/forest.py       @m0d9
 /experiments/           @lynn60107070
-/figures/eda/           @SUMAIYA_GITHUB
+/figures/eda/           @Sumaiya-Riz
 /figures/results/       @m0d9
-/common/config.py       @lynn60107070 @SUMAIYA_GITHUB @m0d9
-/common/split.py        @lynn60107070 @SUMAIYA_GITHUB @m0d9
-/common/evaluate.py     @lynn60107070 @SUMAIYA_GITHUB @m0d9
+/common/config.py       @lynn60107070 @Sumaiya-Riz @m0d9
+/common/split.py        @lynn60107070 @Sumaiya-Riz @m0d9
+/common/evaluate.py     @lynn60107070 @Sumaiya-Riz @m0d9
