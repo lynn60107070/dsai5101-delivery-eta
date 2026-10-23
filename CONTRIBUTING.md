@@ -90,7 +90,7 @@ python -m experiments.run --model hgb --features leaky                  :: leaka
 python -m experiments.tune --model hgb --n-iter 20 --sample 150000
 python -m experiments.run --model hgb --params-from results\tuning\hgb_base.json
 
-:: CP4: every final model, the report tables and figure, from one command (frozen settings in experimentsinal_params\)
+:: CP4: every final model, the report tables and figure, from one command (frozen settings in experiments/final_params/)
 python -m experiments.final                              :: CV mode, safe any time
 python -m experiments.final --eval test --i-am-at-cp4    :: test days, once, at CP4
 
