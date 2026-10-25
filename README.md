@@ -32,7 +32,7 @@ platform at the same average promised time.
 | `experiments/` | `run.py` (fit + score any model), `tune.py` (random search on CV), `compare.py` (paired bootstrap), `promise_test.py` (L4), `final.py` (every final result + report tables, L5/L6), `final_params/` (frozen settings, CP3) |
 | `notebooks/` | Analysis notebooks, numbered (see `notebooks/README.md`) |
 | `figures/` | Report-quality figures: `eda/` (Sumaiya), `results/` (Mahmoud) |
-| `report/` | `refs.bib` + link to the Overleaf IEEE report |
+| `report/` | The IEEE report: `main.tex` + one file per section, `refs.bib`. Written here by PR; Lynn's Overleaf only builds the PDF (`report/README.md`) |
 | `presentation/` | Slides (PDF export) + Q&A prep sheet |
 | `results/runs/` | Scratch runs (git-ignored). `results/final/`: committed final runs (CP4) |
 | `data/` | Raw CSV + cached table, **git-ignored** (licence forbids redistribution) |

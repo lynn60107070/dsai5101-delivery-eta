@@ -132,4 +132,6 @@ python -m experiments.compare results\runs\hgb_base_cv promise
 3. Run `python -m unittest` before every pull request.
 4. Open a PR into `main`. Another teammate reviews it before merging. Reviewing also prepares you
    for the Q&A, where anyone can be asked about any part.
-5. Never commit `data/` or large model files. Notebooks: clear huge outputs before committing.
+5. **The report works the same way:** edit only your own `report/*.tex` files and open a PR. Lynn merges it
+   and builds the PDF on Overleaf (details in `report/README.md`).
+6. Never commit `data/` or large model files. Notebooks: clear huge outputs before committing.

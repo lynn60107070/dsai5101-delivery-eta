@@ -25,7 +25,7 @@ the EDA, encode time carefully, fit only on training days, and plan what to cut.
 |---|---|---|
 | Kick-off | Thu 22 Oct | Repo handed over; everyone sets up (30 min) |
 | **CP0** | **Fri 23 Oct** | **Everyone set up**: proof posted in the group chat (no call) |
-| **CP1** | **Sun 25 Oct** | Everyone set up and has run their own model on the full data; data audit numbers done; report skeleton on Overleaf |
+| **CP1** | **Sun 25 Oct** | Everyone set up and has run their own model on the full data; data audit numbers done; report skeleton in `report/` |
 | **CP2** | **Thu 29 Oct** | **Cleaning + features frozen (v1)**; EDA v1; distance method chosen; 2 sources each in `refs.bib` |
 | **CP3** | **Wed 4 Nov** | **All models tuned on CV and frozen**; leakage audit, stage analysis, importance, promise test done on CV |
 | **CP4** | **Sun 8 Nov** | **All experiments final**: test set scored once, all tables and figures final, one script rebuilds everything |
@@ -78,7 +78,7 @@ Owns `models/baselines.py`, `models/linear.py`, `models/promise.py`, `experiment
 | ID | Task | Effort | Due |
 |---|---|---|---|
 | L1 | Hand over: GitHub repo, add Sumaiya and Mahmoud, fill `.github/CODEOWNERS` | 30 min | **CP0** |
-| L2 | Overleaf IEEE two-column skeleton, one file per section, shared with both | 1 h | **CP1** |
+| L2 | IEEE two-column report skeleton in `report/`, one file per section; Lynn's Overleaf builds the PDF (sections come in by PR, see `report/README.md`) ✅ | 1 h | **CP1** |
 | L3 | Elastic-Net: tune with `experiments.tune`, raw vs log target, interpret coefficients (the interpretable end of Lec 1's prediction/inference trade-off) [P, Lec 7] | 3 h | **CP3** |
 | L4 | Promise test (**code + figure done 23 Oct**, `experiments/promise_test.py`): tune `hgb_q80`; shift its predictions so the mean promised time equals the platform's, then compare late rate, pinball loss, coverage; vary the late threshold (5 / 10 min) [P, Lec 2 business evaluation] | 4–5 h | **CP3** |
 | L5 | `experiments/final.py`: one command reruns every final model on test into `results/final/` and writes the report tables. **Code done 23 Oct**; at CP4: freeze params in `experiments/final_params/`, run with `--eval test --i-am-at-cp4` | 3 h → 30 min | **CP4** |
