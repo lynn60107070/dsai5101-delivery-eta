@@ -22,8 +22,9 @@ Sources: `requirements_rubric/DSAI5101_Project_Info.pdf` and the three rubric PD
 | Q&A prep sheet: ~15 likely questions with short answers (why time split? why MAE? why not courier features? what if weather? leakage?) | Q&A: Understanding (1.5) + Reasoning (1) | All | CP6 |
 | Every member can answer about the **whole** project; notebook + figures open during Q&A | Group Engagement (0.5) | All | 20 Nov |
 
-Speaking order (draft): Lynn (problem + question, ~1 min) → Sumaiya (data + EDA, ~3 min) → Lynn (methods +
-evaluation, ~2 min) → Mahmoud (results + drivers + errors, ~3 min) → Lynn (promise test + conclusion, ~1 min).
+Slide-by-slide plan (titles, figures, speakers, timing): [presentation/outline.md](presentation/outline.md). Deck built in
+Canva. Speaking order: Lynn (problem) → Sumaiya (data + EDA) → Lynn (methods) → Mahmoud (results) → Lynn (promise
+test) → Mahmoud (conclusion), about 3 min each.
 
 ## 2. Final report: 15% · submit **Sun 29 Nov** (deadline Thu 3 Dec) · IEEE two-column, 4–6 pages excl. references
 
