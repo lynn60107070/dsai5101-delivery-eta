@@ -9,7 +9,6 @@ The parameters use the HistGradientBoosting names. For LightGBM they are renamed
 equivalents, so SEARCH_SPACE and any tuned params file work for both engines.
 """
 
-from lightgbm import LGBMRegressor
 from scipy.stats import loguniform, randint
 from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.pipeline import make_pipeline
@@ -29,6 +28,9 @@ _LGBM_LOSS = {"squared_error": "regression", "absolute_error": "l1"}
 
 
 def _lgbm(seed, **params):
+    # imported here so the default HGB path works even where LightGBM can't load (on a Mac it needs libomp)
+    from lightgbm import LGBMRegressor
+
     params = {_LGBM_NAMES.get(k, k): v for k, v in params.items()}
     if "loss" in params:
         params["objective"] = _LGBM_LOSS[params.pop("loss")]
