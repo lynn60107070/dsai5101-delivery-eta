@@ -94,7 +94,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 
 | # | Feature | Why | Status |
 |---|---|---|---|
-| F1 | `dist_haversine_km` (alternative `dist_manhattan_km`) | Proposal: choose by validation MAE (M3). v0: 6.32 vs 6.31, too close to call without a bootstrap | v0 |
+| F1 | `dist_haversine_km` (alternative `dist_manhattan_km`) | Proposal: choose by validation MAE. **M3 (26 Oct):** HGB on full training data, CV MAE 6.284 vs 6.282 (Manhattan − Haversine −0.002 min, 95% CI −0.007 to +0.003, includes 0) → no real difference, keep Haversine (simpler, default). `base_manhattan` stays as the comparison set for the report | final |
 | F2 | `prep_min`: estimated meal-ready time − order time | Known at placement; median-imputed inside the pipeline | v0 |
 | F3 | `prep_missing` flag | Missingness can carry signal (Lec 6) | v0 |
 | F4 | `tod_sin`, `tod_cos` (time of day, cyclical) | 23:59 and 00:00 are close (Lec 6, **proposal feedback**) | final |
