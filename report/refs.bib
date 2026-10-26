@@ -59,3 +59,56 @@
   year    = {1978},
   doi     = {10.2307/1913643}
 }
+
+% --- T1, Mahmoud (added by Lynn): related work on delivery-time / ETA prediction ---
+
+% Mahmoud: Estimates the full order-to-delivery time ("order fulfillment cycle time") for Ele.me's food
+% delivery platform; the model is deployed there. Closest prior work to ours (same target, same setting),
+% but built on rich proprietary platform data. We use a public dataset with order-time features only,
+% tree ensembles, an explicit leakage audit, and a comparison against the platform's own promise.
+@inproceedings{zhu2020fulfillment,
+  author    = {Zhu, Lin and Yu, Wei and Zhou, Kairong and Wang, Xing and Feng, Wenxing and Wang, Pengyu and
+               Chen, Ning and Lee, Pei},
+  title     = {Order Fulfillment Cycle Time Estimation for On-Demand Food Delivery},
+  booktitle = {Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining},
+  pages     = {2571--2580},
+  year      = {2020},
+  doi       = {10.1145/3394486.3403307}
+}
+
+% Mahmoud: Travel-time (ETA) estimation for DiDi ride-hailing with a Wide-Deep-Recurrent (WDR) model
+% learned from large-scale trip data. Shows ETA prediction as a learning problem at industry scale; food
+% delivery adds a restaurant preparation stage before the ride, which our stage analysis separates out.
+@inproceedings{wang2018travel,
+  author    = {Wang, Zheng and Fu, Kun and Ye, Jieping},
+  title     = {Learning to Estimate the Travel Time},
+  booktitle = {Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining},
+  pages     = {858--866},
+  year      = {2018},
+  doi       = {10.1145/3219819.3219900}
+}
+
+% Mahmoud (methods, not related work): Random Forest, and the permutation importance idea we use for the
+% delay drivers (M5). Cite in Methodology.
+@article{breiman2001random,
+  author  = {Breiman, Leo},
+  title   = {Random Forests},
+  journal = {Machine Learning},
+  volume  = {45},
+  number  = {1},
+  pages   = {5--32},
+  year    = {2001},
+  doi     = {10.1023/A:1010933404324}
+}
+
+% Mahmoud (methods, not related work): gradient boosting, the basis of our main model. Cite in Methodology.
+@article{friedman2001greedy,
+  author  = {Friedman, Jerome H.},
+  title   = {Greedy Function Approximation: A Gradient Boosting Machine},
+  journal = {The Annals of Statistics},
+  volume  = {29},
+  number  = {5},
+  pages   = {1189--1232},
+  year    = {2001},
+  doi     = {10.1214/aos/1013203451}
+}
