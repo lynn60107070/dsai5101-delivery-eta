@@ -24,6 +24,7 @@ from common.config import UTC_OFFSET_HOURS
 
 EARTH_RADIUS_KM = 6371.0
 LOAD_WINDOW_MIN = 15
+LOAD_BASELINE_H = 24  # relative load: compared with this area's average over the previous 24 h
 AFTER_ORDER = ["promise_min", "courier_id", "dispatch_min", "grab_min", "fetch_min", "delivery_min"]
 
 
@@ -61,12 +62,20 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     # Cyclical time of day (Lecture 6; proposal feedback): 23:59 and 00:00 end up next to each other
     df["tod_sin"] = np.sin(2 * np.pi * df["minute_of_day"] / 1440)
     df["tod_cos"] = np.cos(2 * np.pi * df["minute_of_day"] / 1440)
-    df["lunch_peak"] = df["hour"].between(10, 12).astype(int)  # v0: from the order-count by hour
+    # v1: the hours whose median delivery time (training days) is above the overall median (02_eda §9)
+    df["lunch_peak"] = (df["hour"] == 11).astype(int)
     df["dinner_peak"] = df["hour"].between(17, 19).astype(int)
-    # Missingness as a feature (Lecture 6): the imputer fills prep_min, this keeps the fact it was missing
+    # Missingness as a feature (Lecture 6): the imputer fills prep_min, this keeps the fact it was missing.
+    # Covers both missing codes (stored 0 and defaults); prep_default (clean.py) says which one
     df["prep_missing"] = df["prep_min"].isna().astype(int)
     # Strictly backward-looking window (Lecture 6): only orders placed before this one
     df["load_15m"] = past_count(df["order_ts"], df["district"], LOAD_WINDOW_MIN * 60)
+    # v1: the same load relative to this area's average 15 minutes over the previous 24 h, so a big area is not
+    # "busy" just for being big (02_eda §7). Missing until a full day of history exists (the first training day)
+    usual = past_count(df["order_ts"], df["district"], LOAD_BASELINE_H * 3600) / (LOAD_BASELINE_H * 60 / LOAD_WINDOW_MIN)
+    df["load_15m_rel"] = (df["load_15m"] / usual).where(usual > 0)
+    first = df.loc[df["is_prebook"] == 0, "order_ts"].min()
+    df.loc[df["order_ts"] < first + LOAD_BASELINE_H * 3600, "load_15m_rel"] = np.nan
     return df
 
 
@@ -84,7 +93,8 @@ class FeatureSet:
 # No is_weekend: the training days hold one weekend day (Sat 22) and CV folds 1-3 hold none, so the
 # effect can't be learned or validated. With it, scaling blew up on fold 4 (Elastic-Net MAE 6.8 -> 18.0).
 # Weekend is described in EDA and stated as a limitation instead (README §4, F8).
-_TIME_AND_LOAD = ("prep_min", "prep_missing", "tod_sin", "tod_cos", "lunch_peak", "dinner_peak", "load_15m")
+_TIME_AND_LOAD = ("prep_min", "prep_missing", "prep_default", "tod_sin", "tod_cos", "lunch_peak", "dinner_peak",
+                  "load_15m_rel")
 
 FEATURE_SETS = {
     "base": FeatureSet("base", ("dist_haversine_km", *_TIME_AND_LOAD), ("district",)),
