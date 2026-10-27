@@ -25,3 +25,6 @@ desktop.ini
 
 # final predictions are large and rebuilt by `python -m experiments.final`; summaries, tables and manifest are committed
 results/final/**/predictions.parquet
+
+# figures taken out of figures/eda (kept locally as a backup, never committed)
+figures/_removed/

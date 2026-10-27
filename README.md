@@ -66,6 +66,7 @@ platform at the same average promised time.
 | Target `delivery_min` = arrive − order time | median 27.9, mean 29.6 (modelling rows), right-skewed |
 | Platform promise `promise_min` | mean 37.8, **minimum 30.0**: a padded promise, not an unbiased ETA |
 | Missing estimated prep time (stored as 0) | 9,874 orders |
+| Prep "estimate" under 5 min (a system default) | 75,361 modelling orders (13.8%), treated as missing (C2b) |
 | Days | 17 Oct 2022 = Monday. Weekend days: Sat 22 (train), Sun 23 (test) |
 | Coordinates | stored as degrees × 1e6 and shifted for privacy. Distances are valid, locations aren't real |
 
@@ -84,10 +85,11 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 |---|---|---|---|---|
 | C1 | Keep `is_courier_grabbed = 1` | −85,797 | Refused attempts repeat an order that someone else delivered | v0 |
 | C2 | Timestamp 0 → missing | prep time 9,874; arrival 1 | 0 means "not recorded" | v0 |
+| C2b | Prep estimate under 5 min → missing, flagged `prep_default` | 75,361 modelling orders (13.8%) | Not a real estimate: 75% equal the dispatch time, and these orders are slower than ones with a real estimate at the same distance (`01_data_audit` §4). CV: Elastic-Net 6.93 → 6.70, HGB no change | v1 |
 | C3 | Drop orders without arrival time | −1 | No target | v0 |
 | C4 | Exclude pre-booked orders from modelling | −22,181 | Different timing rules (proposal) | v0 |
 | C5 | Exclude delivery > 180 min | −24 after C4 | Implausible durations (max ≈ 7 days) | v0 — justify threshold from EDA |
-| C6 | Missing prep time → training median (inside each model) | 9,874 | Fit on training rows only, so no leakage | v0 |
+| C6 | Missing prep time → training median (inside each model) | 82,800 modelling orders (stored 0 or default) | Fit on training rows only, so no leakage | v0 |
 | C7 | After-order columns (dispatch, grab, fetch, courier, promise) never model inputs | n/a | Leakage: not known when the order is placed (Lec 6) | final |
 
 **Feature log** (Sumaiya owns `features.py`; each row says why, with the lecture or feedback it answers)
@@ -95,11 +97,11 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | # | Feature | Why | Status |
 |---|---|---|---|
 | F1 | `dist_haversine_km` (alternative `dist_manhattan_km`) | Proposal: choose by validation MAE. **M3 (26 Oct):** HGB on full training data, CV MAE 6.284 vs 6.282 (Manhattan − Haversine −0.002 min, 95% CI −0.007 to +0.003, includes 0) → no real difference, keep Haversine (simpler, default). `base_manhattan` stays as the comparison set for the report | final |
-| F2 | `prep_min`: estimated meal-ready time − order time | Known at placement; median-imputed inside the pipeline | v0 |
-| F3 | `prep_missing` flag | Missingness can carry signal (Lec 6) | v0 |
+| F2 | `prep_min`: estimated meal-ready time − order time | Known at placement (assumed); median-imputed in the pipeline; defaults are missing (C2b). Spearman 0.24 with delivery (`02_eda` §8) | v1 |
+| F3 | `prep_missing` + `prep_default` flags | Orders without an estimate are 2–5 min slower at the same distance (`02_eda` §6, Lec 6) | v1 |
 | F4 | `tod_sin`, `tod_cos` (time of day, cyclical) | 23:59 and 00:00 are close (Lec 6, **proposal feedback**) | final |
-| F5 | `lunch_peak` (10–12 h), `dinner_peak` (17–19 h) | Proposal "meal peaks". v0 hours from order counts by hour; S3 confirms | v0 |
-| F6 | `load_15m`: orders placed in the same district in the previous 15 min | Proposal "district load". Strictly backward-looking (Lec 6) | v0 |
+| F5 | `lunch_peak` (11 h), `dinner_peak` (17–19 h) | Proposal "meal peaks". Hours with a median above the overall median on training days (`02_eda` §9). Best of 4 options on CV: Elastic-Net −0.07 vs v0, HGB no change | v1 |
+| F6 | `load_15m_rel`: orders in the same district in the last 15 min ÷ its 15-min average over the last 24 h (missing on day 1) | Proposal "district load". Backward-looking only (Lec 6). The raw count mostly measured area size and hour (`02_eda` §7). Best of 4 options on CV: vs raw count, Elastic-Net −0.021, HGB −0.009. `load_15m` stays in the table for EDA | v1 |
 | F7 | `district` one-hot (23 levels, unseen → zeros) | Nominal, low cardinality (Lec 6) | final |
 | F8 | ~~`is_weekend`~~ **excluded** | One weekend day in training, none in CV folds 1–3. Scaling blew up on the Saturday fold (Elastic-Net fold-4 MAE 6.8 → 18.0). Weekend is described in EDA and stated as a limitation (**proposal feedback**: careful with 8 days) | final |
 | F9 | `restaurant` (4,962 ids), `courier_id` **excluded** | Restaurant: high cardinality; target encoding only inside folds (Lec 6). Courier: assigned after the order (leakage) | final |
@@ -111,6 +113,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | Run | CV MAE | Promise MAE (same rows) | Note |
 |---|---|---|---|
 | `median`, all training rows | 9.26 | 9.51 | do-nothing baseline (Lec 7) |
+| `hgb` / `elasticnet` defaults, **features v1**, all training rows | 6.28 / 6.61 | 9.51 | vs v0 features: HGB −0.005, Elastic-Net −0.32 |
 | `elasticnet` v0 (α = 0.01), 50k sample | 6.92 | 9.50 | stable across folds (6.8–7.1) |
 | `elasticnet` v0, log target, 50k sample | 7.15 | 9.50 | log is *worse* here: input for S3's skew decision |
 | `rf` v0, 50k sample | 6.46 | 9.50 | |

@@ -44,6 +44,7 @@ def fake_raw(per_day: int = 80, seed: int = 0) -> pd.DataFrame:
     refused = raw.iloc[:5].copy()  # a refused dispatch attempt repeats an accepted order
     refused[["is_courier_grabbed", "grab_time", "fetch_time", "arrive_time", "grab_lng", "grab_lat"]] = 0
     raw.loc[6, "estimate_meal_prepare_time"] = 0  # missing stored as 0
+    raw.loc[9, "estimate_meal_prepare_time"] = raw.loc[9, "order_push_time"]  # a default, not an estimate
     raw.loc[7, "is_prebook"] = 1
     raw.loc[8, "arrive_time"] = raw.loc[8, "platform_order_time"] + 5 * 3600  # implausible
     return pd.concat([raw, refused], ignore_index=True)
@@ -65,6 +66,13 @@ class TestClean(unittest.TestCase):
         self.assertTrue(np.isnan(self.df.loc[self.df.order_id == 6, "prep_min"]).all())
         self.assertTrue((self.df["delivery_min"] > 0).all())
 
+    def test_default_prep_estimate_is_missing_and_flagged(self):
+        """An estimate a few seconds after the order is a default: missing for the imputer, but flagged."""
+        row = self.df.set_index("order_id").loc[9]
+        self.assertTrue(np.isnan(row["prep_min"]))
+        self.assertEqual(row["prep_default"], 1)
+        self.assertEqual(self.df.loc[self.df.order_id == 6, "prep_default"].item(), 0)  # stored 0 is not a default
+
     def test_modelling_rows_exclude_prebook_and_implausible(self):
         kept = set(clean.modelling_rows(self.df)["order_id"])
         self.assertNotIn(7, kept)
@@ -82,6 +90,13 @@ class TestFeatures(unittest.TestCase):
         groups = pd.Series(["a", "a", "a", "a", "b"])
         # window 900 s: order at 1000 sees 100 and 100 (0 is 1000 s back, outside); ties are not "earlier"
         self.assertEqual(list(features.past_count(times, groups, 900)), [0, 1, 1, 2, 0])
+
+    def test_relative_load_needs_a_day_of_history(self):
+        full = features.add_features(clean.clean(fake_raw()))
+        first_day = full["order_ts"] < full.loc[full["is_prebook"] == 0, "order_ts"].min() + 24 * 3600
+        self.assertTrue(full.loc[first_day, "load_15m_rel"].isna().all())
+        later = full[~first_day]
+        self.assertTrue(later.loc[later["load_15m"] > 0, "load_15m_rel"].gt(0).all())
 
     def test_time_of_day_is_cyclical(self):
         """Proposal feedback: 23:59 and 00:00 must be close, not 1439 minutes apart."""
