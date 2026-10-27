@@ -58,8 +58,9 @@ def clean(raw: pd.DataFrame) -> pd.DataFrame:
         "grab_min": minutes("grab_time"),
         "fetch_min": minutes("fetch_time"),
     })
-    # An "estimate" under 5 min is a second missing-value code: most equal the second the order was pushed
-    # to dispatch, and these orders are slower than ones with real estimates at the same distance
+    # An "estimate" under 5 min is a second missing-value code: most equal order_push_time (~12 s after the
+    # order, known at placement; never the later dispatch_time), and these orders are slower than ones with
+    # real estimates at the same distance
     out["prep_default"] = (out["prep_min"] < PREP_DEFAULT_MAX_MIN).astype(int)
     out.loc[out["prep_default"] == 1, "prep_min"] = np.nan
     out["implausible"] = out["delivery_min"] > MAX_DELIVERY_MIN

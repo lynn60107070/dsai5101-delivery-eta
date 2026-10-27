@@ -95,8 +95,10 @@ class TestFeatures(unittest.TestCase):
         full = features.add_features(clean.clean(fake_raw()))
         first_day = full["order_ts"] < full.loc[full["is_prebook"] == 0, "order_ts"].min() + 24 * 3600
         self.assertTrue(full.loc[first_day, "load_15m_rel"].isna().all())
+        self.assertTrue(full.loc[first_day, "load_missing"].eq(1).all())
         later = full[~first_day]
         self.assertTrue(later.loc[later["load_15m"] > 0, "load_15m_rel"].gt(0).all())
+        self.assertTrue((full["load_missing"] == full["load_15m_rel"].isna()).all())
 
     def test_time_of_day_is_cyclical(self):
         """Proposal feedback: 23:59 and 00:00 must be close, not 1439 minutes apart."""
