@@ -76,6 +76,8 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df["load_15m_rel"] = (df["load_15m"] / usual).where(usual > 0)
     first = df.loc[df["is_prebook"] == 0, "order_ts"].min()
     df.loc[df["order_ts"] < first + LOAD_BASELINE_H * 3600, "load_15m_rel"] = np.nan
+    # Same idea as prep_missing: day 1 is up to half the fit rows in early CV folds and the imputer fills it
+    df["load_missing"] = df["load_15m_rel"].isna().astype(int)
     return df
 
 
@@ -94,7 +96,7 @@ class FeatureSet:
 # effect can't be learned or validated. With it, scaling blew up on fold 4 (Elastic-Net MAE 6.8 -> 18.0).
 # Weekend is described in EDA and stated as a limitation instead (README §4, F8).
 _TIME_AND_LOAD = ("prep_min", "prep_missing", "prep_default", "tod_sin", "tod_cos", "lunch_peak", "dinner_peak",
-                  "load_15m_rel")
+                  "load_15m_rel", "load_missing")
 
 FEATURE_SETS = {
     "base": FeatureSet("base", ("dist_haversine_km", *_TIME_AND_LOAD), ("district",)),

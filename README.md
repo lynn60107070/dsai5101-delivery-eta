@@ -85,7 +85,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 |---|---|---|---|---|
 | C1 | Keep `is_courier_grabbed = 1` | −85,797 | Refused attempts repeat an order that someone else delivered | v0 |
 | C2 | Timestamp 0 → missing | prep time 9,874; arrival 1 | 0 means "not recorded" | v0 |
-| C2b | Prep estimate under 5 min → missing, flagged `prep_default` | 75,361 modelling orders (13.8%) | Not a real estimate: 75% equal the dispatch time, and these orders are slower than ones with a real estimate at the same distance (`01_data_audit` §4). CV: Elastic-Net 6.93 → 6.70, HGB no change | v1 |
+| C2b | Prep estimate under 5 min → missing, flagged `prep_default` | 75,361 modelling orders (13.8%) | Not a real estimate: 74% equal the push time exactly (when the order enters the dispatch system, ~12 s after the order; 97% within 5 s, none equal the later dispatch time, so no leakage), and these orders are slower than ones with a real estimate at the same distance (`01_data_audit` §4). CV: Elastic-Net 6.93 → 6.70, HGB no change | v1 |
 | C3 | Drop orders without arrival time | −1 | No target | v0 |
 | C4 | Exclude pre-booked orders from modelling | −22,181 | Different timing rules (proposal) | v0 |
 | C5 | Exclude delivery > 180 min | −24 after C4 | Implausible durations (max ≈ 7 days) | v0 — justify threshold from EDA |
@@ -101,7 +101,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | F3 | `prep_missing` + `prep_default` flags | Orders without an estimate are 2–5 min slower at the same distance (`02_eda` §6, Lec 6) | v1 |
 | F4 | `tod_sin`, `tod_cos` (time of day, cyclical) | 23:59 and 00:00 are close (Lec 6, **proposal feedback**) | final |
 | F5 | `lunch_peak` (11 h), `dinner_peak` (17–19 h) | Proposal "meal peaks". Hours with a median above the overall median on training days (`02_eda` §9). Best of 4 options on CV: Elastic-Net −0.07 vs v0, HGB no change | v1 |
-| F6 | `load_15m_rel`: orders in the same district in the last 15 min ÷ its 15-min average over the last 24 h (missing on day 1) | Proposal "district load". Backward-looking only (Lec 6). The raw count mostly measured area size and hour (`02_eda` §7). Best of 4 options on CV: vs raw count, Elastic-Net −0.021, HGB −0.009. `load_15m` stays in the table for EDA | v1 |
+| F6 | `load_15m_rel`: orders in the same district in the last 15 min ÷ its 15-min average over the last 24 h (missing on day 1, flagged `load_missing`) | Proposal "district load". Backward-looking only (Lec 6). The raw count mostly measured area size and hour (`02_eda` §7). Best of 4 options on CV: vs raw count, Elastic-Net −0.021, HGB −0.009. The flag: day 1 is 49% of fit rows in CV fold 1; Elastic-Net −0.005 (95% CI −0.005 to −0.005), HGB no change. `load_15m` stays in the table for EDA | v1 |
 | F7 | `district` one-hot (23 levels, unseen → zeros) | Nominal, low cardinality (Lec 6) | final |
 | F8 | ~~`is_weekend`~~ **excluded** | One weekend day in training, none in CV folds 1–3. Scaling blew up on the Saturday fold (Elastic-Net fold-4 MAE 6.8 → 18.0). Weekend is described in EDA and stated as a limitation (**proposal feedback**: careful with 8 days) | final |
 | F9 | `restaurant` (4,962 ids), `courier_id` **excluded** | Restaurant: high cardinality; target encoding only inside folds (Lec 6). Courier: assigned after the order (leakage) | final |
@@ -113,7 +113,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | Run | CV MAE | Promise MAE (same rows) | Note |
 |---|---|---|---|
 | `median`, all training rows | 9.26 | 9.51 | do-nothing baseline (Lec 7) |
-| `hgb` / `elasticnet` defaults, **features v1**, all training rows | 6.28 / 6.61 | 9.51 | vs v0 features: HGB −0.005, Elastic-Net −0.32 |
+| `hgb` / `elasticnet` defaults, **features v1**, all training rows | 6.28 / 6.60 | 9.51 | vs v0 features: HGB −0.006, Elastic-Net −0.33 |
 | `elasticnet` v0 (α = 0.01), 50k sample | 6.92 | 9.50 | stable across folds (6.8–7.1) |
 | `elasticnet` v0, log target, 50k sample | 7.15 | 9.50 | log is *worse* here: input for S3's skew decision |
 | `rf` v0, 50k sample | 6.46 | 9.50 | |
