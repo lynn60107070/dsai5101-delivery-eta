@@ -1,0 +1,18 @@
+{
+  "params": {
+    "learning_rate": 0.05514718587869894,
+    "max_leaf_nodes": 29,
+    "min_samples_leaf": 126,
+    "max_iter": 200
+  },
+  "cv_mean": 2.390669717899752,
+  "cv_std": 0.08030641416072455,
+  "settings": {
+    "model": "hgb_q80",
+    "features": "base",
+    "n_iter": 20,
+    "log_target": false,
+    "sample": 150000,
+    "seed": 42
+  }
+}

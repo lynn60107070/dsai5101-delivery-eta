@@ -114,12 +114,13 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 |---|---|---|---|
 | `median`, all training rows | 9.26 | 9.51 | do-nothing baseline (Lec 7) |
 | `hgb` / `elasticnet` defaults, **features v1**, all training rows | 6.28 / 6.60 | 9.51 | vs v0 features: HGB −0.006, Elastic-Net −0.33 |
+| **`elasticnet` tuned (L3, frozen features, 30 Oct)** | **6.59** | 9.51 | Raw target beats log (6.59 vs 6.73), so we keep the raw target. Best α ≈ 0.002 (little regularisation; 31 of 33 coefficients non-zero). Effects in min: distance **+6.1/km**, lunch peak +4.8, dinner peak +3.6, no real prep estimate +2.0 to +2.5, prep +0.66 per estimated min, load +1.1 per "1× usual", district spread 9.2. Frozen in `experiments/final_params/elasticnet.json` |
+| **`hgb_q80` tuned (L4, frozen features, 30 Oct)** | 8.20 | 9.51 | Pinball 2.391 on CV (all 20 settings within 2.391–2.418: tuning barely matters). **Promise test** at the same mean promise (37.7 min): late after the promise 14.6% vs 14.9% (−0.3 pp, CI −0.5 to −0.2); late > 5 min 5.6% vs 4.8% (+0.8 pp); > 10 min 2.2% vs 1.4% (+0.8 pp); pinball 2.44 vs 2.32. Same story as v0, so robust: from order-time information we match the platform on ordinary lateness, but it is better at preventing *very* late orders (likely because it acts after the order: see the drop at exactly 8 min late, `02_eda` §5). Frozen in `experiments/final_params/hgb_q80.json` |
 | `elasticnet` v0 (α = 0.01), 50k sample | 6.92 | 9.50 | stable across folds (6.8–7.1) |
 | `elasticnet` v0, log target, 50k sample | 7.15 | 9.50 | log is *worse* here: input for S3's skew decision |
 | `rf` v0, 50k sample | 6.46 | 9.50 | |
 | `hgb` v0 defaults, 100k sample | 6.32 | 9.48 | −32% vs median before any tuning |
 | `hgb` Manhattan distance, 100k sample | 6.31 | 9.48 | distance choice barely matters (M3) |
-| `hgb_q80` v0, all training rows | 8.29 | 9.51 | **Promise test (L4)** at the same mean promise (37.7 min): late after the promise 14.6% vs platform 14.9% (−0.3 pp, CI −0.4 to −0.2); late > 5 min 5.6% vs 4.8% (+0.8 pp). The platform is better at avoiding *very* late orders, the risk the proposal named. Untuned; rerun after CP2. `python -m experiments.promise_test results/runs/hgb_q80_base_cv` |
 | `hgb` with `--features leaky`, 50k sample | 4.67 | 9.50 | how much error is information we don't have at order time (S5) |
 
 Final numbers come from `results/final/` at CP4. Never quote these v0 numbers in the report.
