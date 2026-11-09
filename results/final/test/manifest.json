@@ -1,0 +1,75 @@
+{
+  "eval": "test",
+  "git_commit": "5b36430",
+  "data_cache_key": "2a28db294c",
+  "features": "base",
+  "feature_columns": [
+    "dist_haversine_km",
+    "prep_min",
+    "prep_missing",
+    "prep_default",
+    "tod_sin",
+    "tod_cos",
+    "lunch_peak",
+    "dinner_peak",
+    "load_15m_rel",
+    "load_missing",
+    "district"
+  ],
+  "seed": 42,
+  "sample": null,
+  "started_utc": "2026-11-09T11:55:01+00:00",
+  "models": {
+    "median": {
+      "params": {},
+      "params_source": "defaults (no frozen params file)",
+      "log_target": false,
+      "seconds": 0.2
+    },
+    "elasticnet": {
+      "params": {
+        "alpha": 0.0019674328025306126,
+        "l1_ratio": 0.662522284353982
+      },
+      "params_source": "experiments\\final_params\\elasticnet.json",
+      "log_target": false,
+      "seconds": 2.8
+    },
+    "rf": {
+      "params": {
+        "n_estimators": 200,
+        "min_samples_leaf": 6,
+        "max_features": 0.3144091460070617,
+        "max_depth": 20.0
+      },
+      "params_source": "experiments\\final_params\\rf.json",
+      "log_target": false,
+      "seconds": 39.4
+    },
+    "hgb": {
+      "params": {
+        "loss": "absolute_error",
+        "learning_rate": 0.03756560040604225,
+        "max_leaf_nodes": 76,
+        "min_samples_leaf": 70,
+        "l2_regularization": 7.852755494724242,
+        "max_iter": 800
+      },
+      "params_source": "experiments\\final_params\\hgb.json",
+      "log_target": false,
+      "seconds": 56.1
+    },
+    "hgb_q80": {
+      "params": {
+        "learning_rate": 0.05514718587869894,
+        "max_leaf_nodes": 29,
+        "min_samples_leaf": 126,
+        "max_iter": 200
+      },
+      "params_source": "experiments\\final_params\\hgb_q80.json",
+      "log_target": false,
+      "seconds": 16.2
+    }
+  },
+  "finished_utc": "2026-11-09T11:57:44+00:00"
+}

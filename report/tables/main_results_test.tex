@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\caption{Delivery-time prediction on the test days (23--24 Oct). $\Delta$MAE in minutes with 95\% paired bootstrap intervals; negative = lower error.}
+\label{tab:main_results}
+\begin{tabular}{lrrrrll}
+\toprule
+Model & MAE & RMSE & $R^2$ & Late $>$5 min & $\Delta$MAE vs median & $\Delta$MAE vs promise \\
+\midrule
+Platform promise & 9.62 & 11.87 & 0.048 & 5.0\% & +0.16 [+0.11, +0.21] & -- \\
+Median predictor & 9.46 & 12.38 & -0.035 & 36.1\% & -- & -0.16 [-0.21, -0.11] \\
+Elastic-Net & 6.80 & 8.98 & 0.455 & 27.6\% & -2.66 [-2.69, -2.62] & -2.82 [-2.86, -2.77] \\
+Random Forest & 6.54 & 8.67 & 0.492 & 26.9\% & -2.92 [-2.95, -2.88] & -3.08 [-3.12, -3.04] \\
+Gradient boosting & 6.49 & 8.70 & 0.488 & 29.4\% & -2.97 [-3.00, -2.93] & -3.13 [-3.17, -3.08] \\
+\bottomrule
+\end{tabular}
+\end{table*}

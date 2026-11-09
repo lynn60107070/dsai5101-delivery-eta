@@ -59,7 +59,7 @@ def frozen_params(model: str) -> tuple[dict, str]:
 def git_commit() -> str:
     try:
         out = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True)
-        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=REPO_ROOT, capture_output=True, text=True).stdout
+        dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=REPO_ROOT, capture_output=True, text=True).stdout
         return out.stdout.strip() + ("+uncommitted" if dirty.strip() else "")
     except OSError:
         return "unknown"

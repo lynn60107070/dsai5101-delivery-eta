@@ -127,7 +127,24 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | `hgb` Manhattan distance, 100k sample | 6.31 | 9.48 | distance choice barely matters (M3) |
 | `hgb` with `--features leaky`, 50k sample | 4.67 | 9.50 | how much error is information we don't have at order time (S5) |
 
-Final numbers come from `results/final/` at CP4. Never quote these v0 numbers in the report.
+The rows above are development numbers; quote only the final ones below in the report.
+
+### Final results: test days (CP4, scored once on 9 Nov, commit `5b36430`)
+
+`python -m experiments.final --eval test --i-am-at-cp4`; full tables in `results/final/test/` and `report/tables/*_test.tex`.
+
+| Model | MAE | RMSE | R² | vs median (95% CI) |
+|---|---|---|---|---|
+| Platform promise (as a prediction) | 9.62 | 11.87 | 0.05 | +0.16 [+0.11, +0.21] |
+| Median predictor | 9.46 | 12.38 | −0.04 | n/a |
+| Elastic-Net | 6.80 | 8.98 | 0.46 | −2.66 [−2.69, −2.62] |
+| Random Forest | 6.54 | 8.67 | 0.49 | −2.92 [−2.95, −2.88] |
+| **Gradient boosting** | **6.49** | 8.70 | 0.49 | **−2.97 [−3.00, −2.93]** (31% better) |
+
+- **Best vs second best:** HGB − RF = −0.048 min [−0.056, −0.039] (`best_vs_second.json`). Real but tiny; RF has the lower RMSE, so HGB wins on typical error and RF on big misses.
+- **Test vs CV:** every model is ~0.2 min worse on test than on CV (HGB 6.25 → 6.49), and the ranking is unchanged. Test day 23 Oct (Sunday, MAE 6.77) is harder than 24 Oct (Monday, 6.17): the weekend limitation (F8) showing up.
+- **Promise test (q80, same mean promise 38.2 min):** late > 0 min 15.3% vs platform 14.9% (+0.3 pp [+0.2, +0.5]), > 5 min 6.1% vs 5.0% (+1.2 pp), > 10 min 2.4% vs 1.5% (+0.9 pp); pinball 2.52 vs 2.36; coverage 84.7% vs 85.1%. **On test the platform is slightly better at every threshold**; on CV we were 0.3 pp better at > 0 min. So the honest answer to the research question: order-time information predicts delivery time far better than the platform's promise does (MAE 6.49 vs 9.62), but it does not beat the platform at setting promises, which can react after the order is placed.
+
 
 ---
 
