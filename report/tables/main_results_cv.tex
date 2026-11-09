@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering
+\caption{Delivery-time prediction on the forward-chaining CV folds (17--22 Oct). $\Delta$MAE in minutes with 95\% paired bootstrap intervals; negative = lower error.}
+\label{tab:main_results}
+\begin{tabular}{lrrrrll}
+\toprule
+Model & MAE & RMSE & $R^2$ & Late $>$5 min & $\Delta$MAE vs median & $\Delta$MAE vs promise \\
+\midrule
+Platform promise & 9.51 & 11.68 & 0.035 & 4.8\% & +0.25 [+0.21, +0.29] & -- \\
+Median predictor & 9.26 & 12.07 & -0.030 & 35.3\% & -- & -0.25 [-0.29, -0.21] \\
+Elastic-Net & 6.60 & 8.68 & 0.467 & 25.8\% & -2.66 [-2.68, -2.63] & -2.91 [-2.94, -2.88] \\
+Random Forest & 6.32 & 8.35 & 0.507 & 25.1\% & -2.94 [-2.96, -2.91] & -3.19 [-3.22, -3.16] \\
+Gradient boosting & 6.25 & 8.36 & 0.506 & 27.6\% & -3.00 [-3.03, -2.98] & -3.25 [-3.28, -3.22] \\
+\bottomrule
+\end{tabular}
+\end{table*}
