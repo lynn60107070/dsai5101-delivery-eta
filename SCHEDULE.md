@@ -67,7 +67,7 @@ Owns `common/clean.py`, `common/features.py`, `notebooks/01_*`–`03_*`, `figure
 | S4 | Cleaning + features v1: replace the v0 rules in `clean.py` with justified ones (outlier decision tree from Lec 3), add features EDA suggests (any restaurant-level feature must be computed inside CV folds, Lec 6), log each rule in README §4 → **freeze** [FB2, P] | 3–4 h | **CP2** |
 | S5 | Leakage audit: same model with `--features leaky` vs `base` (v0: MAE 4.7 vs 6.3); explain the gap as information not available at order time [P, Lec 6–7] | 1–2 h | **CP3** |
 | S6 | `notebooks/03_stages.ipynb`: restaurant wait (`fetch_min`) vs road time (`delivery_min − fetch_min`): which stage drives delay, and where (hour, district) [P] | 3 h | **CP3** |
-| S7 | Pre-booked orders: short separate description (why excluded: a "different population" in Lec 3's outlier tree) [P] | 1 h | **CP3** |
+| S7 | ✅ **Done 6 Nov** (`01_data_audit` §7, C4). Pre-booked orders: short separate description (why excluded: a "different population" in Lec 3's outlier tree) [P] | 1 h | **CP3** |
 | S8 | Final EDA + stage figures at report quality, checked against the Lec 5 figure checklist (ALIGNMENT §5) [FB2, Lec 5] | 2 h | **CP4** |
 | S9 | Report: Data & EDA section (each problem → how it was handled → the figure/table showing it) + Related Work section (≥ 5 sources, compared, merges everyone's) [FB2, rubric] | 5 h | **CP5** |
 | S10 | Slides: data, cleaning, EDA findings (~3 min) | 1.5 h | **CP5** |
@@ -95,8 +95,8 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 | M1 | Setup (tests + median as S1); post one `python -m experiments.run --model hgb --sample 100000` result | 30 min | **CP0** |
 | M2 | Boosting + RF on the full training data; decide HistGradientBoosting vs LightGBM [P] | 2 h | **CP1** |
 | M3 | Distance comparison: `--features base` vs `base_manhattan`, same model, CV MAE + bootstrap (v0: 6.32 vs 6.31, so the bootstrap decides) → pick one, tell Sumaiya [P] | 1 h | **CP2** |
-| M4 | Tune HGB (incl. `loss=absolute_error`, since we report MAE) and RF with `experiments.tune` on the frozen features (start after CP2) + **one training-vs-CV error curve** over a complexity setting for the report [P, Lec 7] | 3 h + run time | **CP3** |
-| M5 | `notebooks/04_drivers.ipynb`: grouped permutation importance (distance, prep, time, load, district) on CV folds, with spread → ranked delay drivers. Check the proposal's expectation (distance, peaks, load on top) and say if it held [P] | 3 h | **CP3** |
+| M4 | ✅ **Done 7 Nov** (HGB 6.25, RF 6.32; frozen). Tune HGB (incl. `loss=absolute_error`, since we report MAE) and RF with `experiments.tune` on the frozen features (start after CP2) + **one training-vs-CV error curve** over a complexity setting for the report [P, Lec 7] | 3 h + run time | **CP3** |
+| M5 | ✅ **Done 7 Nov** (README §5). `notebooks/04_drivers.ipynb`: grouped permutation importance (distance, prep, time, load, district) on CV folds, with spread → ranked delay drivers. Check the proposal's expectation (distance, peaks, load on top) and say if it held [P] | 3 h | **CP3** |
 | M6 | `notebooks/05_errors.ipynb`: errors by district / hour / distance / day, worst orders, residual plots, do errors rise at meal peaks (proposal expectation)? Does it hold on the test days? [P, Lec 2 subgroup evaluation] | 3 h | **CP4** |
 | M7 | Final test runs for HGB and RF (via L5's script) | 1 h | **CP4** |
 | M8 | Report: Results & Discussion section | 5 h | **CP5** |
