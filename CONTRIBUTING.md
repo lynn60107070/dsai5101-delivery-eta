@@ -1,4 +1,4 @@
-﻿# Team guide: start here
+# Team guide: start here
 
 The shared pipeline already works and is tested on the real data: download, v0 cleaning, features,
 the time split, every model (v0), the runner, the tuner, the bootstrap comparison and all metrics.
