@@ -87,7 +87,7 @@ Every rule, with its reason. v0 rules are provisional and are confirmed or repla
 | C2 | Timestamp 0 → missing | prep time 9,874; arrival 1 | 0 means "not recorded" | v0 |
 | C2b | Prep estimate under 5 min → missing, flagged `prep_default` | 75,361 modelling orders (13.8%) | Not a real estimate: 74% equal the push time exactly (when the order enters the dispatch system, ~12 s after the order; 97% within 5 s, none equal the later dispatch time, so no leakage), and these orders are slower than ones with a real estimate at the same distance (`01_data_audit` §4). CV: Elastic-Net 6.93 → 6.70, HGB no change | v1 |
 | C3 | Drop orders without arrival time | −1 | No target | v0 |
-| C4 | Exclude pre-booked orders from modelling | −22,181 | Different timing rules (proposal) | v0 |
+| C4 | Exclude pre-booked orders from modelling | −22,181 | Different population (Lec 3 tree): delivery time follows the slot the customer picked (`01_data_audit` §7). HGB CV MAE on normal orders 6.28, vs 6.76 with those under 3 h mixed in | final |
 | C5 | Exclude delivery > 180 min | −24 after C4 | Implausible durations (max ≈ 7 days) | v0 — justify threshold from EDA |
 | C6 | Missing prep time → training median (inside each model) | 82,800 modelling orders (stored 0 or default) | Fit on training rows only, so no leakage | v0 |
 | C7 | After-order columns (dispatch, grab, fetch, courier, promise) never model inputs | n/a | Leakage: not known when the order is placed (Lec 6) | final |
