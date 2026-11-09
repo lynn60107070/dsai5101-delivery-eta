@@ -1,0 +1,18 @@
+{
+  "params": {
+    "n_estimators": 200,
+    "min_samples_leaf": 6,
+    "max_features": 0.3144091460070617,
+    "max_depth": 20.0
+  },
+  "cv_mean": 6.369659523016475,
+  "cv_std": 0.14585237587381422,
+  "settings": {
+    "model": "rf",
+    "features": "base",
+    "n_iter": 10,
+    "log_target": false,
+    "sample": 100000,
+    "seed": 42
+  }
+}
