@@ -87,7 +87,7 @@ Owns `models/baselines.py`, `models/linear.py`, `models/promise.py`, `experiment
 | L6 | ✅ **Done 9 Nov** (HGB vs RF −0.048 [−0.056, −0.039]). Bootstrap table: every model vs median and vs promise (**built into `final.py`, done 23 Oct**); add best vs second best with `experiments.compare` | 1 h → 15 min | **CP4** |
 | L7 | ⏳ **First draft in `report/` 10 Nov** (Lynn to revise; add S5/S6 numbers to the conclusion once merged). Report: abstract, introduction (**the research question as one sentence**, T/P/E, success criteria, contributions), methodology (numbered steps + one table, not dense prose), conclusion (limitations incl. weekend, ethics, monitoring/drift) [FB1, FB4, Lec 1–2] | 6 h | **Thu 12 Nov** |
 | L8 | Slide template; problem + research question in the first minute, methods, promise test (~3.5 min); one idea per slide; assemble the deck [FB1, FB4]. Lynn builds the whole deck first, then sends it for everyone's parts | 2 h → more | **Thu 12 Nov** (first version) |
-| L9 | References + AI-use acknowledgement + Meituan data acknowledgement; submit on D2L | 2 h | Sun 29 Nov |
+| L9 | ⏳ **References + acknowledgements drafted 10 Nov** (dataset, pandas, NumPy cited; code/data/AI statements in `main.tex`); left: invite the instructor to the repo, final AI-use check, submit. References + AI-use acknowledgement + Meituan data acknowledgement; submit on D2L | 2 h | Sun 29 Nov |
 
 ### Mahmoud: boosting, Random Forest, tuning, distance comparison, delay drivers, error analysis
 Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figures/results/`.
