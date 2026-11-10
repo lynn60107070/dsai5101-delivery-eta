@@ -6,6 +6,35 @@
 % Ethics (Lec 1): tighter promises pressure couriers; padded promises shift risk to customers;
 %   do some districts get systematically worse ETAs?
 % Future work (Lec 2, monitoring): drift over longer periods, retraining, input monitoring.
+% TODO(Lynn): once S5 (leakage audit) and S6 (stages) are merged, add one sentence each with their final numbers.
 \section{Conclusion}
 
-TODO.
+\textbf{Answer to the research question.} Using only information known when an order is placed,
+gradient boosting predicts delivery time with an MAE of 6.49 minutes on unseen days: 31\% better than
+a median predictor, which meets our 20\% target, and 3.1 minutes better than the platform's promise. The
+three model families end within 0.3 minutes of each other, so the limit is the information available
+at ordering, not the choice of model. Distance drives delivery time far more than anything else,
+followed by time of day, district and preparation time. Our proposal expected recent district load to
+be a top driver; it was the weakest. The business criterion was not met: at the same average promised
+time, our 80th-percentile promises are late slightly more often than the platform's. Better estimates
+are therefore not automatically better promises, since the platform can still react after an order is
+placed, for example by reassigning couriers.
+
+\textbf{Limitations.} The data cover eight days, with a single weekend day for training, so weekend
+effects could not be modelled; the Sunday test day was indeed harder than the Monday (MAE 6.77 vs 6.17).
+Weather, traffic and courier availability are not known at ordering in this dataset, and coordinates are
+shifted for privacy, so distances are approximate. All results come from one platform in one city, over
+one week.
+
+\textbf{Ethics.} Errors are not spread evenly: test MAE ranges from 4.4 to 9.0 minutes across districts,
+so customers in some areas would get systematically less reliable estimates. Promise length also moves
+risk between groups: shorter promises put pressure on couriers to ride faster, while padded promises
+shift the cost of uncertainty to customers. A deployed system should report errors by district and be
+judged on courier workload as well as late rate.
+
+\textbf{Future work.} (1) Add order-time features that need care to avoid leakage: a restaurant's past
+delivery times computed inside each fold, the number of couriers busy in the district just before the
+order, and recent delays in that district. (2) Combine the estimate with post-order updates, which is
+where the platform's advantage appears to come from. (3) Before deployment, test on several weeks to
+measure drift, retrain on a schedule, and monitor input distributions (distance, load, missing
+preparation estimates) for change.

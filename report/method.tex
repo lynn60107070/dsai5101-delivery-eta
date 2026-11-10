@@ -6,24 +6,100 @@
 % Lec 7: baseline ladder, loss vs metric (MAE), train-vs-CV error curve (from M4).
 \section{Methodology}
 
+The pipeline has six steps. All code, a fixed seed (42) and pinned library versions are in the
+repository, and one command rebuilds every final table.
+
 \subsection{Prediction setting and features}
-TODO. % order-time-only rule; feature table (README F1-F9)
+\textbf{Step 1: inputs known at ordering.} Every feature must pass one test: would its value exist at
+the moment the order is placed? The model uses:
+\begin{itemize}
+  \item \emph{Distance}: Haversine distance between restaurant and customer. A Manhattan distance gave
+        the same cross-validated MAE (difference $-0.002$ min, 95\% CI $[-0.007, +0.003]$), so we kept
+        the simpler one.
+  \item \emph{Time of day}: sine and cosine of the minute of the day, so that 23:59 and 00:00 are
+        neighbours, plus flags for the lunch (11:00) and dinner (17:00--19:59) peaks found in the EDA.
+  \item \emph{Preparation}: the platform's estimated meal-ready time, with a flag when it is missing or
+        a system default (Section~\ref{sec:data}).
+  \item \emph{District load}: orders placed in the same district in the previous 15 minutes, divided by
+        that district's usual 15-minute count over the previous 24 hours. It counts only strictly earlier
+        orders, and is flagged as missing on the first day, which has no 24-hour history.
+  \item \emph{District}: one-hot encoded (23 levels).
+\end{itemize}
+Three candidates were excluded. The courier is assigned after ordering (leakage). Restaurant identity
+has 4{,}962 levels, so a safe encoding would need target statistics computed inside each fold. The
+weekend flag was dropped because the training days contain one weekend day and the first three
+validation folds none, so its effect cannot be learned or validated; with it, Elastic-Net's error on the
+Saturday fold rose from 6.8 to 18.0 minutes.
+
+\textbf{Step 2: preprocessing inside the model.} Median imputation, scaling (Elastic-Net only) and
+one-hot encoding are part of each model's scikit-learn pipeline~\cite{pedregosa2011scikit}, so they are
+refitted on the training rows of every fold and never see validation or test days. A unit test checks
+this.
 
 \subsection{Baselines and models}
-TODO. All models are implemented in scikit-learn~\cite{pedregosa2011scikit}. % median predictor, platform promise; Elastic-Net, Random Forest, gradient boosting; q80 model
+\textbf{Step 3: a baseline ladder.} We compare every model with two baselines. The \emph{median
+predictor} always predicts the training median; any model must beat it. The \emph{platform promise} is
+the time Meituan showed the customer. It is padded (never under 30 minutes, mean 37.8 against a mean
+actual time of 29.6), so on MAE it is not a fair estimate; it is used as the business baseline in
+Step~6.
+
+\textbf{Step 4: three model families}, from interpretable to flexible: Elastic-Net linear regression
+(effects readable in minutes), Random Forest~\cite{breiman2001random} and histogram gradient
+boosting~\cite{friedman2001greedy}. Table~\ref{tab:models} lists their final settings. A raw target
+beat a log-transformed one in cross-validation (Elastic-Net MAE 6.59 vs 6.73), so all models predict
+minutes directly. Since we report MAE, the boosting search included the absolute-error loss, and the
+best setting used it.
+
+\begin{table}[t]
+\centering
+\caption{Final models, tuned settings and tuning budget (random search, scored by cross-validated MAE;
+pinball loss for the q80 model).}
+\label{tab:models}
+\footnotesize
+\begin{tabular}{@{}p{0.2\columnwidth}p{0.5\columnwidth}p{0.2\columnwidth}@{}}
+\toprule
+Model & Final settings & Search \\
+\midrule
+Elastic-Net & $\alpha = 0.002$, L1 ratio $0.66$ & 30 tries, all rows \\
+Random Forest & 200 trees, min.\ leaf 6, 31\% of features per split, depth 20 & 10 tries, 100k rows \\
+Gradient boosting & absolute-error loss, learning rate 0.038, 76 leaves, min.\ leaf 70, L2 7.9, 800 iterations & 20 tries, 150k rows \\
+Boosting, q80 & quantile loss ($q=0.8$), learning rate 0.055, 29 leaves, min.\ leaf 126, 200 iterations & 20 tries, 150k rows \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Validation, tuning and metrics}
-TODO. % forward-chaining CV on 17-22 Oct, test 23-24 Oct once; random search; MAE/RMSE/R^2, late rate; bootstrap CIs
+\textbf{Step 5: time-based validation, test used once.} The data are split by day. The first six days
+(17--22 Oct, 406{,}553 orders) are for development, the last two (23--24 Oct, 139{,}787 orders) for the
+final test. Within development we use forward-chaining cross-validation: four folds, each trained on
+all earlier days and validated on the next one (fit on 17--18, validate on 19; \ldots; fit on 17--21,
+validate on 22). This mirrors deployment, where the model only ever sees the past. Hyperparameters were
+chosen by random search on these folds (Table~\ref{tab:models}); the slower tree models were tuned on a
+random sample of rows and then refitted on all of them. Fig.~\ref{fig:complexity} shows why tuning
+matters: as trees grow, training error keeps falling while validation error rises. All settings were
+frozen before the test days were scored, once, with every model refitted on all six development days.
 
-% \begin{table}[t]
-% \centering
-% \caption{Models, tuned hyperparameters and search ranges.}
-% \label{tab:models}
-% \begin{tabular}{lll}
-% \toprule
-% Model & Hyperparameters & Search range \\
-% \midrule
-% ... \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{hgb_complexity_curve}
+\caption{Training vs cross-validation MAE for gradient boosting as the number of leaves per tree grows
+(other settings at their defaults; bars: spread over the four folds). Validation error is lowest around
+16 leaves; at 511 leaves training error is 2.45 minutes but validation error 6.63, a clear sign of
+overfitting.}
+\label{fig:complexity}
+\end{figure}
+
+\textbf{Step 6: metrics and comparisons.}
+\begin{itemize}
+  \item \emph{Accuracy}: MAE in minutes (primary, easy to explain to operations), RMSE and $R^2$.
+  \item \emph{Significance}: paired bootstrap 95\% intervals (2{,}000 resamples of test orders) for every
+        difference in MAE, so that small gaps are not over-read.
+  \item \emph{Drivers}: grouped permutation importance~\cite{breiman2001random} on the validation folds,
+        shuffling related features together (distance, time of day, district, preparation, load) and
+        measuring the increase in MAE.
+  \item \emph{Promise setting}: an 80th-percentile boosting model trained with the pinball (quantile)
+        loss~\cite{koenker1978quantiles}. To compare fairly with the padded platform promise, we shift
+        its promises by a constant so that both promise the same mean time on the same orders, then
+        compare the share of orders arriving more than 0, 5 and 10 minutes late, with bootstrap
+        intervals.
+\end{itemize}

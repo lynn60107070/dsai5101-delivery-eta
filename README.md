@@ -153,6 +153,7 @@ The rows above are development numbers; quote only the final ones below in the r
 | Date | Who | Tool | What was asked | What we used / changed |
 |---|---|---|---|---|
 | 22 Oct | Lynn | Claude Code | Set up the shared pipeline (data loading, v0 cleaning, features, split, metrics, runner, tests) and the team docs; map the proposal feedback and lectures to tasks | Reviewed; all cleaning rules and model choices are owned and revised by the team |
+| 10 Nov | Lynn | Claude Code | First drafts of the abstract, introduction, methodology and conclusion from the final results, and the Q&A prep sheet | Drafts only: Lynn rewrites and checks every number against `results/final/` before CP6 |
 
 ---
 

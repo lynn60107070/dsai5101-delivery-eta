@@ -3,7 +3,21 @@
 %   (e.g. test MAE vs the median predictor and the platform promise, top drivers, promise-test late rate).
 % Not a topic description. Never use v0 numbers (README section 5); only results/final/.
 \begin{abstract}
-TODO.
+Food delivery platforms promise customers a delivery time the moment an order is placed, before a
+courier is assigned. We ask how accurately the delivery time can be predicted at that moment, using only
+information known then, and which order-time conditions drive long deliveries. Using eight days of
+public Meituan data (546{,}340 orders after cleaning), we train Elastic-Net, Random Forest and gradient
+boosting models on six days with forward-chaining cross-validation and score them once on the two
+held-out days. Gradient boosting predicts delivery time with a mean absolute error of 6.49 minutes,
+31\% lower than a median predictor (9.46) and 3.1 minutes lower than the platform's own promised time
+(9.62), with all differences confirmed by paired bootstrap intervals. Random Forest (6.54) is only
+0.05 minutes behind, which suggests that accuracy is limited by the information available at ordering
+rather than by the model. Distance is by far the strongest driver, ahead of time of day, district and
+estimated preparation time, while recent district load matters little. Turning predictions into
+promises is a different matter: at the same average promised time (38.2 minutes), an 80th-percentile
+model is late slightly more often than the platform (6.1\% vs 5.0\% of orders more than five minutes
+late), likely because the platform can still act after the order is placed. Order-time prediction
+therefore gives clearly better estimates, but not better promises on its own.
 \end{abstract}
 
 \begin{IEEEkeywords}
