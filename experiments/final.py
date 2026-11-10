@@ -99,7 +99,7 @@ def main_results_latex(table: pd.DataFrame, eval_name: str) -> str:
              r"\caption{Delivery-time prediction on the " + ("test days (23--24 Oct)" if eval_name == "test" else
                                                              "forward-chaining CV folds (17--22 Oct)") +
              r". $\Delta$MAE in minutes with 95\% paired bootstrap intervals; negative = lower error.}",
-             r"\label{tab:main_results}",
+             r"\label{tab:main_results" + ("" if eval_name == "test" else "_cv") + "}",
              r"\begin{tabular}{lrrrrll}", r"\toprule",
              r"Model & MAE & RMSE & $R^2$ & Late $>$5 min & $\Delta$MAE vs median & $\Delta$MAE vs promise \\",
              r"\midrule"]
@@ -117,7 +117,7 @@ def promise_latex(result: dict, eval_name: str) -> str:
              r"\caption{Promise setting at the same mean promised time (" + f"{sm['platform']['mean_promise']:.1f}" +
              r" min; our q80 promises shifted by " + f"{sm['shift_min']:+.1f}" + r" min). " +
              ("Test days." if eval_name == "test" else "CV folds.") + r" Gap = ours $-$ platform, 95\% bootstrap CI.}",
-             r"\label{tab:promise}", r"\begin{tabular}{lrrl}", r"\toprule",
+             r"\label{tab:promise" + ("" if eval_name == "test" else "_cv") + "}", r"\begin{tabular}{lrrl}", r"\toprule",
              r"Metric & Ours & Platform & Gap \\", r"\midrule"]
     for t in promise_test.THRESHOLDS:
         d = sm["late_rate_diff"][f"{t}min"]

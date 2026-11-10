@@ -9,7 +9,9 @@
 \usepackage{siunitx}    % \SI{6.3}{\minute}, \num{546340}
 \usepackage{cite}
 \usepackage{url}
-\graphicspath{{figures/}}  % upload figures/eda/*.pdf and figures/results/*.pdf here
+% Figures are found by name. In the repo they sit in ../figures/; on Overleaf, upload them to the same
+% subfolders under figures/ (eda, results, promise). Tables come from tables/, written by experiments.final
+\graphicspath{{figures/eda/}{figures/results/}{figures/promise/}{../figures/eda/}{../figures/results/}{../figures/promise/}}
 
 \begin{document}
 
