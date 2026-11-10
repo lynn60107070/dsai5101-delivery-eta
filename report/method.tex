@@ -6,8 +6,9 @@
 % Lec 7: baseline ladder, loss vs metric (MAE), train-vs-CV error curve (from M4).
 \section{Methodology}
 
-The pipeline has six steps. All code, a fixed seed (42) and pinned library versions are in the
-repository, and one command rebuilds every final table.
+The pipeline has six steps, implemented in Python with pandas~\cite{mckinney2010pandas},
+NumPy~\cite{harris2020numpy} and scikit-learn. All code, a fixed seed (42) and pinned library versions
+are in the repository, and one command rebuilds every final table.
 
 \subsection{Prediction setting and features}
 \textbf{Step 1: inputs known at ordering.} Every feature must pass one test: would its value exist at

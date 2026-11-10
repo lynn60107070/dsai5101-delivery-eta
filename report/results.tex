@@ -23,7 +23,23 @@ TODO. % errors by district, hour, distance, test day (M6)
 TODO. % [Sumaiya] S5, S6
 
 \subsection{Promise setting}
-TODO. % [Lynn] L4: q80 vs platform at the same mean promised time
+% [Lynn] L4: q80 vs platform at the same mean promised time
+A point estimate aims at the middle of the distribution, so about half of all orders arrive after it;
+a promise needs a higher quantile. Our 80th-percentile model, shifted by $+2.7$ minutes so that its
+average promise equals the platform's (38.2 minutes on the test days), covers 84.7\% of orders against
+the platform's 85.1\%. At this equal average, the platform is late slightly less often at every
+threshold (Table~\ref{tab:promise}): 15.3\% vs 14.9\% of orders arrive after the promise, 6.1\% vs 5.0\%
+more than five minutes late, and 2.4\% vs 1.5\% more than ten minutes late, all with bootstrap intervals
+that exclude zero. Fig.~\ref{fig:promise_gap} shows that the comparison depends on promise length:
+with shorter average promises (below about 37 minutes) our model is late less often at the zero-minute
+threshold, but at the platform's average and above, the platform does better. On the validation folds our model was marginally better at
+the zero-minute threshold ($-0.3$ points) but already worse beyond five minutes, so the pattern is
+stable: the platform is better at preventing \emph{very} late orders. A likely reason is that it can
+still act after the order is placed. The EDA points the same way: the number of orders arriving late
+more than halves at exactly eight minutes late, at every promise level, which looks like an operational
+rule applied after ordering (Section~\ref{sec:data}). A model
+limited to order-time information cannot do this, so better estimates (Table~\ref{tab:main_results})
+do not by themselves give better promises.
 % Table~\ref{tab:promise} and Fig.~\ref{fig:promise_gap}; CV version: tables/promise_test_cv
 \input{tables/promise_test_test}
 \begin{figure}[t]
