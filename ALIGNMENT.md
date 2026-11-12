@@ -115,10 +115,10 @@ project from these artefacts, it isn't finished").
 - [ ] State how many pairs were looked at (forking paths)
 
 **Lec 5 (Visualisation): every report and slide figure (S8, M6, L8)**
-- [ ] The most important quantity on position or length; no pies, no area, no dual axes
-- [ ] **Title states the finding** ("Delivery time rises ~X min per km"), not the variables
-- [ ] Axes labelled with units; hours in chronological order; bars start at zero
-- [ ] viridis or a colour-blind-safe palette; meaning never carried by colour alone; check in greyscale
+- [x] The most important quantity on position or length; no pies, no area, no dual axes
+- [x] **Title states the finding** ("Delivery time rises ~X min per km"), not the variables
+- [x] Axes labelled with units; hours in chronological order; bars start at zero
+- [x] viridis or a colour-blind-safe palette; meaning never carried by colour alone; check in greyscale
 - [ ] Every figure numbered, captioned and referenced in the text (Guidelines §6)
 
 **Lec 6 (Feature engineering): S4, M3, all models**
@@ -134,7 +134,7 @@ project from these artefacts, it isn't finished").
 - [ ] Always compare with a do-nothing baseline (median) **and** the business baseline (promise)
 - [ ] Loss vs metric: we report MAE, so try `loss="absolute_error"` for boosting (median-targeting, in `SEARCH_SPACE`)
 - [ ] Over/underfitting: one training-vs-CV error curve over a complexity setting (e.g. `max_leaf_nodes` or RF `min_samples_leaf`), a figure for the Methodology section
-- [ ] Reducible vs irreducible error: the leaky model (MAE 4.7 vs 6.3) shows how much error is information we don't have at order time
+- [ ] Reducible vs irreducible error: the leaky model (MAE 4.53 vs 6.25, frozen HGB, S5) shows how much error is information we don't have at order time
 - [ ] Test days scored **once** (Lec 1, Lec 7: "if you keep tuning until the test score looks good, it has become training data")
 
 **Lec 1/2 (reproducibility, responsibility): everyone**
