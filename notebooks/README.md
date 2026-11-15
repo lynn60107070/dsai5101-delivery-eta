@@ -2,7 +2,10 @@
 
 Numbered in the order they should run. Each one loads the shared table (`from common.data import load_table`)
 or saved runs (`pd.read_parquet("../results/runs/<name>/predictions.parquet")`). Don't fit models
-in notebooks, use `experiments.run` so everyone's numbers are computed the same way.
+in notebooks, use `experiments.run` so everyone's numbers are computed the same way. Exception: `03_stages`
+refits the frozen HGB and Elastic-Net (settings from `experiments/final_params/`, same CV folds) for S5, because the
+one-at-a-time leaky sets aren't in the frozen `features.py`, and for §4 when `results/final/cv/hgb/` has no saved
+predictions (`python -m experiments.final` writes them).
 
 Start every notebook with:
 ```python
