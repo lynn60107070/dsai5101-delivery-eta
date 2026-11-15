@@ -6,19 +6,22 @@
 % Ethics (Lec 1): tighter promises pressure couriers; padded promises shift risk to customers;
 %   do some districts get systematically worse ETAs?
 % Future work (Lec 2, monitoring): drift over longer periods, retraining, input monitoring.
-% TODO(Lynn): once S5 (leakage audit) and S6 (stages) are merged, add one sentence each with their final numbers.
 \section{Conclusion}
 
 \textbf{Answer to the research question.} Using only information known when an order is placed,
 gradient boosting predicts delivery time with an MAE of 6.49 minutes on unseen days: 31\% better than
 a median predictor, which meets our 20\% target, and 3.1 minutes better than the platform's promise. The
 three model families end within 0.3 minutes of each other, so the limit is the information available
-at ordering, not the choice of model. Distance drives delivery time far more than anything else,
+at ordering, not the choice of model. The leakage audit confirms this: adding the after-order dispatch,
+acceptance and pickup times lowers the cross-validated MAE from 6.25 to 4.53 minutes ($R^2$ 0.51 to 0.72),
+almost all of it from the pickup time, which no order-time model can know. Neither stage of the
+delivery dominates: getting the food picked up and riding it to the customer each take a median 13.1
+minutes, and both run about 2.7 minutes longer at meal peaks. Distance drives delivery time far more than anything else,
 followed by time of day, district and preparation time. Our proposal expected recent district load to
 be a top driver; it was the weakest. The business criterion was not met: at the same average promised
 time, our 80th-percentile promises are late slightly more often than the platform's. Better estimates
 are therefore not automatically better promises, since the platform can still react after an order is
-placed, for example by reassigning couriers.
+placed.
 
 \textbf{Limitations.} The data cover eight days, with a single weekend day for training, so weekend
 effects could not be modelled; the Sunday test day was indeed harder than the Monday (MAE 6.77 vs 6.17).

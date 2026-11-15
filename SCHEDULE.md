@@ -30,11 +30,11 @@ the EDA, encode time carefully, fit only on training days, and plan what to cut.
 | **CP3** | **Wed 4 Nov** | **All models tuned on CV and frozen**; leakage audit, stage analysis, importance, promise test done on CV |
 | **CP4** | **Sun 8 Nov** | **All experiments final**: test set scored once, all tables and figures final, one script rebuilds everything |
 | **CP5** | **Thu 12 Nov** (was Wed 11) | **Full report draft** (every section). Slides: Lynn builds the deck first, then sends it for everyone's parts |
-| **CP6** | **Sat 14 Nov** | **95% done**: report and slides reviewed by all, rubric self-check, code checked on a fresh clone |
+| **CP6** | **Sat 14 Nov** → report sections Mon 16 Nov, review Tue 17 Nov | **95% done**: report and slides reviewed by all, rubric self-check, code checked on a fresh clone |
 | (light) | 15–17 Nov | Fix review comments only (Lynn's AICC paper is due 17 Nov) |
-| Rehearsal 1 | Wed 18 Nov | Full timed run-through (10 min) + 5-min mock Q&A |
-| Rehearsal 2 | Fri 20 Nov | Second timed run; **slides locked** |
-| **Presentation** | **Sun 22 Nov** | 10 min talk + 5 min Q&A, all three speak |
+| Slides ready | **Thu 19 Nov, night (max)** | Everyone's slides + speaker scripts in the deck (Lynn creates it 15 Nov) |
+| Dry run | **Sat 21 Nov** | Call: full timed run-through (10 min) + 5-min mock Q&A; **slides locked** |
+| **Presentation** | **Sun 22 Nov** | Group run-through before class (time TBC), then 10 min talk + 5 min Q&A, all three speak |
 | Report polish | 23–28 Nov | Apply anything the Q&A exposed; final read |
 | **Submit** | **Sun 29 Nov** | Report PDF + code link + data link on D2L (deadline Thu 3 Dec) |
 
@@ -71,7 +71,7 @@ Owns `common/clean.py`, `common/features.py`, `notebooks/01_*`–`03_*`, `figure
 | S6 | ✅ **Done 11 Nov** (README §5, `03_stages` §1–6). `notebooks/03_stages.ipynb`: restaurant wait (`fetch_min`) vs road time (`delivery_min − fetch_min`): which stage drives delay, and where (hour, district) [P] | 3 h | **Wed 11 Nov** (was CP3) |
 | S7 | ✅ **Done 6 Nov** (`01_data_audit` §7, C4). Pre-booked orders: short separate description (why excluded: a "different population" in Lec 3's outlier tree) [P] | 1 h | **CP3** |
 | S8 | ✅ **Done 11 Nov** (all `figures/eda/` figures checked against Lec 5 and reworked to the agreed plan: 5 for the report, 4 for slides, 3 for backup; analysis on training days). Final EDA + stage figures at report quality, checked against the Lec 5 figure checklist (ALIGNMENT §5) [FB2, Lec 5] | 2 h | **Wed 11 Nov** (was CP4) |
-| S9 | Report: Data & EDA section (each problem → how it was handled → the figure/table showing it) + Related Work section (≥ 5 sources, compared, merges everyone's) [FB2, rubric] | 5 h | **Thu 12 Nov** |
+| S9 | Report: Data & EDA section (each problem → how it was handled → the figure/table showing it) + Related Work section (≥ 5 sources, compared, merges everyone's) [FB2, rubric] | 5 h | **Mon 16 Nov** (was Thu 12) |
 | S10 | Slides: data, cleaning, EDA findings (~3 min), in Lynn's deck once it is sent | 1.5 h | after Lynn's deck |
 
 ### Lynn (lead): baselines, Elastic-Net, promise-setting test, integration
@@ -99,9 +99,9 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 | M3 | Distance comparison: `--features base` vs `base_manhattan`, same model, CV MAE + bootstrap (v0: 6.32 vs 6.31, so the bootstrap decides) → pick one, tell Sumaiya [P] | 1 h | **CP2** |
 | M4 | ✅ **Done 7 Nov** (HGB 6.25, RF 6.32; frozen). Tune HGB (incl. `loss=absolute_error`, since we report MAE) and RF with `experiments.tune` on the frozen features (start after CP2) + **one training-vs-CV error curve** over a complexity setting for the report [P, Lec 7] | 3 h + run time | **CP3** |
 | M5 | ✅ **Done 7 Nov** (README §5). `notebooks/04_drivers.ipynb`: grouped permutation importance (distance, prep, time, load, district) on CV folds, with spread → ranked delay drivers. Check the proposal's expectation (distance, peaks, load on top) and say if it held [P] | 3 h | **CP3** |
-| M6 | `notebooks/05_errors.ipynb`: errors by district / hour / distance / day, worst orders, residual plots, do errors rise at meal peaks (proposal expectation)? Does it hold on the test days? [P, Lec 2 subgroup evaluation] | 3 h | **Wed 11 Nov** (was CP4; CV part done 7 Nov) |
-| M7 | Test-day results for HGB and RF: Lynn ran the single test run on 9 Nov (L5, all models together); Mahmoud uses `results/final/test/hgb/predictions.parquet` (sent directly, not in git) for M6. Do not rerun `--eval test` | 1 h | **Wed 11 Nov** |
-| M8 | Report: Results & Discussion section (final tables already wired into `results.tex`) | 5 h | **Thu 12 Nov** |
+| M6 | `notebooks/05_errors.ipynb`: errors by district / hour / distance / day, worst orders, residual plots, do errors rise at meal peaks (proposal expectation)? Does it hold on the test days? [P, Lec 2 subgroup evaluation] | 3 h | **Mon 16 Nov** (was CP4; CV part done 7 Nov) |
+| M7 | Test-day results for HGB and RF: Lynn ran the single test run on 9 Nov (L5, all models together); Mahmoud uses `results/final/test/hgb/predictions.parquet` (sent directly, not in git) for M6. Do not rerun `--eval test` | 1 h | **Mon 16 Nov** (was Wed 11) |
+| M8 | Report: Results & Discussion section (final tables already wired into `results.tex`) | 5 h | **Mon 16 Nov** (was Thu 12) |
 | M9 | Slides: results, delay drivers, limitations (~3.5 min), in Lynn's deck once it is sent | 1.5 h | after Lynn's deck |
 
 ### Everyone
@@ -112,7 +112,7 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 | T3 | Read the whole report draft and comment on every section | **CP6** |
 | T4 | Rubric self-check: Sumaiya on the Report rubric, Mahmoud on the Presentation rubric, Lynn on the Info checklist (§6) | **CP6** |
 | T5 | Fresh-clone test: follow README in a new folder, run the tests and the final script (Mahmoud) | **CP6** |
-| T6 | Be able to explain the **whole** project (Q&A questions can go to anyone) | Rehearsals 18 + 20 Nov |
+| T6 | Be able to explain the **whole** project (Q&A questions can go to anyone) | Dry run Sat 21 + run-through Sun 22 Nov (use `presentation/qa_prep.md`) |
 
 ---
 

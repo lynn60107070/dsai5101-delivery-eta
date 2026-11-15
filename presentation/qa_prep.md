@@ -86,8 +86,8 @@ overfitting in other ways, so it can afford more leaves.
 
 **R² is only 0.49. Isn't that weak?**
 Half the variation comes from things nobody knows at ordering: traffic, weather, waiting at the door,
-which courier takes it. Even a model allowed to cheat with after-order times only reaches about 0.73
-(leakage audit, S5). Our three very different models all land within 0.3 min of each other, which says
+which courier takes it. Even a model allowed to cheat with after-order times only reaches 0.72
+(leakage audit, S5: CV MAE 6.25 → 4.53). Our three very different models all land within 0.3 min of each other, which says
 the limit is the information, not the model. MAE in minutes is our main metric, and there we beat both
 baselines clearly.
 
@@ -131,12 +131,17 @@ starting point for promises that are then updated after dispatch (future work).
 ## 6. Leakage audit and stages [Sumaiya]
 
 **What is the leakage audit?**
-The same model with after-order times (dispatch, accept, pickup) added. Error drops a lot, which shows
-how tempting leakage is and how much error is information that does not exist at ordering. Final
-numbers: S5.
+The same frozen models with after-order times (dispatch, courier accepts, pickup) added. CV MAE drops
+from 6.25 to 4.53 for boosting (CI −1.74 to −1.71) and 6.60 to 4.84 for Elastic-Net; R² 0.51 → 0.72.
+Added one at a time, dispatch (5.86) and accept (5.83) barely help; pickup (4.55) gives almost the whole
+gap, partly by construction, since pickup time contains the other two. It shows how tempting leakage is
+and how much error is information that does not exist at ordering.
 
 **Which part of the delivery causes delays: the restaurant or the road?**
-Final answer from S6 (restaurant wait vs road time, by hour and district). Fill in once merged.
+Neither dominates. Order → pickup and pickup → arrival each take a median 13.1 min, and after
+accounting for distance the model's error splits about evenly (51% / 47%). Both run ~2.7 min longer at
+meal peaks. Where it differs: late orders lose more on the road in the 7 big areas with longer trips
+(72% of late orders), and more at pickup in the other areas and at night.
 
 ## 7. Limitations, ethics, next steps [Lynn]
 
