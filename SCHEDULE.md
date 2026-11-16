@@ -129,15 +129,15 @@ Sunday (6.58 vs 6.77). So "3.1 min better than the promise" is all padding: the 
 | F2 | More features (feature engineering), more explainable | Candidate features (rider availability F3, restaurant history computed inside folds, day of week) on CV; explainability: partial dependence for distance, hour and load + Elastic-Net coefficients in minutes | Lynn | Thu 19 |
 | F3 | Rider availability per district, high or low (e.g. > 10 riders free → capacity high) → feature | District × time matrix of riders active in the previous 30 min, using **only events finished before the order** (leakage-safe), heatmap + `riders_30m` and orders-per-rider features | Lynn | Thu 19 |
 | F4 | Compare padded with padded, unpadded with unpadded; share of trips < 1 km and > 3 km; show our model on its own, not only vs the app | Padded: q80 vs promise (done). Unpadded: our estimate vs the promise minus its average padding (above). Trip shares: < 1 km 30.0%, 1–3 km 62.8%, > 3 km 7.2%. Standalone: MAE, coverage and error by segment for our model alone | Lynn | Thu 19 |
-| F5 | % duplicates, missing values etc., with why we did what we did | One table in `data.tex`: each issue, count, % of rows, decision, reason (from `01_data_audit`) | Sumaiya | Mon 23 (in S9) |
+| F5 | % duplicates, missing values etc., with why we did what we did | One table in `data.tex`: each issue, count, % of rows, decision, reason (from `01_data_audit`) | Lynn | Mon 23 (table goes in `data.tex`) |
 | F6 | Same weekday over time: is the pattern drifting, or can we assume other days look the same? | Monday 17 vs Monday 24 (a week apart): mean 34.5 vs 34.7, median 28.0 vs 28.1, so stable; add the hourly overlay to the F1 figure and one sentence on drift | Lynn | Thu 19 |
-| F7 | Benchmarking (optional): how industry does this, state of the art | Small table in Related Work: published ETA systems (e.g. Meituan, Ele.me, DoorDash, Uber), their inputs and reported error, with a note that numbers are not directly comparable across datasets | Mahmoud | Mon 23 |
+| F7 | Benchmarking (optional): how industry does this, state of the art | Small table in Related Work: published ETA systems (e.g. Meituan, Ele.me, DoorDash, Uber), their inputs and reported error, with a note that numbers are not directly comparable across datasets | Lynn | Mon 23 |
 | F8 | Reproducibility: one command that runs every notebook and regenerates everything | `python -m experiments.reproduce`: tests → `experiments.final` (CV) → all notebooks executed → slide figures; README §2 updated | Lynn | Tue 17 |
 
 **Decided 16 Nov:** new features (F2/F3) are a **CV-only extension**. The frozen models and the single
 test run (9 Nov) stay the main results; the report gives the new features' CV gain separately, so the
-test days are never looked at twice. Lynn does F1–F4, F6, F8; F5 stays in Sumaiya's `data.tex` (S9) and
-F7 goes to Mahmoud.
+test days are never looked at twice. Lynn does all of F1–F8; Sumaiya's and Mahmoud's remaining tasks are
+unchanged.
 
 ---
 
