@@ -34,7 +34,7 @@ of its forms is information unavailable at prediction time entering a model. Del
 since dispatch, pickup and arrival times sit next to the order, so we keep after-order times out of every
 model and measure their worth separately.
 
-Deployed systems show where the industry stands (Table~\ref{tab:benchmark}). Ele.me's fulfilment-time
+Deployed systems show where the industry stands (Table~\ref{tab:benchmark} in the appendix). Ele.me's fulfilment-time
 model~\cite{zhu2020fulfillment,alibaba2020fulfillment} uses real-time supply and demand, the orders
 waiting at the restaurant and nearby couriers, the same kinds of signals our extension adds
 (Section~\ref{sec:extension}), and cut MAE by 9.8\% in an online test. Uber's
@@ -42,7 +42,6 @@ DeepETA~\cite{uber2022deepeta,hu2022deepreta} corrects a routing engine's estima
 uses an asymmetric loss, so that being late can cost more than being early: the same trade-off the
 platform's padded promise makes. Their errors are not comparable with ours, since each uses its own data
 and target.
-\input{tables/benchmark}
 
 In short, earlier work either predicts with richer, private inputs~\cite{zhu2020fulfillment,
 hildebrandt2022supervised,wang2018travel} or uses predictions to steer dispatch~\cite{liu2021ontime,

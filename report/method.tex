@@ -86,20 +86,9 @@ final test. Within development we use forward-chaining cross-validation: four fo
 all earlier days and validated on the next one (fit on 17--18, validate on 19; \ldots; fit on 17--21,
 validate on 22). This mirrors deployment, where the model only ever sees the past. Hyperparameters were
 chosen by random search on these folds (Table~\ref{tab:models}); the slower tree models were tuned on a
-random sample of rows and then refitted on all of them. Fig.~\ref{fig:complexity} shows why tuning
+random sample of rows and then refitted on all of them. Fig.~\ref{fig:complexity} (appendix) shows why tuning
 matters: as trees grow, training error keeps falling while validation error rises. All settings were
 frozen before the test days were scored, once, with every model refitted on all six development days.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{hgb_complexity_curve}
-\caption{Training vs cross-validation MAE for gradient boosting as the number of leaves per tree grows
-(other settings at their defaults; bars: spread over the four folds). Validation error is lowest around
-16 leaves; at 511 leaves training error is 2.45 minutes but validation error 6.63, a clear sign of
-overfitting.}
-\label{fig:complexity}
-\end{figure}
-
 \textbf{Step 6: metrics and comparisons.}
 \begin{itemize}
   \item \emph{Accuracy}: MAE in minutes (primary, easy to explain to operations), RMSE and $R^2$.

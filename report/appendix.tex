@@ -1,0 +1,48 @@
+% Supplementary tables and figures (not counted in the 6-page limit: the guidelines exclude appendices).
+% Moved here from the main sections on 16 Nov; every one is referenced from the main text.
+\section{Supplementary results}
+\label{app:supplementary}
+These tables and figures support the main text; each is referred to from the section that discusses it.
+
+\input{tables/benchmark}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{hgb_complexity_curve}
+\caption{Training vs cross-validation MAE for gradient boosting as the number of leaves per tree grows
+(other settings at their defaults; bars: spread over the four folds). Validation error is lowest around
+16 leaves; at 511 leaves training error is 2.45 minutes but validation error 6.63, a clear sign of
+overfitting.}
+\label{fig:complexity}
+\end{figure}
+
+\input{tables/elasticnet_effects}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{day_profiles}
+\caption{Median delivery time by hour for every day (left: weekdays in blue, Saturday and Sunday in black)
+and for the two Mondays a week apart (right). Shaded hours have under 2\% of orders.}
+\label{fig:days}
+\end{figure}
+
+\input{tables/extension_models}
+
+\input{tables/extension_vs_platform}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{rider_pressure}
+\caption{Orders waiting per available rider (median) by district and hour, training days. Available riders
+are those who finished a delivery in the district in the last 30 minutes; grey: no orders.}
+\label{fig:riders}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{partial_dependence}
+\caption{Partial dependence of the extended gradient boosting model (all extra features, fitted on the six
+training days): the average prediction for \num{5000} training orders when one input is set to each value
+and the rest are kept. Distance is shown up to its 99th percentile.}
+\label{fig:pd}
+\end{figure}

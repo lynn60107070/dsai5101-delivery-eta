@@ -52,12 +52,11 @@ meal peaks matter most, but wrong about load. Time and load share information: s
 1.43 minutes, more than the 1.05 from shuffling them one at a time, so each one alone partly hides the other.
 Permutation importance shows what the model uses, not what causes long deliveries.
 
-The interpretable Elastic-Net gives the same picture in minutes (Table~\ref{tab:effects}): each kilometre
+The interpretable Elastic-Net gives the same picture in minutes (Table~\ref{tab:effects} in the appendix): each kilometre
 adds 6.1 minutes, the lunch peak 4.8 and the dinner peak 3.6, each estimated minute of preparation 0.66, an
 order with no real prep estimate 2.0--2.5 minutes, and a district running at twice its usual load only 1.1.
 Its test MAE (6.80) is only 0.31 minutes above boosting's, so these readable effects capture most of what the
 complex models learn.
-\input{tables/elasticnet_effects}
 
 \begin{figure}[t]
 \centering
@@ -75,7 +74,7 @@ under 1~km to 14.37 over 7~km, but 70\% of orders are under 2~km. \textbf{Day:} 
 day (MAE 6.77, predicted 2.1 minutes too short on average), while Monday is 6.17, close to the CV weekdays.
 The development data hold only one weekend day, so the model cannot learn weekend patterns, and Sunday
 explains most of the gap between test and CV. Weekends follow the same daily shape as weekdays (hourly
-medians correlate at 0.92) but run 1--3.5 minutes slower from noon to 18:00 (Fig.~\ref{fig:days}), which a
+medians correlate at 0.92) but run 1--3.5 minutes slower from noon to 18:00 (Fig.~\ref{fig:days} in the appendix), which a
 day-of-week feature could capture with more weekends to learn from. Patterns are stable over the week: the
 two Mondays a week apart differ by 0.5 minutes per busy hour on average. \textbf{Districts:} MAE ranges from 4.37 (district 18) to 9.04
 (district 21). District 21 was ordinary on CV (5.67) and is only bad on Sunday (11.3), which looks like a
@@ -97,15 +96,6 @@ which no order-time model can see.
 (bottom), on the CV folds and the test days.}
 \label{fig:errors}
 \end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{day_profiles}
-\caption{Median delivery time by hour for every day (left: weekdays in blue, Saturday and Sunday in black)
-and for the two Mondays a week apart (right). Shaded hours have under 2\% of orders.}
-\label{fig:days}
-\end{figure}
-
 \subsection{Leakage audit and delivery stages}
 \label{sec:leakage}
 % [Sumaiya] S5, S6. Numbers: notebooks/03_stages (CV on the training days, frozen settings).
@@ -147,44 +137,26 @@ per available rider); the restaurant's past mean delivery and pickup times; the 
 lateness of the district's deliveries in the last 30 minutes; the orders waiting for pickup at the
 restaurant; and the restaurant's prep-estimate bias, how much later than the platform's prep estimate its
 food is usually picked up (over at least five earlier pickups). Riders are scarcest at the meal peaks, and
-far more so in some districts (Fig.~\ref{fig:riders}); when more than three orders wait per available rider
+far more so in some districts (Fig.~\ref{fig:riders} in the appendix); when more than three orders wait per available rider
 (19\% of orders), the median delivery takes 35.6 minutes against 26.4 otherwise. With the
 frozen boosting settings, all the extra features together lower the CV MAE from 6.25 to 5.92 ($-0.33$, CI
 $[-0.34, -0.32]$) and raise $R^2$ from 0.51 to 0.57 (Table~\ref{tab:extension}). Restaurant history gives
 most of the gain ($-0.24$), the prep-estimate bias $-0.03$ on top of the rest, riders $-0.05$ on their own,
 and recent delays and the queue only $-0.01$. Re-tuning boosting on the new features (the same 20-try
 search) selected the frozen settings again. Elastic-Net and Random Forest gain about as much as boosting
-($-0.33$ and $-0.31$; Table~\ref{tab:ladder}) and keep their order, so the gain comes from the information
+($-0.33$ and $-0.31$; Table~\ref{tab:ladder} in the appendix) and keep their order, so the gain comes from the information
 in the features, not from model complexity. Even so, the extra features close only a fifth of the gap
 the leakage audit measured (0.33 of the 1.72 minutes between 6.25 and 4.53): most of the missing
 information only exists after the order. Because these features were designed after the test run, we
 report them on the validation folds only. Against the platform's promise minus its per-distance padding,
 the extended model is more accurate overall (5.92 vs 6.24, difference $-0.31$, CI $[-0.33, -0.30]$) and in
-five of seven segments (Table~\ref{tab:extension_platform}); on 1--3~km trips the two are level (6.08 vs
+five of seven segments (Table~\ref{tab:extension_platform} in the appendix); on 1--3~km trips the two are level (6.08 vs
 6.09, CI of the difference $[-0.03, +0.02]$), and only at the lunch peak is the platform still better
-(6.66 vs 6.75, CI $[+0.05, +0.14]$). Fig.~\ref{fig:pd} shows what the model learned: predictions rise by about 24 minutes from
+(6.66 vs 6.75, CI $[+0.05, +0.14]$). Fig.~\ref{fig:pd} (appendix) shows what the model learned: predictions rise by about 24 minutes from
 0.2 to 4.9~km, by about 6 minutes as orders per rider go from 0.5 to 3, by about 4 minutes across the hours
 of the day, by about 3 minutes from the fastest to the slowest restaurants, and by 1--2 minutes with recent
 district delays or a long restaurant queue. Like permutation importance, these curves show what the model uses, not causes.
 \input{tables/extension_cv}
-\input{tables/extension_models}
-\input{tables/extension_vs_platform}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{rider_pressure}
-\caption{Orders waiting per available rider (median) by district and hour, training days. Available riders
-are those who finished a delivery in the district in the last 30 minutes; grey: no orders.}
-\label{fig:riders}
-\end{figure}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{partial_dependence}
-\caption{Partial dependence of the extended gradient boosting model (all extra features, fitted on the six
-training days): the average prediction for \num{5000} training orders when one input is set to each value
-and the rest are kept. Distance is shown up to its 99th percentile.}
-\label{fig:pd}
-\end{figure}
-
 \subsection{Promise setting}
 % [Lynn] L4: q80 vs platform at the same mean promised time
 A point estimate aims at the middle of the distribution, so about half of all orders arrive after it;
