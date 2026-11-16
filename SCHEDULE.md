@@ -114,6 +114,31 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 | T5 | ✅ **Done 15 Nov** (Mahmoud: 19 tests OK, same CV numbers). Fresh-clone test: follow README in a new folder, run the tests and the final script (Mahmoud) | **CP6** |
 | T6 | Be able to explain the **whole** project (Q&A questions can go to anyone) | Dry run Sat 21 + run-through Sun 22 Nov (use `presentation/qa_prep.md`) |
 
+### Instructor feedback (16 Nov)
+
+Presentation-relevant items are due **Thu 19 Nov** so they can go into the slides; report-only items by
+**Mon 23 Nov**. First check (16 Nov, Lynn): subtracting the platform's average padding (8.07 min, learned
+on the development days only) makes its promise as accurate as our model on the test days (MAE 6.48 vs
+6.49, difference +0.015, CI [−0.013, +0.043]). We are better on CV (3 of 4 folds), on trips under 1 km
+(5.61 vs 6.13) and over 3 km (8.73 vs 10.07); the platform is better at lunch (6.68 vs 7.22) and on
+Sunday (6.58 vs 6.77). So "3.1 min better than the promise" is all padding: the headline must change.
+
+| ID | Feedback | What we do | Owner | Due |
+|---|---|---|---|---|
+| F1 | Weekday encoding: is `is_weekend` needed, do weekend and weekday patterns differ, or is it just time of day? | EDA: hourly delivery-time profile per day (8 lines) + weekday vs weekend; first look: daily medians 27.8–29.5, weekend (Sat 28.9, Sun 29.5) only slightly slower. Keep the fold-4 reason for dropping the flag; add day-of-week only if the profiles differ in shape | Lynn | Thu 19 |
+| F2 | More features (feature engineering), more explainable | Candidate features (rider availability F3, restaurant history computed inside folds, day of week) on CV; explainability: partial dependence for distance, hour and load + Elastic-Net coefficients in minutes | Lynn | Thu 19 |
+| F3 | Rider availability per district, high or low (e.g. > 10 riders free → capacity high) → feature | District × time matrix of riders active in the previous 30 min, using **only events finished before the order** (leakage-safe), heatmap + `riders_30m` and orders-per-rider features | Lynn | Thu 19 |
+| F4 | Compare padded with padded, unpadded with unpadded; share of trips < 1 km and > 3 km; show our model on its own, not only vs the app | Padded: q80 vs promise (done). Unpadded: our estimate vs the promise minus its average padding (above). Trip shares: < 1 km 30.0%, 1–3 km 62.8%, > 3 km 7.2%. Standalone: MAE, coverage and error by segment for our model alone | Lynn | Thu 19 |
+| F5 | % duplicates, missing values etc., with why we did what we did | One table in `data.tex`: each issue, count, % of rows, decision, reason (from `01_data_audit`) | Sumaiya | Mon 23 (in S9) |
+| F6 | Same weekday over time: is the pattern drifting, or can we assume other days look the same? | Monday 17 vs Monday 24 (a week apart): mean 34.5 vs 34.7, median 28.0 vs 28.1, so stable; add the hourly overlay to the F1 figure and one sentence on drift | Lynn | Thu 19 |
+| F7 | Benchmarking (optional): how industry does this, state of the art | Small table in Related Work: published ETA systems (e.g. Meituan, Ele.me, DoorDash, Uber), their inputs and reported error, with a note that numbers are not directly comparable across datasets | Mahmoud | Mon 23 |
+| F8 | Reproducibility: one command that runs every notebook and regenerates everything | `python -m experiments.reproduce`: tests → `experiments.final` (CV) → all notebooks executed → slide figures; README §2 updated | Lynn | Tue 17 |
+
+**Decided 16 Nov:** new features (F2/F3) are a **CV-only extension**. The frozen models and the single
+test run (9 Nov) stay the main results; the report gives the new features' CV gain separately, so the
+test days are never looked at twice. Lynn does F1–F4, F6, F8; F5 stays in Sumaiya's `data.tex` (S9) and
+F7 goes to Mahmoud.
+
 ---
 
 ## Checkpoint checklists
