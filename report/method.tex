@@ -23,7 +23,8 @@ the moment the order is placed? The model uses:
         a system default (Section~\ref{sec:data}).
   \item \emph{District load}: orders placed in the same district in the previous 15 minutes, divided by
         that district's usual 15-minute count over the previous 24 hours. It counts only strictly earlier
-        orders, and is flagged as missing on the first day, which has no 24-hour history.
+        orders (pre-bookings included, at the time they were booked), and is flagged as missing for the
+        first 24 hours of data, which have no full day of history.
   \item \emph{District}: one-hot encoded (23 levels).
 \end{itemize}
 Three candidates were excluded. The courier is assigned after ordering (leakage). Restaurant identity

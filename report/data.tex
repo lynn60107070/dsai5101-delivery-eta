@@ -3,36 +3,136 @@
 %   encoding, leakage) JUSTIFIED; EDA figures that each make a point and VISIBLY inform the modelling.
 % FB2 (proposal feedback): show each listed problem being handled: the before -> after table from S2
 %   (refused dispatches, zero timestamps, pre-booked, > 3 h durations, missing prep time).
-% Source material: README section 3 (facts), section 4 (cleaning log C1-C7, feature log F1-F9).
-% Lec 3/4/5 checklists: ALIGNMENT.md section 5. Every figure: numbered, captioned, referenced, title = finding.
+% Numbers: cleaning from notebooks/01_data_audit (all days, before the split); EDA from notebooks/02_eda
+%   (training days, 17-22 Oct). README sections 3-4 log every rule (C1-C7) and feature (F1-F9).
 \section{Data and Exploratory Analysis}
 \label{sec:data}
 
 \subsection{Source and description}
-TODO.
+We use the data Meituan released for the INFORMS TSL Data-Driven Research
+Challenge~\cite{zhao2024meituan}: every food-delivery waybill logged by its dispatch system in one city
+from 17 to 24 October 2022. A row is a \emph{dispatch attempt}, so a refused order appears again when it
+is reassigned. The raw file has 654{,}343 rows and 23 columns: 568{,}546 orders, 23 delivery districts
+(Meituan's business areas), 4{,}962 restaurants and 4{,}955 couriers. Each row holds the order time,
+restaurant and customer coordinates (shifted for privacy, so locations are not real and distances are
+approximate), the district, a pre-booking flag, the platform's estimated meal-ready time and promised
+delivery time, and the times of dispatch, courier acceptance, pickup and arrival. The target is arrival
+minus order time in minutes (median 27.8 on the training days, right-skewed). The file does not say when
+the prep estimate is set; we assume it is known at ordering. After-order times and the courier are used
+only for analysis (Section~\ref{sec:leakage}); the promise only as a baseline.
 
 \subsection{Cleaning and preprocessing}
-TODO. % include Table~\ref{tab:cleaning}
+Table~\ref{tab:cleaning} lists every rule that removes rows; the reasons follow.
 
-% \begin{table}[t]
-% \centering
-% \caption{Data problems and how each was handled (rows before and after).}
-% \label{tab:cleaning}
-% \begin{tabular}{lrr}
-% \toprule
-% Step & Rows affected & Rows left \\
-% \midrule
-% ... \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
+\begin{table}[t]
+\centering
+\caption{Cleaning keeps 546{,}340 of 654{,}343 rows (all eight days, before the time split); \% is of the
+rows before each step. There are no exact duplicate rows. A further 82{,}800 modelling orders (15.2\%)
+with a missing (1.4\%) or default (13.8\%) prep estimate are kept, imputed and flagged, not removed.}
+\label{tab:cleaning}
+\begin{tabular}{lrrr}
+\toprule
+Step & Removed & \% & Rows left \\
+\midrule
+Raw dispatch attempts & & & 654{,}343 \\
+Keep accepted attempts & 85{,}797 & 13.1 & 568{,}546 \\
+Drop orders with no arrival time & 1 & 0.0 & 568{,}545 \\
+Exclude pre-booked orders & 22{,}181 & 3.9 & 546{,}364 \\
+Exclude deliveries over 180 min & 24 & 0.0 & 546{,}340 \\
+\midrule
+\multicolumn{4}{l}{Train 17--22 Oct: 406{,}553 \quad Test 23--24 Oct: 139{,}787} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Refused attempts.} All 85{,}797 repeat an order another courier later accepted, so dropping
+them loses no order.
+
+\textbf{Hidden missing values.} The file has no empty cells, but a timestamp of 0 means ``not recorded'':
+one order has no arrival time (dropped, since it has no target) and 9{,}874 accepted orders have no prep
+estimate (7{,}439 of them in the modelling table). A second missing code hides in the prep column:
+13.8\% of the modelling orders have an ``estimate'' less than 5 minutes after the order, and 74\% of these
+equal, to the second, the moment the order entered the dispatch system, so they are system defaults, not
+forecasts. Flagging them is safe: the default is written within seconds of the order and before any
+dispatch (none equals the dispatch time). Both codes are set to missing (82{,}800 modelling orders),
+filled with the training median inside each model, and kept as two flags, because these orders are about
+2--5 minutes slower than orders with a real estimate at the same distance (shown in the distance figure
+below).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{delivery_time_by_prebook}
+\caption{Pre-booked orders follow the slot the customer picked, not the delivery (all days, before
+cleaning), and hold almost every delivery over 180 minutes, so they are excluded.}
+\label{fig:prebook}
+\end{figure}
+
+\textbf{Outliers.} Following the usual outlier triage (error, rare but real, or a different population),
+pre-booked orders are a different population (Fig.~\ref{fig:prebook}): their clock runs to a slot the
+customer chose (median 80 minutes against 28), and they hold 4{,}073 of the 4{,}097 deliveries over three
+hours. Mixing them into training raises the boosting model's validation MAE on normal orders from 6.28
+to 6.76 minutes, even keeping only those under three hours, so they are excluded. The IQR and $z$-score
+rules would flag 8{,}097 and 3{,}879 ordinary long deliveries on this skewed target, so we keep them; only
+24 normal orders take over 180 minutes (99.9\% take under 86), and we remove those as implausible (7 of
+them on the test days).
+
+\textbf{Encoding.} Districts are one-hot encoded; restaurant ID is left out because 1{,}229 of its
+4{,}962 levels have fewer than 10 orders (see the Methodology).
+
+\textbf{Leakage.} A column is a model input only if it is known when the order is placed. The courier,
+the acceptance flag and the dispatch, acceptance and pickup times are all written later, so they are kept
+out of every model and used only to measure what they would add (Section~\ref{sec:leakage}). Every step
+that learns from data, such as the median used for imputation, is fitted on the training folds alone.
+
+\textbf{What we did not find.} There are no duplicate rows (each accepted order appears once), no
+timestamp-order violations in seven checks (placed, dispatched, accepted, picked up, arrived, and no
+estimate before the order), no coordinates outside the city's area and no constant columns. These rules
+therefore cover every problem the audit found.
 
 \subsection{Exploratory findings that shaped the modelling}
-TODO. % each paragraph: finding -> figure -> modelling decision it led to
+All findings below use the training days only, so the test days stay unseen.
 
-% \begin{figure}[t]
-% \centering
-% \includegraphics[width=\columnwidth]{delivery_vs_distance_prep}   % bare name: main.tex sets \graphicspath
-% \caption{State the finding here, not just the variables.}
-% \label{fig:distance}
-% \end{figure}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{delivery_vs_distance_prep}
+\caption{Delivery time rises with distance, and orders whose prep estimate is a default (dashed) or
+stored as 0 (dotted) run slower at the same distance (training days). This led to the distance feature
+and the two missing-estimate flags.}
+\label{fig:distance}
+\end{figure}
+
+\textbf{Distance is the main driver.} The median delivery time rises about 7.1 minutes per kilometre up
+to 3~km, where 93\% of orders fall, and about 5.2 per kilometre beyond (Spearman $\rho = 0.55$;
+Fig.~\ref{fig:distance}). The spread grows too: the 20th--80th percentile gap widens from 13 to 24
+minutes. We checked for a Simpson reversal by repeating this within each district: the slope stays
+positive in all 23, between 4.9 and 7.7 minutes per kilometre. Distance explains about two-thirds of the
+variance between district medians, but not all of it: districts 18 and 6 are still 6.2 and 5.5 minutes
+faster than the typical order of the same distance. This is why the model uses both distance and
+district.
+
+\textbf{Meal peaks are slow.} Delivery time and order volume peak together: at 11:00, with 17\% of
+orders, the median is 33.5 minutes against 27.8 overall. The 11:00--11:59 and 17:00--19:59 hours are the
+only ones above the overall median, and became the lunch and dinner peak flags.
+
+\textbf{Load matters less than it looks.} Recent district load correlates with delivery time
+($\rho = 0.30$) mostly because big districts and meal peaks are busy and slow; within the same district
+and hour it is only 0.09. We measure load relative to the district's usual level, so big districts do
+not look busy just for being big, and expect it to be a weak driver.
+
+\textbf{The promise is padded.} 35\% of promises sit at a 30-minute minimum, and the median order
+arrives 8.3 minutes early, yet 14.7\% arrive late (Fig.~\ref{fig:promise_padding}). The number of
+orders arriving late more than halves at exactly eight minutes late (798 orders in the 15~seconds
+before, 336 in the 15~seconds after), at every promise level, which suggests an operational rule
+applied after ordering. Because the promise is padded, beating it on MAE says little about it as a
+promise; the Results also compare promises at the same average length.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{promise_padding}
+\caption{Actual minus promised delivery time (training days): most orders arrive early, and arrivals
+drop sharply at +8 minutes, so promises are also compared at equal average length.}
+\label{fig:promise_padding}
+\end{figure}
+
+\textbf{Two smaller decisions.} The log target removes most of the skew (0.89 to $-0.31$) and the
+weekend sits on both sides of the split; the Methodology explains why neither is used.

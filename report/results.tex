@@ -90,7 +90,39 @@ which no order-time model can see.
 \label{fig:errors}
 \end{figure}
 
+\subsection{Leakage audit and delivery stages}
+\label{sec:leakage}
+% [Sumaiya] S5, S6. Numbers: notebooks/03_stages (CV on the training days, frozen settings).
+How much of the remaining error is information we cannot have at order time? We refitted the tuned
+models, settings unchanged, with the after-order times added. With all three (dispatch, courier acceptance, pickup), the
+gradient-boosting model's cross-validated MAE falls from 6.25 to 4.53 minutes ($-1.72$, 95\% CI $[-1.74,
+-1.71]$, paired bootstrap over CV orders), and Elastic-Net's from 6.60 to 4.84. Almost all of the gain comes from the pickup time alone
+(4.55; Fig.~\ref{fig:leakage}). This is partly by construction: every time is measured from the order,
+so the pickup time already contains dispatch and acceptance. None of these times exists when the order
+is placed, so the deployable model must do without them.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{leakage_audit}
+\caption{Cross-validated MAE of the gradient-boosting model when after-order times are added (training
+days). The pickup time alone gives almost all of the gain, but it is not known when we predict.}
+\label{fig:leakage}
+\end{figure}
+
+Splitting each delivery at pickup gives two stages of about 13 minutes each (training days): order to
+pickup (dispatch, the courier reaching the restaurant and waiting for the food) and pickup to arrival
+(the road). After distance is taken out, neither stage dominates: pickup holds 53\% of the remaining
+variance, late orders take 7--8 minutes longer than usual for their distance in each stage, and both
+stages take about 2.7 minutes longer at meal peaks. The model's MAE roughly doubles, to about 11--12
+minutes, in the slowest tenth of either stage. Where it differs: in the seven large districts with longer
+trips, which hold 72\% of late orders, late orders lose more time on the road; in the other sixteen, and
+at night, they lose it at pickup. Restaurant waiting cannot be measured on its own, because the data have
+no timestamp for the courier's arrival at the restaurant. Order-time features cannot see either stage
+running long, so the most promising next inputs are on the pickup side, such as a restaurant's recent
+delays; Section~\ref{sec:extension} tests these.
+
 \subsection{Extension: real-time features}
+\label{sec:extension}
 % [Lynn] Instructor feedback F2/F3; experiments/extension.py. CV only: the test days stay scored once.
 The platform knows more at ordering than our base features. We added information it has in real time, all
 computed only from deliveries completed before the order was placed: the riders who finished a delivery in
@@ -120,9 +152,6 @@ training days): the average prediction for \num{5000} training orders when one i
 and the rest are kept. Distance is shown up to its 99th percentile.}
 \label{fig:pd}
 \end{figure}
-
-\subsection{Leakage audit and delivery stages}
-TODO. % [Sumaiya] S5, S6
 
 \subsection{Promise setting}
 % [Lynn] L4: q80 vs platform at the same mean promised time

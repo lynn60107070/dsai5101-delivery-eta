@@ -36,7 +36,9 @@ effects could not be modelled; weekends run 1--3.5 minutes slower in the afterno
 day was indeed harder than the Monday (MAE 6.77 vs 6.17). The same weekday a week apart is almost
 identical, so we see no drift within the week, but eight days cannot show longer-term drift. Weather and
 traffic are not in the dataset, rider availability can only be approximated from past deliveries, and
-coordinates are shifted for privacy, so distances are approximate. The extra features were evaluated on
+coordinates are shifted for privacy, so distances are approximate. The split follows the dataset's day
+field, which is the local arrival date: 140 late-evening orders carry the next day's date, and 16 test
+orders were placed before the last training order. The extra features were evaluated on
 the validation folds only, to keep the test days scored once. All results come from one platform in one city, over
 one week.
 
