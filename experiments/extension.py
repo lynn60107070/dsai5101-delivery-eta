@@ -3,7 +3,7 @@
     python -m experiments.extension
 
 The frozen gradient boosting settings (final_params/hgb.json) are refitted on the CV folds with the new
-feature sets (common/features.py: riders, restaurant, extended, realtime) and compared with the frozen base
+feature sets (common/features.py: riders, restaurant, extended, realtime, restaurant_prep, all) and compared with the frozen base
 model on the same orders (paired bootstrap). The realtime set is also refitted with settings re-tuned for it
 (`python -m experiments.tune --model hgb --features realtime --n-iter 20 --sample 150000`, CV only). Every
 model is also compared with the platform's promise minus its per-distance padding, by segment. The test days
@@ -46,7 +46,9 @@ SETS = [("riders", "riders", "+ rider availability", "frozen"),
         ("restaurant", "restaurant", "+ restaurant history", "frozen"),
         ("extended", "extended", "+ both", "frozen"),
         ("realtime", "realtime", "+ both + recent delays, restaurant queue", "frozen"),
-        ("realtime_tuned", "realtime", "same, boosting re-tuned", "tuned")]
+        ("realtime_tuned", "realtime", "same, boosting re-tuned", "tuned"),
+        ("restaurant_prep", "restaurant_prep", "+ restaurant history + prep bias", "frozen"),
+        ("all", "all", "all of the above + prep bias", "frozen")]
 SEGMENTS = {"All orders": lambda p: p.y > -1, "Under 1 km": lambda p: p.dist_km < 1,
             "1-3 km": lambda p: p.dist_km.between(1, 3), "Over 3 km": lambda p: p.dist_km > 3,
             "Lunch peak (11:00)": lambda p: p.hour == 11, "Dinner peak (17-19)": lambda p: p.hour.between(17, 19),
@@ -172,10 +174,8 @@ def rider_pressure(train: pd.DataFrame) -> dict:
 
 def partial_dependence(train: pd.DataFrame, params: dict) -> dict:
     """F2: average prediction when one input is set to each grid value for 5,000 training orders (others kept),
-    for the best extended model (realtime features; re-tuned settings when they exist)."""
-    fs = FEATURE_SETS["realtime"]
-    if TUNED.exists():
-        params = json.loads(TUNED.read_text(encoding="utf8"))["params"]
+    for the model with every extension feature (frozen settings: re-tuning chose them again)."""
+    fs = FEATURE_SETS["all"]
     _, est = fit_predict("hgb", fs, train, train.head(1), params)
     sample = train.sample(5000, random_state=SEED)
 
@@ -227,7 +227,7 @@ def elasticnet_effects(train: pd.DataFrame) -> dict:
     """F2: the linear model's effects in minutes per unit (scaled coefficients divided back by the scale)."""
     params, _ = frozen_params("elasticnet")
     out = {}
-    for name in ("base", "realtime"):
+    for name in ("base", "all"):
         fs = FEATURE_SETS[name]
         _, est = fit_predict("elasticnet", fs, train, train.head(1), params)
         pre, reg = est[0], est[-1]

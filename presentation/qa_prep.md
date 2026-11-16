@@ -7,7 +7,7 @@ marked CV. Sources: README §3–§5, ALIGNMENT.md, `results/final/`.
 **The 20-second story:** using only what is known when an order is placed, gradient boosting predicts
 delivery time with 6.49 min error, 31% better than guessing the median and as accurate as the platform's
 own estimate once its padding is removed (6.36–6.48). Distance is the main driver; free riders and
-each restaurant's track record come next, and with them (CV error 6.25 → 5.95) we beat the app's own
+each restaurant's track record come next, and with them (CV error 6.25 → 5.92) we beat the app's own
 estimate on the validation days. But turning predictions into
 promises does not beat the platform, because the platform can still act after the order is placed.
 
@@ -149,7 +149,7 @@ only) and it ties with us: 6.48 vs 6.49, CI −0.01 to +0.04. Take off each dist
 (fairer to the app) and it's slightly better, 6.36. Even then we're better under 1 km (5.61 vs 5.86) and
 over 3 km (8.73 vs 9.94), 37% of orders; the app is better on 1–3 km trips (63%) and at lunch (6.68 vs
 7.22). With the real-time features (riders, restaurant history), our model beats the app's own estimate
-on the validation days: 5.95 vs 6.24, and in 5 of 7 segments, but still not at lunch. Padded vs padded is
+on the validation days: 5.92 vs 6.24, and in 6 of 7 segments, but still not at lunch. Padded vs padded is
 the promise test: we win only for shorter promises (average below ~37 min); at the app's own average it
 is late less often (5.0% vs 6.1% > 5 min late). In one sentence: from order-time data we reach the
 app's own estimate, beat it with real-time features on validation days, and a better promise needs what
@@ -204,8 +204,8 @@ feature) barely matter; orders per free rider do.
 
 **Did more features help?**
 Yes, on the validation folds: riders + each restaurant's past delivery and pickup times take CV MAE from
-6.25 to 5.95 (CI −0.31 to −0.29), R² 0.51 → 0.56, and beat the app's de-padded promise overall (5.95 vs
-6.24) and in 5 of 7 segments, not at lunch. Restaurant history gives most of it (−0.24), riders
+6.25 to 5.92 (CI −0.34 to −0.32), R² 0.51 → 0.57, and beat the app's de-padded promise overall (5.92 vs
+6.24) and in 6 of 7 segments, not at lunch. Restaurant history gives most of it (−0.24), riders
 −0.05. We did **not** re-score the test days with them: they were designed after the single test run, and
 using the test set twice would make it training data. (B15)
 

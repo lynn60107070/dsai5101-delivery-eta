@@ -10,6 +10,8 @@ so changing a feature set changes every model the same way.
     --features restaurant      base + the restaurant's delivery and pickup history (F2)
     --features extended        base + both (F2/F3). A CV-only extension: the test days stay as scored on 9 Nov
     --features realtime        extended + recent district delays and the restaurant's pickup queue (CV only)
+    --features restaurant_prep restaurant + the restaurant's prep-estimate bias (CV only)
+    --features all             realtime + prep-estimate bias: every extension feature (CV only)
 
 Rule: only information known when the order is placed. Never add this order's promise_min, courier_id,
 dispatch_min, grab_min, fetch_min or anything derived from them to a non-leaky set. Other orders' times
@@ -32,6 +34,7 @@ EARTH_RADIUS_KM = 6371.0
 LOAD_WINDOW_MIN = 15
 LOAD_BASELINE_H = 24  # relative load: compared with this area's average over the previous 24 h
 RIDER_WINDOW_MIN = 30  # a rider counts as available in an area if they finished a delivery there in the last 30 min
+PREP_BIAS_MIN_N = 5  # restaurant prep bias needs at least this many earlier picked-up orders, else missing
 AFTER_ORDER = ["promise_min", "courier_id", "dispatch_min", "grab_min", "fetch_min", "delivery_min"]
 
 
@@ -61,9 +64,10 @@ def past_count(times: pd.Series, groups: pd.Series, window_s: float) -> np.ndarr
 
 def _finished(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     """Arrival time (unix s) of every order, and which orders count as observed activity: not pre-booked
-    (their slot is hours later) and not implausible."""
+    (their slot is hours later; known at booking). Implausible (> 3 h) orders stay in: whether an order will
+    take over 3 hours is a future outcome, so dropping it from a backlog would leak (Sumaiya's review, PR #11)."""
     arrive = (df["order_ts"] + df["delivery_min"] * 60).to_numpy()
-    ok = ((df["is_prebook"] == 0) & ~df["implausible"]).to_numpy()
+    ok = (df["is_prebook"] == 0).to_numpy()
     return arrive, ok
 
 
@@ -188,7 +192,31 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df["recent_delivery_30m"], df["recent_late_30m"] = recent_deliveries(df, RIDER_WINDOW_MIN * 60)
     df["recent_missing"] = df["recent_delivery_30m"].isna().astype(int)
     df["rest_backlog"] = restaurant_backlog(df)
+    # Restaurant prep bias: how much later than the platform's prep estimate this restaurant usually is
+    df["prep_bias"], _ = restaurant_prep_bias(df)
+    df["prep_bias_missing"] = df["prep_bias"].isna().astype(int)
     return df
+
+
+def restaurant_prep_bias(df: pd.DataFrame, min_n: int = PREP_BIAS_MIN_N) -> tuple[np.ndarray, np.ndarray]:
+    """For each order: the mean of (order -> pickup minutes - estimated prep minutes) over the restaurant's
+    orders that were already picked up before it was placed, are not pre-booked and have a real estimate;
+    and how many such orders there were. NaN when there are fewer than min_n."""
+    t_all = df["order_ts"].to_numpy(float)
+    pickup_ts = t_all + df["fetch_min"].to_numpy(float) * 60  # NaN if never picked up: never in the history
+    bias = df["fetch_min"].to_numpy(float) - df["prep_min"].to_numpy(float)  # NaN without a real estimate
+    ok = (df["is_prebook"] == 0).to_numpy() & ~np.isnan(pickup_ts) & ~np.isnan(bias)
+    out, n_out = np.full(len(df), np.nan), np.zeros(len(df))
+    for _, idx in df.groupby("restaurant").groups.items():
+        pos = df.index.get_indexer(idx)
+        ev = pos[ok[pos]]
+        order = np.argsort(pickup_ts[ev], kind="stable")
+        p, cb = pickup_ts[ev][order], np.concatenate([[0], np.cumsum(bias[ev][order])])
+        k = np.searchsorted(p, t_all[pos], "left")
+        n_out[pos] = k
+        with np.errstate(invalid="ignore", divide="ignore"):
+            out[pos] = np.where(k >= min_n, cb[k] / k, np.nan)
+    return out, n_out
 
 
 @dataclass(frozen=True)
@@ -222,6 +250,10 @@ FEATURE_SETS["extended"] = FeatureSet("extended", (*FEATURE_SETS["base"].numeric
                                       ("district",))
 _REALTIME = ("recent_delivery_30m", "recent_late_30m", "recent_missing", "rest_backlog")
 FEATURE_SETS["realtime"] = FeatureSet("realtime", (*FEATURE_SETS["extended"].numeric, *_REALTIME), ("district",))
+_PREP_BIAS = ("prep_bias", "prep_bias_missing")
+FEATURE_SETS["restaurant_prep"] = FeatureSet("restaurant_prep", (*FEATURE_SETS["base"].numeric, *_RESTAURANT,
+                                                                 *_PREP_BIAS), ("district",))
+FEATURE_SETS["all"] = FeatureSet("all", (*FEATURE_SETS["realtime"].numeric, *_PREP_BIAS), ("district",))
 
 
 def preprocessor(fs: FeatureSet, scale: bool = False) -> ColumnTransformer:

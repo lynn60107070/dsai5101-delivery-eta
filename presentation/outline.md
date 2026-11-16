@@ -154,13 +154,13 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 - Script: *"So why did our order take 43 minutes? 12.5 minutes until pickup, about average, then 31 on
   the road. Mostly distance, then lunchtime. How many new orders come in barely matters. What matters is
   how many riders are free: when more than three orders wait per free rider, the median delivery takes
-  36 minutes instead of 26. Add that and each restaurant's past delivery times, and our error drops
-  another 0.3 minutes."*
+  36 minutes instead of 26. Add that and each restaurant's track record, and our error drops another
+  0.3 minutes."*
 - `figures/results/delay_drivers`: distance +3.10 ≫ time +0.86 ≈ district +0.83 > prep +0.67 > load +0.19
 - Extension (CV only, test untouched): riders + restaurant history + recent district delays + restaurant
-  queue, CV MAE 6.25 → 5.95 (CI −0.31 to −0.29), R² 0.51 → 0.56; restaurant history −0.24, riders −0.05,
-  the rest −0.01. **Beats the app's de-padded promise on the validation days: overall 5.95 vs 6.24 and in
-  5 of 7 segments; the app still wins at lunch (6.66 vs 6.79).** Small inset or B13/B15
+  queue, CV MAE 6.25 → 5.92 (CI −0.34 to −0.32), R² 0.51 → 0.57; restaurant history −0.24, riders −0.05,
+  prep bias (Sumaiya) −0.03, the rest −0.01. **Beats the app's de-padded promise on the validation days: overall 5.92 vs 6.24 and in
+  6 of 7 segments; the app still wins at lunch (6.66 vs 6.75).** Small inset or B13/B15
 - Pickup and road each take a median 13.1 min; both ~2.7 min slower at peaks
 - Proposal: right on distance and peaks, wrong on load
 
@@ -245,7 +245,7 @@ the full answer is ready here. Full spoken answers are in [qa_prep.md](qa_prep.m
 - B11 **Scorecard, won and lost** (`report/tables/depadded_test.tex`): vs the promise as shown ✓ (6.49 vs
   9.62) · vs the de-padded promise = (6.49 vs 6.48 one average; ✗ 6.49 vs 6.36 per distance band) ·
   per band: under 1 km ✓ (5.61 vs 5.86) · over 3 km ✓ (8.73 vs 9.94) · 1–3 km ✗ (6.67 vs 6.19) · lunch ✗
-  (7.22 vs 6.68) · explains why ✓ · shorter promises ✓ · extended model on CV ✓ 5 of 7 segments
+  (7.22 vs 6.68) · explains why ✓ · shorter promises ✓ · extended model on CV ✓ 6 of 7 segments
   (`report/tables/extension_vs_platform.tex`)
   (below ~37 min) · promises at the app's own length ✗ (6.1% vs 5.0% > 5 min late)
 - B12 **Order #85188 is typical**: its segment's medians (actual 45.3, promise 52.2, ours 45.2) and
