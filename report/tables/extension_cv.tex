@@ -1,16 +1,17 @@
 \begin{table}[t]
 \centering
-\caption{Extension (CV only): frozen gradient boosting with extra order-time features. Difference in MAE against the base features on the same orders, with paired bootstrap 95\% intervals. The test days were not used.}
+\caption{Extension (CV only): gradient boosting with extra order-time features, all computed from deliveries finished before each order. $\Delta$ = MAE difference against the base features on the same orders, with paired bootstrap 95\% intervals. The test days were not used.}
 \label{tab:extension}
 \small
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}p{0.42\columnwidth}ccc@{}}
 \toprule
-Features & CV MAE & $\Delta$ vs base & Lunch MAE \\
+Features & CV MAE & $\Delta$ vs base & Lunch \\
 \midrule
 Base (final model) & 6.25 & -- & 7.04 \\
-Base + rider availability & 6.20 & -0.05 [-0.05, -0.05] & 7.03 \\
-Base + restaurant history & 6.01 & -0.24 [-0.25, -0.23] & 6.82 \\
-Base + both & 5.97 & -0.29 [-0.29, -0.28] & 6.81 \\
++ rider availability & 6.20 & -0.05 [-0.05, -0.05] & 7.03 \\
++ restaurant history & 6.01 & -0.24 [-0.25, -0.23] & 6.82 \\
++ both & 5.97 & -0.29 [-0.29, -0.28] & 6.81 \\
++ both + recent delays, restaurant queue & 5.95 & -0.30 [-0.31, -0.29] & 6.79 \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -41,9 +41,21 @@ SEGMENTS = {"under 1 km": lambda p: p.dist_km < 1, "1-3 km": lambda p: p.dist_km
             "Sunday 23": lambda p: p.day == 20221023, "Monday 24": lambda p: p.day == 20221024}
 
 
+PAD_BINS_KM = [0, 1, 2, 3, 4, 5, np.inf]
+
+
 def padding(orders: pd.DataFrame, days) -> float:
     rows = orders[orders["day"].isin(days)]
     return float((rows["promise_min"] - rows["delivery_min"]).mean())
+
+
+def depad_by_distance(pred: pd.DataFrame, orders: pd.DataFrame, days) -> pd.Series:
+    """Stricter de-padding: the promise minus its average padding in the same distance band, learned on `days`.
+    The padding is about 10 min under 1 km (the 30-min floor), 7 min at 1-3 km and 12-14 min beyond 4 km, so
+    one average over-corrects short and long trips; this version is fairer to the platform."""
+    rows = orders[orders["day"].isin(days)]
+    pad = (rows["promise_min"] - rows["delivery_min"]).groupby(np.digitize(rows["dist_haversine_km"], PAD_BINS_KM)).mean()
+    return pred["promise"] - pd.Series(np.digitize(pred["dist_km"], PAD_BINS_KM), index=pred.index).map(pad)
 
 
 def depadded(orders: pd.DataFrame) -> dict:
@@ -55,16 +67,23 @@ def depadded(orders: pd.DataFrame) -> dict:
            "test": {"ours": point_metrics(test.y, test.pred), "depadded_promise": point_metrics(test.y, test.depadded),
                     "ours_minus_depadded": paired_bootstrap(ours, theirs)},
            "test_segments": {}, "cv_folds": {}}
+    strict = (depad_by_distance(test, orders, TRAIN_DAYS) - test.y).abs()
+    out["test_by_distance_band"] = {"depadded_promise_mae": float(strict.mean()),
+                                    "ours_minus_depadded": paired_bootstrap(ours, strict)}
+    # segments against the stricter, per-distance de-padding, so a single average can't flatter us
     for name, f in SEGMENTS.items():
         m = f(test)
         out["test_segments"][name] = {"n": int(m.sum()), "ours": float(ours[m].mean()),
-                                      "depadded": float(theirs[m].mean()),
-                                      "ours_minus_depadded": paired_bootstrap(ours[m], theirs[m])}
+                                      "depadded": float(strict[m].mean()),
+                                      "ours_minus_depadded": paired_bootstrap(ours[m], strict[m])}
     cv = pd.read_parquet(RESULTS / "final" / "cv" / "hgb" / "predictions.parquet")
     for day, g in cv.groupby("day"):
-        s = padding(orders, [d for d in TRAIN_DAYS if d < day])
+        earlier = [d for d in TRAIN_DAYS if d < day]
+        s = padding(orders, earlier)
         out["cv_folds"][DAY_NAMES[day]] = {"padding": s, "ours": float((g.pred - g.y).abs().mean()),
-                                           "depadded": float((g.promise - s - g.y).abs().mean())}
+                                           "depadded": float((g.promise - s - g.y).abs().mean()),
+                                           "depadded_by_distance": float(
+                                               (depad_by_distance(g, orders, earlier) - g.y).abs().mean())}
     return out
 
 
@@ -173,12 +192,19 @@ def depadded_table(d: dict) -> None:
     lines = [r"\begin{table}[t]", r"\centering",
              r"\caption{Unpadded vs unpadded on the test days: our estimate against the platform's promise minus its "
              r"average padding (" + f"{d['padding_learned_on_training_days']:.2f}" +
-             r" min, learned on the training days only). MAE in minutes; $\Delta$ = ours $-$ de-padded promise with "
-             r"a paired bootstrap 95\% interval.}", r"\label{tab:depadded}", r"\small",
+             r" min, learned on the training days only; second row: the average padding of the same distance band, "
+             r"which is fairer to the platform). MAE in minutes; $\Delta$ = ours $-$ de-padded promise with "
+             r"a paired bootstrap 95\% interval. Segment rows use the per-band padding.}", r"\label{tab:depadded}",
+             r"\small",
              r"\begin{tabular}{@{}lrccc@{}}", r"\toprule",
              r"Orders & $n$ & Ours & Promise $-$ padding & $\Delta$ \\", r"\midrule",
              f"All test orders & \\num{{{t['ours']['n']}}} & {t['ours']['mae']:.2f} & "
              f"{t['depadded_promise']['mae']:.2f} & {t['ours_minus_depadded']['diff']:+.2f} [{lo:+.2f}, {hi:+.2f}] \\\\"]
+    s = d["test_by_distance_band"]
+    lo, hi = s["ours_minus_depadded"]["ci95"]
+    lines.append(f"All, padding per distance band & \\num{{{t['ours']['n']}}} & {t['ours']['mae']:.2f} & "
+                 f"{s['depadded_promise_mae']:.2f} & {s['ours_minus_depadded']['diff']:+.2f} [{lo:+.2f}, {hi:+.2f}] \\\\")
+    lines.append(r"\midrule")
     for name, s in d["test_segments"].items():
         lo, hi = s["ours_minus_depadded"]["ci95"]
         lines.append(f"{name.capitalize()} & \\num{{{s['n']}}} & {s['ours']:.2f} & {s['depadded']:.2f} & "

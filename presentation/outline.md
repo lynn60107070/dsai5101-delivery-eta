@@ -14,7 +14,7 @@ Houston airport fixed complaints about baggage waits without making a single bag
 how the wait *felt*. Delivery apps face the same problem about 50 times a minute in one city. We follow
 one real order (#85188) through the talk: what the app knew when it was placed, why it took 43 minutes,
 and how our model's guess compares with the app's promise. The app's promise looks 3 minutes worse than
-ours, but that's padding: take the padding off and the app's own estimate is exactly as accurate as ours.
+ours, but that's padding: take the padding off and the app's own estimate is about as accurate as ours.
 What gets us further is what the app knows in real time (free riders, each restaurant's track record).
 The twist: even so, the app makes better *promises*, because it can act after the order is placed. And
 someone pays for every minute a promise is shortened: the rider.
@@ -137,14 +137,13 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 **Slide 9 · Our model misses by 6.5 min: as accurate as the app's own estimate, once its padding is removed** (55 s)
 - Script: *"So, our order. The app said 51. Our model said 45. It arrived in 43. Across all 140,000 test
   orders, we're off by 6.5 minutes on average, 31% better than guessing. The app looks 3 minutes worse,
-  but that's its padding: take off its usual 8 minutes and it's exactly as accurate as we are, 6.48
+  but that's its padding: take off its usual 8 minutes and it's about as accurate as we are, 6.48
   against 6.49. With public data from the moment you order, we reach the platform's own level."*
 - `figures/results/test_mae` (new version): promise 9.62 · median 9.46 · promise minus padding 6.48
   (hatched) · Elastic-Net 6.80 · RF 6.54 · boosting 6.49
 - The padding (8.2 min) is measured on the training days only, so no test information is used
-- 🎣 Bait: *"The app's own estimate is best at lunch."* → invites "why, and where are you better?" (B11;
-  careful: our edge on very short and long trips is partly because one average padding over-corrects
-  there, qa_prep §5)
+- 🎣 Bait: *"We're better on short and long trips, the app on medium trips and at lunch."* → invites
+  "where exactly?" (B11; holds even when the padding is removed per distance band, qa_prep §5)
 - 🎣 Bait: *"Our order is a typical one."* → invites "isn't it cherry-picked?" (B12)
 - Bootstrap 95% CIs: boosting vs median −2.97 [−3.00, −2.93]; boosting vs RF −0.05 [−0.06, −0.04],
   so real but tiny. R² 0.49 shown openly (the ceiling is on slide 13)
@@ -158,8 +157,10 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
   36 minutes instead of 26. Add that and each restaurant's past delivery times, and our error drops
   another 0.3 minutes."*
 - `figures/results/delay_drivers`: distance +3.10 ≫ time +0.86 ≈ district +0.83 > prep +0.67 > load +0.19
-- Extension (CV only, test untouched): riders + restaurant history, CV MAE 6.25 → 5.97 (CI −0.29 to
-  −0.28), R² 0.51 → 0.56; restaurant history −0.24, riders −0.05. Small inset or B13/B15
+- Extension (CV only, test untouched): riders + restaurant history + recent district delays + restaurant
+  queue, CV MAE 6.25 → 5.95 (CI −0.31 to −0.29), R² 0.51 → 0.56; restaurant history −0.24, riders −0.05,
+  the rest −0.01. **Beats the app's de-padded promise on the validation days: overall 5.95 vs 6.24 and in
+  5 of 7 segments; the app still wins at lunch (6.66 vs 6.79).** Small inset or B13/B15
 - Pickup and road each take a median 13.1 min; both ~2.7 min slower at peaks
 - Proposal: right on distance and peaks, wrong on load
 
@@ -242,10 +243,10 @@ the full answer is ready here. Full spoken answers are in [qa_prep.md](qa_prep.m
 - B10 **Why a padded promise isn't free**: lost orders, bad customer planning, trust wears off,
   operations need the real time; same buffer for every order → too much at 1 km, too little at 7 km
 - B11 **Scorecard, won and lost** (`report/tables/depadded_test.tex`): vs the promise as shown ✓ (6.49 vs
-  9.62) · vs the de-padded promise = (6.49 vs 6.48, CI −0.01 to +0.04) · under 1 km ✓* (5.61 vs 6.10) ·
-  over 3 km ✓* (8.73 vs 10.06) · 1–3 km ✗ (6.67 vs 6.25) · lunch ✗ (7.22 vs 6.69) · explains why ✓ ·
-  shorter promises ✓. *Partly because padding is ~10 min under 1 km and 12–14 min beyond 4 km, so one
-  average (8.2) over-corrects at both ends
+  9.62) · vs the de-padded promise = (6.49 vs 6.48 one average; ✗ 6.49 vs 6.36 per distance band) ·
+  per band: under 1 km ✓ (5.61 vs 5.86) · over 3 km ✓ (8.73 vs 9.94) · 1–3 km ✗ (6.67 vs 6.19) · lunch ✗
+  (7.22 vs 6.68) · explains why ✓ · shorter promises ✓ · extended model on CV ✓ 5 of 7 segments
+  (`report/tables/extension_vs_platform.tex`)
   (below ~37 min) · promises at the app's own length ✗ (6.1% vs 5.0% > 5 min late)
 - B12 **Order #85188 is typical**: its segment's medians (actual 45.3, promise 52.2, ours 45.2) and
   segment MAE (ours 8.4, app 11.0)
@@ -258,6 +259,7 @@ the full answer is ready here. Full spoken answers are in [qa_prep.md](qa_prep.m
 - B14 **Weekday vs weekend, and drift** (`figures/results/day_profiles`): same daily shape (r = 0.92),
   weekend 1–3.5 min slower noon–18:00; Mon 17 vs Mon 24 differ by 0.5 min per busy hour
 - B15 **What the extended model learned** (`figures/results/partial_dependence`) + `report/tables/extension_cv.tex`
+  + `report/tables/extension_vs_platform.tex` (re-tuning chose the same settings, so no gain there)
 - B16 **Industry benchmark** (`report/tables/benchmark.tex`): Ele.me (MAE −9.8% online, uses supply–demand
   and restaurant backlog, like our extension), Uber DeepETA (asymmetric loss: late costs more, like padding)
 - B17 **Data issues with %** (`report/tables/data_issues.tex`): no exact duplicates; 13.1% refused dispatch

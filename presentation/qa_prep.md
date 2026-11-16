@@ -6,8 +6,9 @@ marked CV. Sources: README §3–§5, ALIGNMENT.md, `results/final/`.
 
 **The 20-second story:** using only what is known when an order is placed, gradient boosting predicts
 delivery time with 6.49 min error, 31% better than guessing the median and as accurate as the platform's
-own estimate once its 8.2-min padding is removed (6.48). Distance is the main driver; free riders and
-each restaurant's track record come next (CV error 6.25 → 5.97 with them). But turning predictions into
+own estimate once its padding is removed (6.36–6.48). Distance is the main driver; free riders and
+each restaurant's track record come next, and with them (CV error 6.25 → 5.95) we beat the app's own
+estimate on the validation days. But turning predictions into
 promises does not beat the platform, because the platform can still act after the order is placed.
 
 ---
@@ -142,16 +143,17 @@ is padded by 8 min on average and still late 15% of the time. Padding is good in
 test shows it works. The goal is a buffer that is long where the trip is risky and short where it's easy.
 
 **So did you beat the platform or not?**
-We tie. Against the promise as shown we're 3.1 min closer (6.49 vs 9.62), but that's its padding. Take
-off its average padding (8.2 min, measured on the training days only) and the platform's estimate is as
-accurate as ours: 6.48 vs 6.49, CI −0.01 to +0.04. On the CV folds we were better on 3 of 4 days. By
-segment we look better under 1 km and over 3 km (partly an artefact of one average padding, see below);
-the platform is better on 1–3 km trips (63% of orders) and at lunch (6.69 vs 7.22), probably because it
-knows how many riders are free. Padded
-vs padded is the promise test: there we win only for shorter promises (average below ~37 min); at the
-app's own average it is late less often (5.0% vs 6.1% > 5 min late). In one sentence: with public
-order-time data we reach the platform's own estimate, not beyond it, and a better promise needs what the
-platform does after the order. (B11)
+Depends on how fair you are to the app. Against the promise as shown we're 3.1 min closer (6.49 vs
+9.62), but that's its padding. Take off its average padding (8.2 min, measured on the training days
+only) and it ties with us: 6.48 vs 6.49, CI −0.01 to +0.04. Take off each distance band's own padding
+(fairer to the app) and it's slightly better, 6.36. Even then we're better under 1 km (5.61 vs 5.86) and
+over 3 km (8.73 vs 9.94), 37% of orders; the app is better on 1–3 km trips (63%) and at lunch (6.68 vs
+7.22). With the real-time features (riders, restaurant history), our model beats the app's own estimate
+on the validation days: 5.95 vs 6.24, and in 5 of 7 segments, but still not at lunch. Padded vs padded is
+the promise test: we win only for shorter promises (average below ~37 min); at the app's own average it
+is late less often (5.0% vs 6.1% > 5 min late). In one sentence: from order-time data we reach the
+app's own estimate, beat it with real-time features on validation days, and a better promise needs what
+the app does after the order. (B11)
 
 **Why remove the padding with an average, not per order?**
 A single number measured on the training days is the simplest fair version that uses no test
@@ -159,11 +161,14 @@ information. A smarter de-padding (per district or hour) would need its own mode
 which is what our model already is.
 
 **Why are you better on short and long trips but worse in between?**
-Partly because of how we de-padded. The padding isn't constant: about 10 min under 1 km (the 30-min
-floor), about 7 min at 1–3 km, 12–14 min beyond 4 km. Subtracting one average (8.2) leaves the
-platform's estimate too long at both ends, so part of our advantage there is the simple de-padding, not
-our model. We say this openly; the overall tie is the fair headline. For the common 1–3 km trips at
-lunch, the platform's real-time information (riders, restaurants) likely helps.
+The app's padding is close to a fixed rule with a 30-min minimum: about 10 min under 1 km, 7 at 1–3 km,
+12–14 beyond 4 km. Our model scales with distance. Even when we remove each distance band's own padding
+(the fairest version for the app), we stay better on short and long trips. For the common 1–3 km trips
+at lunch, the app's real-time information (riders, what happens after ordering) likely helps.
+
+**Did re-tuning help?**
+No: re-running the same 20-try search on the new features picked the same settings, so the frozen
+settings still fit. All the gain comes from the features.
 
 **Isn't order #85188 cherry-picked?**
 No: it sits at the median of the 634 Sunday 11:xx orders 3–5 km away (actual 45.3, promise 52.2, our
@@ -199,7 +204,8 @@ feature) barely matter; orders per free rider do.
 
 **Did more features help?**
 Yes, on the validation folds: riders + each restaurant's past delivery and pickup times take CV MAE from
-6.25 to 5.97 (CI −0.29 to −0.28), R² 0.51 → 0.56. Restaurant history gives most of it (−0.24), riders
+6.25 to 5.95 (CI −0.31 to −0.29), R² 0.51 → 0.56, and beat the app's de-padded promise overall (5.95 vs
+6.24) and in 5 of 7 segments, not at lunch. Restaurant history gives most of it (−0.24), riders
 −0.05. We did **not** re-score the test days with them: they were designed after the single test run, and
 using the test set twice would make it training data. (B15)
 

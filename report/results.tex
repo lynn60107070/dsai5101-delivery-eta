@@ -31,13 +31,14 @@ chose a lower learning rate, larger leaves and strong L2, which hold back the ov
 \textbf{Unpadded against unpadded.} The promise's MAE of 9.62 is mostly padding, so it is not a fair
 estimate. Removing the promise's average padding, 8.2 minutes as measured on the training days (so no test
 information is used), gives a de-padded promise with an MAE of 6.48, the same as our model
-(Table~\ref{tab:depadded}; difference $+0.02$, CI $[-0.01, +0.04]$). On the CV folds our model was better
-on three of the four validation days (e.g.\ 6.10 vs 6.33 on 19 Oct). The platform's errors are smaller
-for the 1--3~km trips that make up 63\% of orders and at the lunch peak (6.69 vs 7.22); ours are smaller
-under 1~km (5.61 vs 6.10) and over 3~km (8.73 vs 10.06), but partly because the padding is not constant
-(about 10 minutes under 1~km, where the 30-minute floor binds, and 12--14 minutes beyond 4~km), so a
-single average over-corrects at both ends. With five groups of public order-time features, we therefore
-reach the accuracy of the platform's own estimate but do not beat it.
+(Table~\ref{tab:depadded}; difference $+0.02$, CI $[-0.01, +0.04]$). The padding is not constant, though:
+about 10 minutes under 1~km, where the 30-minute floor binds, 7 minutes at 1--3~km and 12--14 minutes beyond
+4~km. Removing the average padding of each distance band instead is fairer to the platform, and then its
+estimate is better on the test days (6.36 vs 6.49, CI of the difference $[+0.11, +0.16]$), while on the CV
+folds the two are level (6.24 vs 6.25). Even under this stricter version our model is more accurate under
+1~km (5.61 vs 5.86) and over 3~km (8.73 vs 9.94), together 37\% of orders, and on Monday; the platform is
+better on the 1--3~km trips that make up 63\% of orders, at the lunch peak (6.68 vs 7.22) and on Sunday.
+With our base features we therefore reach, but do not beat, the accuracy of the platform's own estimate.
 \input{tables/depadded_test}
 
 \subsection{Delay drivers}
@@ -89,29 +90,34 @@ which no order-time model can see.
 \label{fig:errors}
 \end{figure}
 
-\subsection{Extension: rider availability and restaurant history}
+\subsection{Extension: real-time features}
 % [Lynn] Instructor feedback F2/F3; experiments/extension.py. CV only: the test days stay scored once.
-The platform knows more at ordering than our five feature groups. We added two kinds of information it
-has in real time, both computed only from deliveries completed before the order was placed: the number of
-riders who finished a delivery in the district in the last 30 minutes and the orders still waiting there
-(their ratio is the orders waiting per available rider), and the restaurant's past mean delivery and
-pickup times. When more than three orders wait per available rider (19\% of orders), the median delivery
+The platform knows more at ordering than our base features. We added information it has in real time, all
+computed only from deliveries completed before the order was placed: the riders who finished a delivery in
+the district in the last 30 minutes and the orders still waiting there (their ratio is the orders waiting
+per available rider); the restaurant's past mean delivery and pickup times; the mean delivery time and
+lateness of the district's deliveries in the last 30 minutes; and the orders waiting for pickup at the
+restaurant. When more than three orders wait per available rider (19\% of orders), the median delivery
 takes 35.6 minutes against 26.4 otherwise. With the frozen boosting settings, the extra features lower the
-CV MAE from 6.25 to 5.97 ($-0.29$, CI $[-0.29, -0.28]$) and raise $R^2$ from 0.51 to 0.56
-(Table~\ref{tab:extension}). Restaurant history gives most of the gain ($-0.24$); rider availability adds
-$-0.05$ on its own. Because these features were designed after the test run, we report them on the
-validation folds only. Fig.~\ref{fig:pd} shows what the extended model learned: predictions rise steeply
-with distance (about 25 minutes from 0.2 to 4.9~km), by about 7 minutes as orders per rider go from 0.5
-to 3, and by about 4 minutes from the fastest to the slowest restaurants. The hour of the day still moves predictions by about 4 minutes
-between the quietest and busiest hours. Like permutation importance, these curves show what the model
-uses, not causes.
+CV MAE from 6.25 to 5.95 ($-0.30$, CI $[-0.31, -0.29]$) and raise $R^2$ from 0.51 to 0.56
+(Table~\ref{tab:extension}). Restaurant history gives most of the gain ($-0.24$), riders $-0.05$, and the
+recent-delay and queue features only $-0.01$ more. Re-tuning boosting on the new features (the same 20-try
+search) selected the frozen settings again. Because these features were designed after the test run, we
+report them on the validation folds only. Against the platform's promise minus its per-distance padding,
+the extended model is more accurate overall (5.95 vs 6.24) and in five of seven segments
+(Table~\ref{tab:extension_platform}); the platform remains better at the lunch peak (6.66 vs 6.79) and level
+on 1--3~km trips. Fig.~\ref{fig:pd} shows what the model learned: predictions rise by about 24 minutes from
+0.2 to 4.9~km, by about 6 minutes as orders per rider go from 0.5 to 3, by about 4 minutes from the fastest
+to the slowest restaurants and across the hours of the day, and by 1--2 minutes with recent district delays
+or a long restaurant queue. Like permutation importance, these curves show what the model uses, not causes.
 \input{tables/extension_cv}
+\input{tables/extension_vs_platform}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{partial_dependence}
-\caption{Partial dependence of the extended gradient boosting model (fitted on the six training days): the
-average prediction for \num{5000} training orders when one input is set to each value and the rest are
-kept. Distance is shown up to its 99th percentile.}
+\caption{Partial dependence of the extended gradient boosting model (all extra features, fitted on the six
+training days): the average prediction for \num{5000} training orders when one input is set to each value
+and the rest are kept. Distance is shown up to its 99th percentile.}
 \label{fig:pd}
 \end{figure}
 

@@ -114,7 +114,8 @@ class TestFeatures(unittest.TestCase):
         df = pd.DataFrame({
             "order_ts": [0, 60, 600, 1200, 1300], "delivery_min": [5, 30, 5, 5, 5],
             "district": ["a"] * 5, "restaurant": ["r"] * 5, "courier_id": [1, 2, 1, 3, 3],
-            "fetch_min": [2.0, 10.0, 4.0, 1.0, 1.0], "is_prebook": [0] * 5, "implausible": [False] * 5})
+            "fetch_min": [2.0, 10.0, 4.0, 1.0, 1.0], "is_prebook": [0] * 5, "implausible": [False] * 5,
+            "promise_min": [10.0] * 5})
         riders, backlog = features.rider_supply(df, 30 * 60)
         # arrivals: 300 (rider 1), 1860 (rider 2), 900 (rider 1), 1500 (rider 3), 1600 (rider 3)
         self.assertEqual(list(riders), [0, 0, 1, 1, 1])   # at 1200 and 1300 only rider 1 has finished (twice)
@@ -124,6 +125,12 @@ class TestFeatures(unittest.TestCase):
         self.assertTrue(np.isnan(mean_y[0]))
         self.assertAlmostEqual(mean_y[4], 5)
         self.assertAlmostEqual(mean_pickup[3], (2 + 4) / 2)
+        recent_y, recent_late = features.recent_deliveries(df, 30 * 60)
+        self.assertTrue(np.isnan(recent_y[:2]).all())     # nothing has arrived yet
+        self.assertEqual(list(recent_y[2:]), [5, 5, 5])   # only the 5-min deliveries arrived before 600-1300
+        self.assertEqual(list(recent_late[2:]), [-5, -5, -5])
+        # pickups at 120, 660, 840, 1260, 1360: the queue counts earlier orders not yet picked up
+        self.assertEqual(list(features.restaurant_backlog(df)), [0, 1, 1, 0, 0])
 
     def test_no_leakage_in_deployable_feature_sets(self):
         for name, fs in features.FEATURE_SETS.items():

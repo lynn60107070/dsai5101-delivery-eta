@@ -9,6 +9,7 @@ so changing a feature set changes every model the same way.
     --features riders          base + rider availability and open orders in the district (instructor feedback F3)
     --features restaurant      base + the restaurant's delivery and pickup history (F2)
     --features extended        base + both (F2/F3). A CV-only extension: the test days stay as scored on 9 Nov
+    --features realtime        extended + recent district delays and the restaurant's pickup queue (CV only)
 
 Rule: only information known when the order is placed. Never add this order's promise_min, courier_id,
 dispatch_min, grab_min, fetch_min or anything derived from them to a non-leaky set. Other orders' times
@@ -110,6 +111,46 @@ def restaurant_history(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, np.nda
     return n_out, y_out, p_out
 
 
+def recent_deliveries(df: pd.DataFrame, window_s: float) -> tuple[np.ndarray, np.ndarray]:
+    """For each order: mean delivery time and mean lateness (actual - promise, minutes) of the deliveries that
+    arrived in its district in [t - window, t). Other orders' promises were shown at their checkout and their
+    arrivals have happened, so both are known at t. NaN when nothing arrived in the window."""
+    arrive, ok = _finished(df)
+    t_all = df["order_ts"].to_numpy()
+    y = df["delivery_min"].to_numpy()
+    late = (df["delivery_min"] - df["promise_min"]).to_numpy()
+    mean_y, mean_late = np.full(len(df), np.nan), np.full(len(df), np.nan)
+    for _, idx in df.groupby("district").groups.items():
+        pos = df.index.get_indexer(idx)
+        ev = pos[ok[pos]]
+        order = np.argsort(arrive[ev], kind="stable")
+        a = arrive[ev][order]
+        cy = np.concatenate([[0], np.cumsum(y[ev][order])])
+        cl = np.concatenate([[0], np.cumsum(late[ev][order])])
+        t = t_all[pos]
+        hi, lo = np.searchsorted(a, t, "left"), np.searchsorted(a, t - window_s, "left")
+        n = hi - lo
+        with np.errstate(invalid="ignore", divide="ignore"):
+            mean_y[pos] = np.where(n > 0, (cy[hi] - cy[lo]) / n, np.nan)
+            mean_late[pos] = np.where(n > 0, (cl[hi] - cl[lo]) / n, np.nan)
+    return mean_y, mean_late
+
+
+def restaurant_backlog(df: pd.DataFrame) -> np.ndarray:
+    """For each order: the restaurant's orders placed before it and not yet picked up when it is placed."""
+    _, ok = _finished(df)
+    t_all = df["order_ts"].to_numpy()
+    picked = (df["order_ts"] + df["fetch_min"] * 60).to_numpy()
+    out = np.zeros(len(df))
+    for _, idx in df.groupby("restaurant").groups.items():
+        pos = df.index.get_indexer(idx)
+        ev = pos[ok[pos]]
+        placed, pick = np.sort(t_all[ev]), np.sort(picked[ev])
+        t = t_all[pos]
+        out[pos] = np.searchsorted(placed, t, "left") - np.searchsorted(pick, t, "left")
+    return out
+
+
 def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df["dist_haversine_km"] = haversine_km(df.rest_lat, df.rest_lng, df.cust_lat, df.cust_lng)
@@ -142,6 +183,11 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     # F2: restaurants differ in how long they take; only their orders delivered before this one count
     df["rest_hist_n"], df["rest_hist_min"], df["rest_pickup_hist"] = restaurant_history(df)
     df["rest_hist_missing"] = df["rest_hist_min"].isna().astype(int)
+    # Real-time conditions: how slow and how late the district's latest deliveries were, and the queue at the
+    # restaurant. These move fastest at lunch, where the platform's estimate beat ours
+    df["recent_delivery_30m"], df["recent_late_30m"] = recent_deliveries(df, RIDER_WINDOW_MIN * 60)
+    df["recent_missing"] = df["recent_delivery_30m"].isna().astype(int)
+    df["rest_backlog"] = restaurant_backlog(df)
     return df
 
 
@@ -174,6 +220,8 @@ FEATURE_SETS["riders"] = FeatureSet("riders", (*FEATURE_SETS["base"].numeric, *_
 FEATURE_SETS["restaurant"] = FeatureSet("restaurant", (*FEATURE_SETS["base"].numeric, *_RESTAURANT), ("district",))
 FEATURE_SETS["extended"] = FeatureSet("extended", (*FEATURE_SETS["base"].numeric, *_RIDERS, *_RESTAURANT),
                                       ("district",))
+_REALTIME = ("recent_delivery_30m", "recent_late_30m", "recent_missing", "rest_backlog")
+FEATURE_SETS["realtime"] = FeatureSet("realtime", (*FEATURE_SETS["extended"].numeric, *_REALTIME), ("district",))
 
 
 def preprocessor(fs: FeatureSet, scale: bool = False) -> ColumnTransformer:

@@ -1,0 +1,20 @@
+{
+  "params": {
+    "loss": "absolute_error",
+    "learning_rate": 0.03756560040604225,
+    "max_leaf_nodes": 76,
+    "min_samples_leaf": 70,
+    "l2_regularization": 7.8527554947242555,
+    "max_iter": 800
+  },
+  "cv_mean": 5.98614854459605,
+  "cv_std": 0.12672408832144208,
+  "settings": {
+    "model": "hgb",
+    "features": "realtime",
+    "n_iter": 20,
+    "log_target": false,
+    "sample": 150000,
+    "seed": 42
+  }
+}

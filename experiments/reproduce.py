@@ -34,7 +34,8 @@ NOTEBOOKS = ["01_data_audit", "02_eda", "03_stages", "04_drivers", "04_tuning", 
 TUNING = [["--model", "elasticnet", "--n-iter", "30"],
           ["--model", "hgb", "--n-iter", "20", "--sample", "150000"],
           ["--model", "rf", "--n-iter", "10", "--sample", "100000"],
-          ["--model", "hgb_q80", "--n-iter", "20", "--sample", "150000"]]
+          ["--model", "hgb_q80", "--n-iter", "20", "--sample", "150000"],
+          ["--model", "hgb", "--features", "realtime", "--n-iter", "20", "--sample", "150000"]]  # extension, CV only
 
 
 def step(title: str, cmd: list[str], env=None) -> None:
@@ -65,7 +66,7 @@ def main(argv=None):
     step("2. data", [py, "-c", "from common.data import load_table; print(len(load_table()), 'modelling orders')"])
     if args.tune:
         for flags in TUNING:
-            step(f"3. tuning {flags[1]}", [py, "-m", "experiments.tune", *flags])
+            step(f"3. tuning {' '.join(flags)}", [py, "-m", "experiments.tune", *flags])
     step("4. final models on the CV folds", [py, "-m", "experiments.final"])
     step("5. fair comparison, day profiles, data issues", [py, "-m", "experiments.feedback"])
     step("6. extra features + explainability (CV only)", [py, "-m", "experiments.extension"])
