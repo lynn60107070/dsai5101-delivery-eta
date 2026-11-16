@@ -124,6 +124,36 @@ named this risk. The likely reason is that the platform keeps acting after the o
 couriers, prioritising late orders); the data show a sharp drop at exactly 8 min late. The conclusion is
 that better estimates are not automatically better promises. A clear negative result is a finding.
 
+**What's the difference between delivery time, the promise and delay?**
+Delivery time is how long the food actually took (order → arrival); that is what we predict. The
+promise is the time the app showed at checkout, deliberately padded. Delay is delivery time minus the
+promise; we only use it to describe the data and count late orders. We built two things: an estimate
+(boosting, "when will it most likely arrive?", so about half of orders arrive after it) and a promise
+(the 80th-percentile model, "a time it will almost certainly arrive by"). Only the promise is compared
+with the app's promise.
+
+**Arriving early is good, so what's wrong with a padded promise?**
+For one customer, nothing. But a long promise loses orders (people choose the app that says 30), makes
+customers plan badly (the courier arrives while they're out), and wears down trust in the number.
+Operations need the realistic time for courier planning. And the padding is blunt: about the same
+buffer for every order, too much for a 1 km trip, not enough for 7 km at lunch, which is why the app
+is padded by 8 min on average and still late 15% of the time. Padding is good insurance; our promise
+test shows it works. The goal is a buffer that is long where the trip is risky and short where it's easy.
+
+**So did you beat the platform or not?**
+On accuracy, yes: our estimate is 3.1 min closer to the real time (6.49 vs 9.62), and we can say why
+orders are slow. But that's not a fair fight, because the promise isn't trying to be accurate, so we
+ran the promise test. There we win only for shorter promises (average below ~37 min); at the app's own
+average, the app is late less often (5.0% vs 6.1% more than 5 min late). In one sentence: we predict
+when food arrives more accurately, but turning that into a better promise is harder, because the app
+can still act after the order.
+
+**Isn't order #85188 cherry-picked?**
+No: it sits at the median of the 634 Sunday 11:xx orders 3–5 km away (actual 45.3, promise 52.2, our
+prediction 45.2). In that group we're off by 8.4 min on average and the app by 11.0. Our 80th-percentile
+promise for it would have been about 53 min before the +2.7 shift, longer than the app's 51: at the
+lunch peak our model is more cautious, which fits the promise-test result.
+
 **Then what is your model useful for?**
 A 3-minute-better estimate of when food will arrive, a ranked list of what makes orders slow, and a
 starting point for promises that are then updated after dispatch (future work).

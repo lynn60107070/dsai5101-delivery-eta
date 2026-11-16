@@ -185,8 +185,8 @@ def main(argv=None):
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf8")
 
     print("\n" + md)
-    print(f"-> {out}\n-> {TABLES_DIR}\\main_results_{args.eval}.tex, promise_test_{args.eval}.tex"
-          f"\n-> {FIGURES_DIR}\\final_{args.eval}_gap.pdf")
+    print(f"-> {out}\n-> {TABLES_DIR / f'main_results_{args.eval}.tex'}, promise_test_{args.eval}.tex"
+          f"\n-> {FIGURES_DIR / f'final_{args.eval}_gap.pdf'}")
 
 
 if __name__ == "__main__":
