@@ -99,9 +99,9 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 | M3 | Distance comparison: `--features base` vs `base_manhattan`, same model, CV MAE + bootstrap (v0: 6.32 vs 6.31, so the bootstrap decides) → pick one, tell Sumaiya [P] | 1 h | **CP2** |
 | M4 | ✅ **Done 7 Nov** (HGB 6.25, RF 6.32; frozen). Tune HGB (incl. `loss=absolute_error`, since we report MAE) and RF with `experiments.tune` on the frozen features (start after CP2) + **one training-vs-CV error curve** over a complexity setting for the report [P, Lec 7] | 3 h + run time | **CP3** |
 | M5 | ✅ **Done 7 Nov** (README §5). `notebooks/04_drivers.ipynb`: grouped permutation importance (distance, prep, time, load, district) on CV folds, with spread → ranked delay drivers. Check the proposal's expectation (distance, peaks, load on top) and say if it held [P] | 3 h | **CP3** |
-| M6 | `notebooks/05_errors.ipynb`: errors by district / hour / distance / day, worst orders, residual plots, do errors rise at meal peaks (proposal expectation)? Does it hold on the test days? [P, Lec 2 subgroup evaluation] | 3 h | **Mon 16 Nov** (was CP4; CV part done 7 Nov) |
-| M7 | Test-day results for HGB and RF: Lynn ran the single test run on 9 Nov (L5, all models together); Mahmoud uses `results/final/test/hgb/predictions.parquet` (sent directly, not in git) for M6. Do not rerun `--eval test` | 1 h | **Mon 16 Nov** (was Wed 11) |
-| M8 | Report: Results & Discussion section (final tables already wired into `results.tex`) | 5 h | **Mon 16 Nov** (was Thu 12) |
+| M6 | ✅ **Done 15 Nov** (PR #9, test-day errors). `notebooks/05_errors.ipynb`: errors by district / hour / distance / day, worst orders, residual plots, do errors rise at meal peaks (proposal expectation)? Does it hold on the test days? [P, Lec 2 subgroup evaluation] | 3 h | **Mon 16 Nov** (was CP4; CV part done 7 Nov) |
+| M7 | ✅ **Done 15 Nov** (PR #9). Test-day results for HGB and RF: Lynn ran the single test run on 9 Nov (L5, all models together); Mahmoud uses `results/final/test/hgb/predictions.parquet` (sent directly, not in git) for M6. Do not rerun `--eval test` | 1 h | **Mon 16 Nov** (was Wed 11) |
+| M8 | ✅ **Done 15 Nov** (PR #9; merged 16 Nov). Report: Results & Discussion section (final tables already wired into `results.tex`) | 5 h | **Mon 16 Nov** (was Thu 12) |
 | M9 | Slides: results, delay drivers, limitations (~3.5 min), in Lynn's deck once it is sent | 1.5 h | after Lynn's deck |
 
 ### Everyone
@@ -111,7 +111,7 @@ Owns `models/boosting.py`, `models/forest.py`, `notebooks/04_*`–`05_*`, `figur
 | T2 | Read [ALIGNMENT.md](ALIGNMENT.md): the new research question, how the proposal feedback is handled, and the lecture checklists for your tasks | **CP1** |
 | T3 | Read the whole report draft and comment on every section | **CP6** |
 | T4 | Rubric self-check: Sumaiya on the Report rubric, Mahmoud on the Presentation rubric, Lynn on the Info checklist (§6) | **CP6** |
-| T5 | Fresh-clone test: follow README in a new folder, run the tests and the final script (Mahmoud) | **CP6** |
+| T5 | ✅ **Done 15 Nov** (Mahmoud: 19 tests OK, same CV numbers). Fresh-clone test: follow README in a new folder, run the tests and the final script (Mahmoud) | **CP6** |
 | T6 | Be able to explain the **whole** project (Q&A questions can go to anyone) | Dry run Sat 21 + run-through Sun 22 Nov (use `presentation/qa_prep.md`) |
 
 ---
