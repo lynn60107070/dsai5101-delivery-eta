@@ -1,4 +1,4 @@
-# Presentation outline (Sun 22 Nov · 10 min talk + 5 min Q&A)
+# Presentation outline (Sun 22 Nov · 10 min talk + 10–15 min Q&A)
 
 The deck template: sections, slides, what each slide shows, and the spoken story that runs through it.
 **Speakers are not assigned yet.** The deck is built in **Canva**. Slides + scripts ready **Thu 19 Nov

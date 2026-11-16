@@ -1,4 +1,4 @@
-# Presentation (Sun 22 Nov, 10 min + 5 min Q&A)
+# Presentation (Sun 22 Nov, 10 min talk + 10–15 min Q&A)
 
 - **`outline.md`**: the slide-by-slide plan: titles, figures, source tasks, speakers, timing, rubric rows.
   Filled in as results arrive.

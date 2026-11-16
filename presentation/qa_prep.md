@@ -1,4 +1,4 @@
-# Q&A prep (5 minutes, questions can go to anyone)
+# Q&A prep (10–15 minutes; the instructor and classmates ask, and questions can go to anyone)
 
 Everyone should be able to give every answer below in two or three sentences (T6). The person in
 brackets leads if the question is open; anyone may add. All numbers are final (test days, CP4) unless
@@ -88,7 +88,7 @@ overfitting in other ways, so it can afford more leaves.
 
 **R² is only 0.49. Isn't that weak?**
 Half the variation comes from things nobody knows at ordering: traffic, weather, waiting at the door,
-which courier takes it. Even a model allowed to cheat with after-order times only reaches 0.72
+which courier takes it. With the real-time features it rises to 0.57 on the validation days. Even a model allowed to cheat with after-order times only reaches 0.72
 (leakage audit, S5: CV MAE 6.25 → 4.53). Our three very different models all land within 0.3 min of each other, which says
 the limit is the information, not the model. MAE in minutes is our main metric, and there we beat both
 baselines clearly.
@@ -270,7 +270,7 @@ estimates. Shorter promises pressure couriers; padded promises shift the cost to
 feature once several weekends are available, combine the estimate with updates after dispatch, and
 test over several weeks for drift with retraining and input monitoring.
 
-**Why not deep learning?** 11 tabular features and a few hundred thousand rows: tree ensembles are the
+**Why not deep learning?** 10–23 tabular features and a few hundred thousand rows: tree ensembles are the
 standard strong choice there, and the three model families already agree within 0.3 min, so a more
 complex model would chase the same information ceiling.
 
@@ -278,3 +278,115 @@ complex model would chase the same information ceiling.
 tests, downloads the data, rebuilds every final result, table and figure and re-executes every notebook
 (`--tune` also reruns the hyperparameter searches). Pinned requirements, seed 42 throughout. The test
 days are never re-scored: their predictions were written once.
+
+## 8. Hard questions (classmates get bonus marks for asking: expect these)
+
+**How to answer:** two or three sentences, a number, and a backup slide if one fits. Admit limits openly;
+"we didn't test that, but we'd expect…" is a good answer. Never guess a number: say where it is.
+
+**Two test days, one of them a Sunday: is that enough to trust the result?**
+It's 139,787 orders, so the intervals are tight (±0.03 min). Every model was ~0.2 min worse on test than
+in CV with the same ranking, so nothing broke. What two days can't show is drift over weeks or
+seasons; that's a stated limitation, and deployment would need monitoring and retraining.
+
+**Your extended model was never tested on the test days. How do you know it's not overfit?**
+It was checked the same way the main model was chosen: forward-chaining CV, where every fold trains only
+on earlier days. It improves on every validation day, all three model types gain the same, and re-tuning
+picked the same settings. We didn't score the test days again on purpose, because we designed those
+features after seeing test results. The honest claim is "better on validation days, to be confirmed on new
+data".
+
+**Isn't restaurant history leakage? It uses delivery times.**
+Only of *other* orders that had already been delivered before this one was placed, which the platform
+knows live. A unit test checks it on hand-computed cases. Sumaiya's review even found a subtle case:
+open-order counts were skipping orders that would later take over 3 h, which you can't know yet. We fixed
+that.
+
+**Removing the padding uses actual delivery times. Isn't that cheating for the app?**
+It uses the same information our model trains on: the six training days only, never the test days. And
+we show the stricter version (padding per distance band), where the app does slightly better (6.36 vs
+6.49). We report both, so nobody has to trust one choice.
+
+**In the promise test, isn't shifting your promises by +2.7 min tuning on the test set?**
+No: the shift only matches the *average promise* of the two systems (ours vs the app's), using promises,
+never actual delivery times. It makes the comparison fair at equal length; it can't see who was late.
+
+**Why the 80th percentile?**
+A promise has to cover most orders. The app's own promises cover about 85%, so q80 is in the same range.
+The test then equalises the average promise anyway, so the exact quantile matters less than the shape of
+the predictions.
+
+**Why MAE when late deliveries hurt more than early ones?**
+MAE answers "how far off is the estimate", in minutes. Lateness is handled separately: we report the share
+of orders more than 5 min late, and the promise test uses a quantile model built for "being late is
+worse". Uber's DeepETA makes the same split with an asymmetric loss.
+
+**Why not XGBoost, LightGBM or CatBoost?**
+We tried LightGBM with the same settings: 6.247 vs 6.251, the same. Random Forest and Elastic-Net are
+within 0.3 min too. The limit is information, not the algorithm.
+
+**Why not a neural network like Uber?**
+Uber has a routing engine, live traffic and billions of trips. We have 23 tabular features and 400k
+training rows, where tree ensembles are the standard strong choice. And when we added features, Elastic-Net,
+RF and boosting all gained ~0.3 min: features matter more than model complexity here.
+
+**What if you had weather and traffic data?**
+They'd help, but only up to a point. Even after-order times (pickup, dispatch) only take the error from 6.25
+to 4.53, and our real-time features already recover a fifth of that gap. Live rider pressure partly acts
+as a congestion signal already. We'd add weather as a past-only or forecast feature.
+
+**Coordinates are shifted for privacy. Aren't your distances wrong?**
+They're approximate, which we state. But distance still has a strong, steady effect: about 7 min per km,
+positive in all 23 districts, and the top driver by far. So the distances keep enough information to rank
+trips.
+
+**Did you check for Simpson's paradox?**
+Yes: the distance slope stays positive inside every one of the 23 districts (4.9 to 7.7 min/km), so it's
+not created by mixing districts.
+
+**Permutation importance is unreliable with correlated features.**
+That's why we shuffle related features *as groups* (all time features together, etc.). We also checked the
+interaction: time and load shuffled together cost 1.43 min vs 1.05 separately. And two other methods,
+Elastic-Net effects and partial dependence, give the same ranking.
+
+**Why is load weak, when busy obviously means slow?**
+Raw load mostly measures district size and hour: within the same district and hour the correlation is
+only 0.09. What matters is *riders*: when more than 3 orders wait per free rider, median delivery is 35.6
+vs 26.4 min. New orders don't slow things down; too few riders does.
+
+**Why are orders with a default prep estimate slower?**
+We don't know the cause, and we didn't guess: they're 2–5 min slower at the same distance, so they're not
+missing at random. That's why we flagged them instead of deleting them.
+
+**Why a 30-minute window for riders and recent delays?**
+A reasonable single choice, not tuned; we kept it fixed to avoid fitting the validation days with many
+variants. It's a fair next experiment.
+
+**Your model ties the app. So what's the point?**
+Three things. It reaches the app's own accuracy from public data alone, openly and reproducibly. It
+explains *why* orders are slow, which the app doesn't. And with real-time features it beats the app's
+estimate on validation days, except at lunch, which tells the platform where post-order actions matter.
+
+**How would this be deployed?**
+Score at checkout (milliseconds), show an order-specific buffer instead of a flat one, retrain on a
+schedule, and monitor input drift (distance mix, missing prep estimates). Combine it with the app's
+after-order updates rather than replacing them.
+
+**Couldn't better predictions be used to push riders harder?**
+Yes, that's the ethics risk we name. Shorter promises put pressure on riders, and the 2020 "Delivery Riders,
+Trapped in the System" article covered Meituan, the platform behind our data (and Ele.me). Errors also differ by district (4.4–9.0
+min), so some areas get worse estimates. We'd judge any deployment on rider workload too, not just lateness.
+
+**Why not just use the app's promise as an input, like Uber corrects its routing ETA?**
+It would probably win, but it changes the question from "what can be predicted from the order itself?" to
+"how do we adjust Meituan's number?", and the model would partly learn Meituan's padding rule. Our proposal
+feedback asked us not to model the platform's delay, so we kept it out.
+
+**What surprised you most?**
+The 8-minute cliff: late arrivals more than halve exactly 8 minutes after the promise, at every promise
+level. That's an operational rule kicking in after ordering, and it explains why the app wins the promise
+test.
+
+**If you had another week?**
+Confirm the extended model on fresh days, add a day-of-week feature with more weekends, and try combining
+our estimate with the app's after-order updates.

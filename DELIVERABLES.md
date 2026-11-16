@@ -10,7 +10,7 @@ Sources: `requirements_rubric/DSAI5101_Project_Info.pdf` and the three rubric PD
 - [x] Project proposal (5%), submitted 28 Sep 2026: `proposal/DSAI5101_ProjectProposal.pdf`. **Approved, 90/100**
 - [x] Feedback mapped to actions: [ALIGNMENT.md §2](ALIGNMENT.md) (FB1–FB4). FB3 is fixed in code. FB1, FB2 and FB4 are carried by the report rows below
 
-## 1. Presentation & Q&A: 10% · **Sun 22 Nov** · 10 min talk + 5 min Q&A
+## 1. Presentation & Q&A: 10% · **Sun 22 Nov** · 10 min talk + 10–15 min Q&A (instructor + classmates, who get bonus marks for questions)
 
 | Deliverable | Rubric row (marks) | Owner | Due |
 |---|---|---|---|
@@ -26,7 +26,7 @@ Slide-by-slide plan (titles, figures, speakers, timing): [presentation/outline.m
 Canva. Speaking order: Lynn (problem) → Sumaiya (data + EDA) → Lynn (methods) → Mahmoud (results) → Lynn (promise
 test) → Mahmoud (conclusion), about 3 min each.
 
-## 2. Final report: 15% · submit **Sun 29 Nov** (deadline Thu 3 Dec) · IEEE two-column, 4–6 pages excl. references
+## 2. Final report: 15% · submit **Sun 29 Nov** (deadline Thu 3 Dec) · IEEE two-column, 4–6 pages excl. references, title page and appendices (instructor, 16 Nov)
 
 | Section | Rubric row (marks) | Owner | Due |
 |---|---|---|---|
@@ -54,7 +54,7 @@ test) → Mahmoud (conclusion), about 3 min each.
 
 ## 4. Final pre-submission checklist (from the guidelines §6)
 - [ ] IEEE two-column conference format (Overleaf template)
-- [ ] 4–6 pages excluding references and appendices
+- [ ] 4–6 pages excluding references, title page and appendices
 - [ ] Title, all member names and student IDs
 - [ ] Every figure and table numbered, captioned and referred to in the text
 - [ ] Code runs top to bottom, README, dependencies listed, seeds fixed

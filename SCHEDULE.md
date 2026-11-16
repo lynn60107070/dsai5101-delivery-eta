@@ -33,8 +33,8 @@ the EDA, encode time carefully, fit only on training days, and plan what to cut.
 | **CP6** | **Sat 14 Nov** → report sections Mon 16 Nov, review Tue 17 Nov | **95% done**: report and slides reviewed by all, rubric self-check, code checked on a fresh clone |
 | (light) | 15–17 Nov | Fix review comments only (Lynn's AICC paper is due 17 Nov) |
 | Slides ready | **Thu 19 Nov, night (max)** | Everyone's slides + speaker scripts in the deck (Lynn creates it 15 Nov) |
-| Dry run | **Sat 21 Nov** | Call: full timed run-through (10 min) + 5-min mock Q&A; **slides locked** |
-| **Presentation** | **Sun 22 Nov** | Group run-through before class (time TBC), then 10 min talk + 5 min Q&A, all three speak |
+| Dry run | **Sat 21 Nov** | Call: full timed run-through (10 min) + 10–15 min mock Q&A, with hard questions; **slides locked** |
+| **Presentation** | **Sun 22 Nov** | Group run-through before class (time TBC), then 10 min talk + 10–15 min Q&A, all three speak |
 | Report polish | 23–28 Nov | Apply anything the Q&A exposed; final read |
 | **Submit** | **Sun 29 Nov** | Report PDF + code link + data link on D2L (deadline Thu 3 Dec) |
 
