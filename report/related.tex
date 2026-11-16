@@ -6,4 +6,36 @@
 %   leakage in ML (Kapoor & Narayanan 2023, cited in Lec 6).
 \section{Related Work}
 
-TODO.
+Predicting delivery time from data has been studied mostly with rich platform data. Zhu
+\textit{et al.}~\cite{zhu2020fulfillment} estimate the full order-to-delivery time for Ele.me and deploy
+the model there; theirs is the closest task to ours, but it draws on proprietary platform data that are
+not public. Hildebrandt and Ulmer~\cite{hildebrandt2022supervised} study arrival-time estimation in
+restaurant meal delivery, the same prediction problem: they map the current state of the delivery fleet
+to arrival times with supervised learning, and match a near-optimal online simulation at a fraction of its
+cost. They assume the dispatcher's live state is available; we have only what is known about the order
+itself. Wang
+\textit{et al.}~\cite{wang2018travel} learn travel times for DiDi ride-hailing at industrial scale; food
+delivery adds a stage before the ride (dispatch, reaching the restaurant and waiting for the food), which
+our stage analysis separates from the road time. We differ from all three in working with a public log,
+released for the INFORMS TSL challenge~\cite{zhao2024meituan}, with the much smaller set of order-time
+features such a log provides, and in measuring what the missing after-order information is worth
+(Section~\ref{sec:leakage}).
+
+A second line of work uses predictions to act. Liu \textit{et al.}~\cite{liu2021ontime} feed predicted
+travel times into order assignment to improve on-time delivery. Ulmer \textit{et al.}~\cite{ulmer2021restaurant}
+route couriers when restaurant ready times are random. Both act on dispatch, deciding who delivers and
+when; we act on the promise shown to the customer, and compare an 80th-percentile promise with the
+platform's own at the same average length. Ulmer \textit{et al.} treat the ready time as uncertain; our
+audit adds that about one in seven (13.8\%) of the platform's ready-time estimates are not forecasts at
+all but system defaults.
+
+Finally, Kapoor and Narayanan~\cite{kapoor2023leakage} find leakage in 294 papers across 17 fields; one
+of its forms is information unavailable at prediction time entering a model. Delivery logs invite it,
+since dispatch, pickup and arrival times sit next to the order, so we keep after-order times out of every
+model and measure their worth separately.
+
+In short, earlier work either predicts with richer, private inputs~\cite{zhu2020fulfillment,
+hildebrandt2022supervised,wang2018travel} or uses predictions to steer dispatch~\cite{liu2021ontime,
+ulmer2021restaurant}. Our contribution is narrower and fully reproducible: on a public log, we ask how well
+order-time information alone predicts delivery time, how much of the gap the after-order times explain,
+and whether the prediction can set a better promise than the platform's own.
