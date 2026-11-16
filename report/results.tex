@@ -28,6 +28,18 @@ between 6.26 and 6.33. The complexity curve (Fig.~\ref{fig:complexity}) is lowes
 model uses 76: the curve changes only the number of leaves with everything else fixed, while the search also
 chose a lower learning rate, larger leaves and strong L2, which hold back the overfitting the curve shows.
 
+\textbf{Unpadded against unpadded.} The promise's MAE of 9.62 is mostly padding, so it is not a fair
+estimate. Removing the promise's average padding, 8.2 minutes as measured on the training days (so no test
+information is used), gives a de-padded promise with an MAE of 6.48, the same as our model
+(Table~\ref{tab:depadded}; difference $+0.02$, CI $[-0.01, +0.04]$). On the CV folds our model was better
+on three of the four validation days (e.g.\ 6.10 vs 6.33 on 19 Oct). The platform's errors are smaller
+for the 1--3~km trips that make up 63\% of orders and at the lunch peak (6.69 vs 7.22); ours are smaller
+under 1~km (5.61 vs 6.10) and over 3~km (8.73 vs 10.06), but partly because the padding is not constant
+(about 10 minutes under 1~km, where the 30-minute floor binds, and 12--14 minutes beyond 4~km), so a
+single average over-corrects at both ends. With five groups of public order-time features, we therefore
+reach the accuracy of the platform's own estimate but do not beat it.
+\input{tables/depadded_test}
+
 \subsection{Delay drivers}
 To see what the model relies on, we shuffled each group of features together on each CV validation fold and
 measured how much the MAE rose (grouped permutation importance, 5 repeats on each of the 4 folds).
@@ -53,7 +65,10 @@ We split the test errors of gradient boosting by hour, distance, district and da
 under 1~km to 14.37 over 7~km, but 70\% of orders are under 2~km. \textbf{Day:} Sunday 23 Oct is the hardest
 day (MAE 6.77, predicted 2.1 minutes too short on average), while Monday is 6.17, close to the CV weekdays.
 The development data hold only one weekend day, so the model cannot learn weekend patterns, and Sunday
-explains most of the gap between test and CV. \textbf{Districts:} MAE ranges from 4.37 (district 18) to 9.04
+explains most of the gap between test and CV. Weekends follow the same daily shape as weekdays (hourly
+medians correlate at 0.92) but run 1--3.5 minutes slower from noon to 18:00, which a day-of-week feature
+could capture with more weekends to learn from. Patterns are stable over the week: the two Mondays a week
+apart differ by 0.5 minutes per busy hour on average. \textbf{Districts:} MAE ranges from 4.37 (district 18) to 9.04
 (district 21). District 21 was ordinary on CV (5.67) and is only bad on Sunday (11.3), which looks like a
 one-day event. District 16 is consistently hard (7.51 on CV, 7.83 on test) and is predicted 3.8 minutes too
 short, in line with the EDA finding that it is slow even at the same distance (Section~\ref{sec:data}).
@@ -72,6 +87,32 @@ which no order-time model can see.
 \caption{MAE of gradient boosting by hour of the order (top; grey bands are meal peaks) and by district
 (bottom), on the CV folds and the test days.}
 \label{fig:errors}
+\end{figure}
+
+\subsection{Extension: rider availability and restaurant history}
+% [Lynn] Instructor feedback F2/F3; experiments/extension.py. CV only: the test days stay scored once.
+The platform knows more at ordering than our five feature groups. We added two kinds of information it
+has in real time, both computed only from deliveries completed before the order was placed: the number of
+riders who finished a delivery in the district in the last 30 minutes and the orders still waiting there
+(their ratio is the orders waiting per available rider), and the restaurant's past mean delivery and
+pickup times. When more than three orders wait per available rider (19\% of orders), the median delivery
+takes 35.6 minutes against 26.4 otherwise. With the frozen boosting settings, the extra features lower the
+CV MAE from 6.25 to 5.97 ($-0.29$, CI $[-0.29, -0.28]$) and raise $R^2$ from 0.51 to 0.56
+(Table~\ref{tab:extension}). Restaurant history gives most of the gain ($-0.24$); rider availability adds
+$-0.05$ on its own. Because these features were designed after the test run, we report them on the
+validation folds only. Fig.~\ref{fig:pd} shows what the extended model learned: predictions rise steeply
+with distance (about 25 minutes from 0.2 to 4.9~km), by about 7 minutes as orders per rider go from 0.5
+to 3, and by about 4 minutes from the fastest to the slowest restaurants. The hour of the day still moves predictions by about 4 minutes
+between the quietest and busiest hours. Like permutation importance, these curves show what the model
+uses, not causes.
+\input{tables/extension_cv}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{partial_dependence}
+\caption{Partial dependence of the extended gradient boosting model (fitted on the six training days): the
+average prediction for \num{5000} training orders when one input is set to each value and the rest are
+kept. Distance is shown up to its 99th percentile.}
+\label{fig:pd}
 \end{figure}
 
 \subsection{Leakage audit and delivery stages}

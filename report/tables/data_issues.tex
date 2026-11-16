@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{Data issues, how often they occur and what we did. Percentages are of the \num{654343} raw rows (first two lines), the \num{568546} accepted orders (next three) and the \num{546340} modelling orders (last two).}
+\label{tab:data_issues}
+\footnotesize
+\begin{tabular}{@{}p{0.34\columnwidth}rrp{0.36\columnwidth}@{}}
+\toprule
+Issue & Rows & \% & Decision \\
+\midrule
+Exact duplicate rows & \num{0} & 0.0 & none found \\
+Refused dispatch attempts (order repeated) & \num{85797} & 13.1 & removed: keep the accepted attempt, one row per order \\
+No arrival time (no target) & \num{1} & 0.0 & removed \\
+Pre-booked orders & \num{22181} & 3.9 & excluded: timing follows the chosen slot \\
+Delivery over 3 h, not pre-booked & \num{24} & 0.0 & removed as implausible \\
+Prep estimate missing (stored as 0) & \num{7439} & 1.4 & imputed inside the pipeline + flag \\
+Prep estimate is a default ($<$ 5 min) & \num{75361} & 13.8 & treated as missing + flag (not missing at random) \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -10,9 +10,9 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# scratch runs and tuning logs (final runs go to results/final/ and are committed)
+# scratch runs (final runs go to results/final/ and are committed). Tuning logs in results/tuning/ are committed:
+# notebooks/04_tuning reads them (F8, reproducibility)
 results/runs/
-results/tuning/
 *.pkl
 *.joblib
 
@@ -25,6 +25,7 @@ desktop.ini
 
 # final predictions are large and rebuilt by `python -m experiments.final`; summaries, tables and manifest are committed
 results/final/**/predictions.parquet
+results/extension/*.parquet
 
 # figures taken out of figures/eda (kept locally as a backup, never committed)
 figures/_removed/

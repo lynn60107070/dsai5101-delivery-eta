@@ -36,7 +36,11 @@ promise the same average time.
 \begin{itemize}
   \item A leakage-safe, time-split comparison of three model families (Elastic-Net, Random Forest,
         gradient boosting) against two baselines, with paired bootstrap intervals; the best model cuts
-        test MAE by 31\% against the median predictor and by 3.1 minutes against the platform's promise.
+        test MAE by 31\% against the median predictor and matches the platform's own estimate once the
+        padding is removed from its promise.
+  \item An extension with real-time rider availability and restaurant history, computed only from
+        deliveries completed before each order, which lowers the cross-validated MAE by a further 0.29
+        minutes.
   \item A ranking of order-time delay drivers by grouped permutation importance, an analysis of where
         the model fails (district, hour, distance, day), and a leakage audit that measures how much of the
         remaining error is information that does not exist at ordering.

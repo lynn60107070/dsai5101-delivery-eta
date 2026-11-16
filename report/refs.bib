@@ -139,6 +139,36 @@
   doi     = {10.1214/aos/1013203451}
 }
 
+% --- F7, Lynn (instructor feedback: industry benchmarking, Table benchmark) ---
+
+% Lynn: the Ele.me team's own write-up of zhu2020fulfillment; source of the online A/B numbers
+% (MAE -9.8%, complaints -19.3%) and the feature list (supply-demand ratio, restaurant backlog, couriers).
+@misc{alibaba2020fulfillment,
+  author       = {{Alibaba Cloud}},
+  title        = {Fulfillment Time Estimation: How to Make Food Delivery Faster?},
+  howpublished = {\url{https://www.alibabacloud.com/en/developer/a/ai/fulfillment-time-estimation}},
+  note         = {Accessed 16 Nov 2026}
+}
+
+% Lynn: Uber's production ETA model: a transformer that corrects the routing engine's ETA, trained with an
+% asymmetric Huber loss so late predictions can cost more than early ones (the same trade-off as padding).
+@misc{uber2022deepeta,
+  author       = {Binaykiya, Tanmay and Hu, Xinyu and Cirit, Olcay},
+  title        = {{DeepETA}: How {U}ber Predicts Arrival Times Using Deep Learning},
+  year         = {2022},
+  howpublished = {\url{https://www.uber.com/blog/deepeta-how-uber-predicts-arrival-times/}},
+  note         = {Uber Engineering Blog, 10 Feb 2022. Accessed 16 Nov 2026}
+}
+
+@misc{hu2022deepreta,
+  author        = {Hu, Xinyu and Binaykiya, Tanmay and Frank, Eric and Cirit, Olcay},
+  title         = {{DeeprETA}: An {ETA} Post-processing System at Scale},
+  year          = {2022},
+  eprint        = {2206.02127},
+  archivePrefix = {arXiv},
+  howpublished  = {arXiv:2206.02127}
+}
+
 % --- T1, Sumaiya (related work: meal-delivery arrival times, uncertain prep times) ---
 
 % Sumaiya: Uses supervised learning to estimate arrival times in restaurant meal delivery. Same

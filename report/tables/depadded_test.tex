@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{Unpadded vs unpadded on the test days: our estimate against the platform's promise minus its average padding (8.20 min, learned on the training days only). MAE in minutes; $\Delta$ = ours $-$ de-padded promise with a paired bootstrap 95\% interval.}
+\label{tab:depadded}
+\small
+\begin{tabular}{@{}lrccc@{}}
+\toprule
+Orders & $n$ & Ours & Promise $-$ padding & $\Delta$ \\
+\midrule
+All test orders & \num{139787} & 6.49 & 6.48 & +0.02 [-0.01, +0.04] \\
+Under 1 km & \num{42785} & 5.61 & 6.10 & -0.49 [-0.54, -0.44] \\
+1-3 km & \num{86939} & 6.67 & 6.25 & +0.42 [+0.39, +0.45] \\
+Over 3 km & \num{10063} & 8.73 & 10.06 & -1.33 [-1.50, -1.16] \\
+Lunch peak (11:00) & \num{23058} & 7.22 & 6.69 & +0.53 [+0.46, +0.60] \\
+Sunday 23 & \num{75063} & 6.77 & 6.58 & +0.19 [+0.15, +0.23] \\
+Monday 24 & \num{64724} & 6.17 & 6.35 & -0.19 [-0.23, -0.14] \\
+\bottomrule
+\end{tabular}
+\end{table}

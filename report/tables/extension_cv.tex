@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Extension (CV only): frozen gradient boosting with extra order-time features. Difference in MAE against the base features on the same orders, with paired bootstrap 95\% intervals. The test days were not used.}
+\label{tab:extension}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Features & CV MAE & $\Delta$ vs base & Lunch MAE \\
+\midrule
+Base (final model) & 6.25 & -- & 7.04 \\
+Base + rider availability & 6.20 & -0.05 [-0.05, -0.05] & 7.03 \\
+Base + restaurant history & 6.01 & -0.24 [-0.25, -0.23] & 6.82 \\
+Base + both & 5.97 & -0.29 [-0.29, -0.28] & 6.81 \\
+\bottomrule
+\end{tabular}
+\end{table}

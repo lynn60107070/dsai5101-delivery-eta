@@ -1,0 +1,30 @@
+% F7 (instructor feedback): how industry estimates delivery times, next to ours. Hand-written (Lynn, 16 Nov)
+% from sources read on 16 Nov 2026; only facts stated in those sources. Goes in Related Work (related.tex).
+\begin{table*}[t]
+\centering
+\caption{How deployed systems estimate delivery or arrival times, next to ours. Errors are not comparable across
+rows: each system uses its own data, target and baseline.}
+\label{tab:benchmark}
+\footnotesize
+\begin{tabular}{@{}p{0.13\textwidth}p{0.17\textwidth}p{0.29\textwidth}p{0.33\textwidth}@{}}
+\toprule
+System & Model & Inputs at prediction time & Reported result \\
+\midrule
+Ele.me (Alibaba), order fulfilment time~\cite{zhu2020fulfillment,alibaba2020fulfillment} &
+Deep network (encoder + predictor), attention over nearby couriers &
+Area, restaurant, time, order size; real-time supply--demand ratio; orders waiting at the restaurant; nearby
+couriers' distance and load; restaurant history &
+Online A/B test: MAE $-9.8\%$ and complaints $-19.3\%$ against the previous production model \\
+Uber, DeepETA~\cite{uber2022deepeta,hu2022deepreta} &
+Linear transformer correcting a routing-engine ETA (residual) &
+Origin, destination, time of request, real-time traffic, request type (e.g.\ delivery drop-off) &
+Lower error than the previous XGBoost model; asymmetric Huber loss so that being late can cost more than
+being early \\
+Ours &
+Gradient boosting (+ Elastic-Net, Random Forest) &
+Distance, time of day, district, prep estimate, recent load; public data only &
+Test MAE 6.49 min, equal to the platform's promise once its 8.2-min padding is removed; extra
+rider and restaurant features: CV MAE $-0.29$ min \\
+\bottomrule
+\end{tabular}
+\end{table*}

@@ -13,9 +13,11 @@ Part B (Q&A, 3 marks): see [qa_prep.md](qa_prep.md).
 Houston airport fixed complaints about baggage waits without making a single bag faster: it changed
 how the wait *felt*. Delivery apps face the same problem about 50 times a minute in one city. We follow
 one real order (#85188) through the talk: what the app knew when it was placed, why it took 43 minutes,
-and how our model's guess compares with the app's promise. The twist: we predict the real time better,
-but the app still makes better *promises*, because it can act after the order is placed. And someone
-pays for every minute a promise is shortened: the rider.
+and how our model's guess compares with the app's promise. The app's promise looks 3 minutes worse than
+ours, but that's padding: take the padding off and the app's own estimate is exactly as accurate as ours.
+What gets us further is what the app knows in real time (free riders, each restaurant's track record).
+The twist: even so, the app makes better *promises*, because it can act after the order is placed. And
+someone pays for every minute a promise is shortened: the rider.
 
 ## The example order (#85188, a test day, never seen by the model)
 
@@ -132,28 +134,39 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 
 ### Section 4 · Results & Insights (2 marks)
 
-**Slide 9 · Our model misses by 6.5 min: 3.1 min closer than the app's promise** (55 s)
+**Slide 9 · Our model misses by 6.5 min: as accurate as the app's own estimate, once its padding is removed** (55 s)
 - Script: *"So, our order. The app said 51. Our model said 45. It arrived in 43. Across all 140,000 test
-  orders, we're off by 6.5 minutes on average: 31% better than guessing, 3 minutes closer than the app."*
-- `figures/results/test_mae`: promise 9.62 · median 9.46 · Elastic-Net 6.80 · RF 6.54 · boosting 6.49
-- 🎣 Bait, said out loud: *"But the app's promise isn't trying to be accurate, so this isn't a fair
-  fight. That's slide 12."* (shows we know the weakness before anyone asks)
+  orders, we're off by 6.5 minutes on average, 31% better than guessing. The app looks 3 minutes worse,
+  but that's its padding: take off its usual 8 minutes and it's exactly as accurate as we are, 6.48
+  against 6.49. With public data from the moment you order, we reach the platform's own level."*
+- `figures/results/test_mae` (new version): promise 9.62 · median 9.46 · promise minus padding 6.48
+  (hatched) · Elastic-Net 6.80 · RF 6.54 · boosting 6.49
+- The padding (8.2 min) is measured on the training days only, so no test information is used
+- 🎣 Bait: *"The app's own estimate is best at lunch."* → invites "why, and where are you better?" (B11;
+  careful: our edge on very short and long trips is partly because one average padding over-corrects
+  there, qa_prep §5)
 - 🎣 Bait: *"Our order is a typical one."* → invites "isn't it cherry-picked?" (B12)
 - Bootstrap 95% CIs: boosting vs median −2.97 [−3.00, −2.93]; boosting vs RF −0.05 [−0.06, −0.04],
   so real but tiny. R² 0.49 shown openly (the ceiling is on slide 13)
 - Three models within 0.3 min → the limit is the information, not the model
 - Test ≈ CV + 0.2 min, same ranking → holds up on new days
 
-**Slide 10 · Distance drives delivery time; how busy the area is barely matters** (45 s)
+**Slide 10 · Distance drives delivery time; then free riders and the restaurant's track record** (50 s)
 - Script: *"So why did our order take 43 minutes? 12.5 minutes until pickup, about average, then 31 on
-  the road. Mostly distance, then lunchtime. The busy-area effect people expect? Almost nothing."*
+  the road. Mostly distance, then lunchtime. How many new orders come in barely matters. What matters is
+  how many riders are free: when more than three orders wait per free rider, the median delivery takes
+  36 minutes instead of 26. Add that and each restaurant's past delivery times, and our error drops
+  another 0.3 minutes."*
 - `figures/results/delay_drivers`: distance +3.10 ≫ time +0.86 ≈ district +0.83 > prep +0.67 > load +0.19
+- Extension (CV only, test untouched): riders + restaurant history, CV MAE 6.25 → 5.97 (CI −0.29 to
+  −0.28), R² 0.51 → 0.56; restaurant history −0.24, riders −0.05. Small inset or B13/B15
 - Pickup and road each take a median 13.1 min; both ~2.7 min slower at peaks
 - Proposal: right on distance and peaks, wrong on load
 
 **Slide 11 · Our model struggles with long trips and the lunch rush** (30 s)
-- Script: *"Lunch is our hardest hour. For orders like ours, we're off by 8.4 minutes, not 6.5. Still
-  better than the app's 11."*
+- Script: *"Lunch is our hardest hour: we're off by 7.2 minutes, not 6.5, and this is where the app's
+  own estimate beats ours (6.7). It probably knows how many riders are free right now. Weekends are
+  slower too: 1 to 3.5 minutes in the afternoon, and we only had one weekend day to learn from."*
 - `figures/results/errors_by_distance` or `errors_by_hour`, **test-day version (M6)**
 - < 1 km 5.6 vs > 7 km 14.4 · 11:00 7.2 vs 6.5 overall · Sunday 6.77 vs Monday 6.17 · districts 4.4–9.0
 
@@ -181,9 +194,10 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 - Answer: at ordering, delivery time can be predicted to ~6.5 min, and distance is the main driver
 - Leakage audit: with after-order times, MAE 6.25 → 4.53 and R² 0.51 → 0.72, so missing information
   is the ceiling (and why R² 0.49 is not a weak model)
-- Limitations: 8 days with one weekend day; no weather, traffic or courier data
+- Limitations: 8 days with one weekend day (no drift within the week, but none measurable beyond it); no
+  weather or traffic; rider availability only approximated from past deliveries
 - Ethics: error uneven across districts (4.4–9.0 min); every minute cut from a promise lands on a rider
-- Next: update the estimate after dispatch; restaurant history features
+- Next: confirm the extra features on new days; update the estimate after dispatch
 
 **Slide 14 · Thank you** (20 s)
 - Closing: *"Houston didn't make the bags faster, it changed the wait. Since we started talking, about
@@ -227,10 +241,28 @@ the full answer is ready here. Full spoken answers are in [qa_prep.md](qa_prep.m
   percentile)
 - B10 **Why a padded promise isn't free**: lost orders, bad customer planning, trust wears off,
   operations need the real time; same buffer for every order → too much at 1 km, too little at 7 km
-- B11 **Scorecard, won and lost**: accuracy ✓ (6.49 vs 9.62) · explains why ✓ · shorter promises ✓
+- B11 **Scorecard, won and lost** (`report/tables/depadded_test.tex`): vs the promise as shown ✓ (6.49 vs
+  9.62) · vs the de-padded promise = (6.49 vs 6.48, CI −0.01 to +0.04) · under 1 km ✓* (5.61 vs 6.10) ·
+  over 3 km ✓* (8.73 vs 10.06) · 1–3 km ✗ (6.67 vs 6.25) · lunch ✗ (7.22 vs 6.69) · explains why ✓ ·
+  shorter promises ✓. *Partly because padding is ~10 min under 1 km and 12–14 min beyond 4 km, so one
+  average (8.2) over-corrects at both ends
   (below ~37 min) · promises at the app's own length ✗ (6.1% vs 5.0% > 5 min late)
 - B12 **Order #85188 is typical**: its segment's medians (actual 45.3, promise 52.2, ours 45.2) and
   segment MAE (ours 8.4, app 11.0)
+
+**Answer slides for the instructor's feedback** (all from `experiments/feedback.py` and
+`experiments/extension.py`; the test days were not re-scored):
+
+- B13 **Rider pressure map** (`figures/results/rider_pressure`): orders waiting per free rider by district
+  × hour; > 3 per rider (19% of orders) → median 35.6 vs 26.4 min
+- B14 **Weekday vs weekend, and drift** (`figures/results/day_profiles`): same daily shape (r = 0.92),
+  weekend 1–3.5 min slower noon–18:00; Mon 17 vs Mon 24 differ by 0.5 min per busy hour
+- B15 **What the extended model learned** (`figures/results/partial_dependence`) + `report/tables/extension_cv.tex`
+- B16 **Industry benchmark** (`report/tables/benchmark.tex`): Ele.me (MAE −9.8% online, uses supply–demand
+  and restaurant backlog, like our extension), Uber DeepETA (asymmetric loss: late costs more, like padding)
+- B17 **Data issues with %** (`report/tables/data_issues.tex`): no exact duplicates; 13.1% refused dispatch
+  rows; 3.9% pre-booked; 1.4% prep missing; 13.8% prep default; each with its decision
+- Reproducibility: `python -m experiments.reproduce` rebuilds every table, figure and notebook
 
 **Rules for bait:** only plant questions we can answer in two sentences with a slide to point to.
 Keep anything we can't defend in depth (exact tuning ranges, model internals) off the main slides,

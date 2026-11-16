@@ -9,6 +9,11 @@ New here? Read **[CONTRIBUTING.md](CONTRIBUTING.md)** (setup + who owns what), t
 tasks and checkpoints), **[DELIVERABLES.md](DELIVERABLES.md)** (everything we hand in, mapped to the rubrics) and
 **[ALIGNMENT.md](ALIGNMENT.md)** (why each step exists: proposal feedback, proposal promises, lectures, rubrics).
 
+**Reproduce everything with one command** (after `pip install -r requirements.txt`):
+`python -m experiments.reproduce`. It runs the tests, downloads the data, rebuilds every final result, table
+and figure, and re-executes every notebook (`--tune` also reruns the hyperparameter searches). The test days
+are never re-scored: their predictions were written once, on 9 Nov.
+
 **Research question** (rewritten after the proposal feedback, see ALIGNMENT §1):
 
 > At the moment a Meituan order is placed, using only information known at that moment, how accurately can we
@@ -29,7 +34,7 @@ platform at the same average promised time.
 | `requirements_rubric/` | Project guidelines + proposal, presentation and report rubrics |
 | `common/` | Shared, tested pipeline: `config.py` (paths, dates, seed), `data.py` (download + cached table), `clean.py`, `features.py`, `split.py`, `evaluate.py` |
 | `models/` | One file per model, all following one contract (see CONTRIBUTING §3) |
-| `experiments/` | `run.py` (fit + score any model), `tune.py` (random search on CV), `compare.py` (paired bootstrap), `promise_test.py` (L4), `final.py` (every final result + report tables, L5/L6), `final_params/` (frozen settings, CP3) |
+| `experiments/` | `run.py` (fit + score any model), `tune.py` (random search on CV), `compare.py` (paired bootstrap), `promise_test.py` (L4), `final.py` (every final result + report tables, L5/L6), `final_params/` (frozen settings, CP3), `feedback.py` + `extension.py` (instructor feedback F1–F7), **`reproduce.py` (one command rebuilds everything, F8)** |
 | `notebooks/` | Analysis notebooks, numbered (see `notebooks/README.md`) |
 | `figures/` | Report-quality figures: `eda/` (Sumaiya), `results/` (Mahmoud) |
 | `report/` | The IEEE report: `main.tex` + one file per section, `refs.bib`. Written here by PR; Lynn's Overleaf only builds the PDF (`report/README.md`) |
@@ -146,6 +151,9 @@ The rows above are development numbers; quote only the final ones below in the r
 - **Best vs second best:** HGB − RF = −0.048 min [−0.056, −0.039] (`best_vs_second.json`). Real but tiny; RF has the lower RMSE, so HGB wins on typical error and RF on big misses.
 - **Test vs CV:** every model is ~0.2 min worse on test than on CV (HGB 6.25 → 6.49), and the ranking is unchanged. Test day 23 Oct (Sunday, MAE 6.77) is harder than 24 Oct (Monday, 6.17): the weekend limitation (F8) showing up.
 - **Promise test (q80, same mean promise 38.2 min):** late > 0 min 15.3% vs platform 14.9% (+0.3 pp [+0.2, +0.5]), > 5 min 6.1% vs 5.0% (+1.2 pp), > 10 min 2.4% vs 1.5% (+0.9 pp); pinball 2.52 vs 2.36; coverage 84.7% vs 85.1%. **On test the platform is slightly better at every threshold**; on CV we were 0.3 pp better at > 0 min. So the honest answer to the research question: order-time information predicts delivery time far better than the platform's promise does (MAE 6.49 vs 9.62), but it does not beat the platform at setting promises, which can react after the order is placed.
+- **Unpadded vs unpadded (F4, 16 Nov, `experiments.feedback`):** promise minus its average padding (8.20 min, training days only) has test MAE 6.48 vs ours 6.49: difference +0.02 [−0.01, +0.04], a tie. CV: ours better on 3 of 4 folds. Platform better on 1–3 km (6.25 vs 6.67) and at lunch (6.69 vs 7.22); ours better under 1 km (5.61 vs 6.10) and over 3 km (8.73 vs 10.06), partly because padding is not constant (≈10 min under 1 km, 12–14 beyond 4 km). Trip shares: < 1 km 30.4%, 1–3 km 62.6%, > 3 km 7.0%. Standalone: median absolute error 5.1 min, 49% within 5 min, 80% within 10 min.
+- **Extension (F2/F3, CV only, `experiments.extension`):** rider availability (riders finishing in the district in the last 30 min, open orders, orders per rider) and restaurant history (past mean delivery and pickup times), all from deliveries finished before the order. Frozen HGB settings: CV MAE 6.25 → riders 6.20 (−0.05) · restaurant 6.01 (−0.24) · both **5.97 (−0.29 [−0.29, −0.28])**, R² 0.51 → 0.56. > 3 orders per free rider (19% of orders): median 35.6 vs 26.4 min. Test days not re-scored.
+- **Weekdays and drift (F1/F6):** weekend hourly profile correlates 0.92 with weekdays, 1–3.5 min slower noon–18:00; Mon 17 vs Mon 24 differ by 0.5 min per busy hour (max 1.3). `figures/results/day_profiles`.
 
 
 ---
@@ -156,6 +164,7 @@ The rows above are development numbers; quote only the final ones below in the r
 |---|---|---|---|---|
 | 22 Oct | Lynn | Claude Code | Set up the shared pipeline (data loading, v0 cleaning, features, split, metrics, runner, tests) and the team docs; map the proposal feedback and lectures to tasks | Reviewed; all cleaning rules and model choices are owned and revised by the team |
 | 10 Nov | Lynn | Claude Code | First drafts of the abstract, introduction, methodology and conclusion from the final results, and the Q&A prep sheet | Drafts only: Lynn rewrites and checks every number against `results/final/` before CP6 |
+| 16 Nov | Lynn | Claude Code | Code for the instructor-feedback analyses (`feedback.py`, `extension.py`, `reproduce.py`, rider and restaurant features), web search for the industry benchmark sources, and edits to the report drafts and slide outline | Lynn checks every number against `results/feedback/` and `results/extension/`; benchmark facts only from sources read on 16 Nov |
 
 ---
 

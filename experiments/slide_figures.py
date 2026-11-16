@@ -1,8 +1,9 @@
-"""Two slide figures that no analysis notebook makes (owner: Lynn, L8). Run after experiments.final:
+"""Two slide figures that no analysis notebook makes (owner: Lynn, L8). Run after experiments.final and
+experiments.feedback:
 
     python -m experiments.slide_figures
 
-    figures/results/test_mae      slide 9: test MAE of every model and both baselines (from results/final/test)
+    figures/results/test_mae      slide 9: test MAE of every model, both baselines and the de-padded promise
     figures/results/time_split    slide 8: which days each fold trains and validates on, and the test days
 
 Same palette as every other figure: blue = our models / training, orange = the platform, aqua = validation;
@@ -37,17 +38,23 @@ def save(fig, name: str) -> None:
 def test_mae() -> None:
     test = RESULTS / "final" / "test"
     summary = {m: json.loads((test / m / "summary.json").read_text()) for m in ("median", "elasticnet", "rf", "hgb")}
+    fair = json.loads((RESULTS / "feedback" / "summary.json").read_text())["depadded"]  # experiments.feedback
     rows = [("Platform promise", summary["hgb"]["promise"]["mae"], ORANGE),
             ("Median predictor", summary["median"]["model"]["mae"], BASE),
+            (f"Promise minus its {fair['padding_learned_on_training_days']:.1f}-min padding",
+             fair["test"]["depadded_promise"]["mae"], ORANGE),
             ("Elastic-Net", summary["elasticnet"]["model"]["mae"], BLUE),
             ("Random Forest", summary["rf"]["model"]["mae"], BLUE),
             ("Gradient boosting", summary["hgb"]["model"]["mae"], BLUE)]
-    best, median, promise = rows[-1][1], rows[1][1], rows[0][1]
+    best, median, depadded = rows[-1][1], rows[1][1], rows[2][1]
 
-    fig, ax = plt.subplots(figsize=(8, 3.6))
+    fig, ax = plt.subplots(figsize=(8, 4.0))
     labels, values, colors = zip(*rows)
     pos = range(len(rows))[::-1]  # platform on top, best model at the bottom
-    ax.barh(list(pos), values, color=colors, height=0.62)
+    bars = ax.barh(list(pos), values, color=colors, height=0.62)
+    bars[2].set_hatch("//")  # the de-padded promise: the platform's estimate, not what it showed customers
+    bars[2].set_facecolor("white")
+    bars[2].set_edgecolor(ORANGE)
     for p, v in zip(pos, values):
         ax.annotate(f"{v:.2f}", (v, p), xytext=(6, 0), textcoords="offset points", va="center", color=INK)
     ax.set_yticks(list(pos), labels)
@@ -57,7 +64,8 @@ def test_mae() -> None:
     ax.set_axisbelow(True)
     ax.spines[["top", "right"]].set_visible(False)
     ax.set_title(f"Gradient boosting misses by {best:.1f} min on average: {100 * (1 - best / median):.0f}% less than "
-                 f"the median guess,\n{promise - best:.1f} min less than the platform's promise", loc="left", fontsize=13)
+                 f"the median guess,\nand level with the platform's promise once its padding is removed "
+                 f"({depadded:.2f})", loc="left", fontsize=13)
     save(fig, "test_mae")
 
 

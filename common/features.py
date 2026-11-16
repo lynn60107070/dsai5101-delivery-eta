@@ -6,9 +6,14 @@ so changing a feature set changes every model the same way.
     --features base            order-time features, Haversine distance (default)
     --features base_manhattan  same, Manhattan distance (distance comparison, M3)
     --features leaky           base + after-order times; ONLY for the leakage audit (S5)
+    --features riders          base + rider availability and open orders in the district (instructor feedback F3)
+    --features restaurant      base + the restaurant's delivery and pickup history (F2)
+    --features extended        base + both (F2/F3). A CV-only extension: the test days stay as scored on 9 Nov
 
-Rule: only information known when the order is placed. Never add promise_min, courier_id,
-dispatch_min, grab_min, fetch_min or anything derived from them to a non-leaky set.
+Rule: only information known when the order is placed. Never add this order's promise_min, courier_id,
+dispatch_min, grab_min, fetch_min or anything derived from them to a non-leaky set. Other orders' times
+may be used once they have happened: the rider and restaurant features count only orders delivered
+before this one was placed, which the platform knows in real time.
 """
 
 from dataclasses import dataclass
@@ -25,6 +30,7 @@ from common.config import UTC_OFFSET_HOURS
 EARTH_RADIUS_KM = 6371.0
 LOAD_WINDOW_MIN = 15
 LOAD_BASELINE_H = 24  # relative load: compared with this area's average over the previous 24 h
+RIDER_WINDOW_MIN = 30  # a rider counts as available in an area if they finished a delivery there in the last 30 min
 AFTER_ORDER = ["promise_min", "courier_id", "dispatch_min", "grab_min", "fetch_min", "delivery_min"]
 
 
@@ -50,6 +56,58 @@ def past_count(times: pd.Series, groups: pd.Series, window_s: float) -> np.ndarr
         counts = np.searchsorted(ts, ts, side="left") - np.searchsorted(ts, ts - window_s, side="left")
         out[times.index.get_indexer(idx[order])] = counts
     return out
+
+
+def _finished(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+    """Arrival time (unix s) of every order, and which orders count as observed activity: not pre-booked
+    (their slot is hours later) and not implausible."""
+    arrive = (df["order_ts"] + df["delivery_min"] * 60).to_numpy()
+    ok = ((df["is_prebook"] == 0) & ~df["implausible"]).to_numpy()
+    return arrive, ok
+
+
+def rider_supply(df: pd.DataFrame, window_s: float) -> tuple[np.ndarray, np.ndarray]:
+    """For each order, in its district at the moment it is placed:
+    riders  distinct riders who finished a delivery there in [t - window, t)
+    open    orders placed before t and not yet delivered at t (the backlog)
+    Both use only deliveries that had already happened, so they are known at ordering."""
+    arrive, ok = _finished(df)
+    t_all, courier = df["order_ts"].to_numpy(), df["courier_id"].to_numpy()
+    riders, backlog = np.zeros(len(df)), np.zeros(len(df))
+    for _, idx in df.groupby("district").groups.items():
+        pos = df.index.get_indexer(idx)
+        ev = pos[ok[pos]]
+        order = np.argsort(arrive[ev], kind="stable")
+        a, c = arrive[ev][order], courier[ev][order]
+        placed = np.sort(t_all[ev])
+        t = t_all[pos]
+        hi, lo = np.searchsorted(a, t, "left"), np.searchsorted(a, t - window_s, "left")
+        riders[pos] = [len(np.unique(c[l:h])) for l, h in zip(lo, hi)]
+        backlog[pos] = np.searchsorted(placed, t, "left") - hi
+    return riders, backlog
+
+
+def restaurant_history(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """For each order: how many of the restaurant's earlier orders were delivered before it was placed, and
+    their mean delivery and pickup times (minutes). NaN when there is no such order yet."""
+    arrive, ok = _finished(df)
+    t_all = df["order_ts"].to_numpy()
+    y, pickup = df["delivery_min"].to_numpy(), df["fetch_min"].to_numpy()
+    n_out, y_out, p_out = np.zeros(len(df)), np.full(len(df), np.nan), np.full(len(df), np.nan)
+    for _, idx in df.groupby("restaurant").groups.items():
+        pos = df.index.get_indexer(idx)
+        ev = pos[ok[pos]]
+        order = np.argsort(arrive[ev], kind="stable")
+        a, yy, pp = arrive[ev][order], y[ev][order], pickup[ev][order]
+        cy = np.concatenate([[0], np.cumsum(yy)])
+        cp = np.concatenate([[0], np.cumsum(np.nan_to_num(pp))])
+        cn = np.concatenate([[0], np.cumsum(~np.isnan(pp))])
+        k = np.searchsorted(a, t_all[pos], "left")
+        n_out[pos] = k
+        with np.errstate(invalid="ignore", divide="ignore"):
+            y_out[pos] = np.where(k > 0, cy[k] / k, np.nan)
+            p_out[pos] = np.where(cn[k] > 0, cp[k] / cn[k], np.nan)
+    return n_out, y_out, p_out
 
 
 def add_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -78,6 +136,12 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df["order_ts"] < first + LOAD_BASELINE_H * 3600, "load_15m_rel"] = np.nan
     # Same idea as prep_missing: day 1 is up to half the fit rows in early CV folds and the imputer fills it
     df["load_missing"] = df["load_15m_rel"].isna().astype(int)
+    # F3 (instructor feedback): rider supply vs backlog. Load counts new orders; this counts who can deliver them
+    df["riders_30m"], df["open_orders"] = rider_supply(df, RIDER_WINDOW_MIN * 60)
+    df["orders_per_rider"] = df["open_orders"] / df["riders_30m"].clip(lower=1)
+    # F2: restaurants differ in how long they take; only their orders delivered before this one count
+    df["rest_hist_n"], df["rest_hist_min"], df["rest_pickup_hist"] = restaurant_history(df)
+    df["rest_hist_missing"] = df["rest_hist_min"].isna().astype(int)
     return df
 
 
@@ -104,6 +168,12 @@ FEATURE_SETS = {
     "leaky": FeatureSet("leaky", ("dist_haversine_km", *_TIME_AND_LOAD, "dispatch_min", "grab_min", "fetch_min"),
                         ("district",)),
 }
+_RIDERS = ("riders_30m", "open_orders", "orders_per_rider")
+_RESTAURANT = ("rest_hist_n", "rest_hist_min", "rest_pickup_hist", "rest_hist_missing")
+FEATURE_SETS["riders"] = FeatureSet("riders", (*FEATURE_SETS["base"].numeric, *_RIDERS), ("district",))
+FEATURE_SETS["restaurant"] = FeatureSet("restaurant", (*FEATURE_SETS["base"].numeric, *_RESTAURANT), ("district",))
+FEATURE_SETS["extended"] = FeatureSet("extended", (*FEATURE_SETS["base"].numeric, *_RIDERS, *_RESTAURANT),
+                                      ("district",))
 
 
 def preprocessor(fs: FeatureSet, scale: bool = False) -> ColumnTransformer:

@@ -109,6 +109,22 @@ class TestFeatures(unittest.TestCase):
         self.assertLess(np.hypot(sin[0] - sin[1], cos[0] - cos[1]), 0.01)  # 23:59 vs 00:00
         self.assertGreater(np.hypot(sin[1] - sin[2], cos[1] - cos[2]), 1.9)  # midnight vs noon
 
+    def test_rider_and_restaurant_features_use_only_finished_deliveries(self):
+        """F2/F3: an order may only see deliveries that arrived before it was placed."""
+        df = pd.DataFrame({
+            "order_ts": [0, 60, 600, 1200, 1300], "delivery_min": [5, 30, 5, 5, 5],
+            "district": ["a"] * 5, "restaurant": ["r"] * 5, "courier_id": [1, 2, 1, 3, 3],
+            "fetch_min": [2.0, 10.0, 4.0, 1.0, 1.0], "is_prebook": [0] * 5, "implausible": [False] * 5})
+        riders, backlog = features.rider_supply(df, 30 * 60)
+        # arrivals: 300 (rider 1), 1860 (rider 2), 900 (rider 1), 1500 (rider 3), 1600 (rider 3)
+        self.assertEqual(list(riders), [0, 0, 1, 1, 1])   # at 1200 and 1300 only rider 1 has finished (twice)
+        self.assertEqual(list(backlog), [0, 1, 1, 1, 2])  # placed before t and not yet arrived at t
+        n, mean_y, mean_pickup = features.restaurant_history(df)
+        self.assertEqual(list(n), [0, 0, 1, 2, 2])        # the 30-min order is still out at 1300
+        self.assertTrue(np.isnan(mean_y[0]))
+        self.assertAlmostEqual(mean_y[4], 5)
+        self.assertAlmostEqual(mean_pickup[3], (2 + 4) / 2)
+
     def test_no_leakage_in_deployable_feature_sets(self):
         for name, fs in features.FEATURE_SETS.items():
             if name != "leaky":

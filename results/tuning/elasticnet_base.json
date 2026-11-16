@@ -1,0 +1,16 @@
+{
+  "params": {
+    "alpha": 0.0019674328025306126,
+    "l1_ratio": 0.662522284353982
+  },
+  "cv_mean": 6.590003283493249,
+  "cv_std": 0.17103238982947955,
+  "settings": {
+    "model": "elasticnet",
+    "features": "base",
+    "n_iter": 30,
+    "log_target": false,
+    "sample": null,
+    "seed": 42
+  }
+}

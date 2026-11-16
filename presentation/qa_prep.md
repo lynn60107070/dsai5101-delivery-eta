@@ -5,9 +5,10 @@ brackets leads if the question is open; anyone may add. All numbers are final (t
 marked CV. Sources: README §3–§5, ALIGNMENT.md, `results/final/`.
 
 **The 20-second story:** using only what is known when an order is placed, gradient boosting predicts
-delivery time with 6.49 min error, 31% better than guessing the median and 3.1 min better than the
-platform's own promise. Distance is the main driver. But turning predictions into promises does not
-beat the platform, because the platform can still act after the order is placed.
+delivery time with 6.49 min error, 31% better than guessing the median and as accurate as the platform's
+own estimate once its 8.2-min padding is removed (6.48). Distance is the main driver; free riders and
+each restaurant's track record come next (CV error 6.25 → 5.97 with them). But turning predictions into
+promises does not beat the platform, because the platform can still act after the order is placed.
 
 ---
 
@@ -141,22 +142,78 @@ is padded by 8 min on average and still late 15% of the time. Padding is good in
 test shows it works. The goal is a buffer that is long where the trip is risky and short where it's easy.
 
 **So did you beat the platform or not?**
-On accuracy, yes: our estimate is 3.1 min closer to the real time (6.49 vs 9.62), and we can say why
-orders are slow. But that's not a fair fight, because the promise isn't trying to be accurate, so we
-ran the promise test. There we win only for shorter promises (average below ~37 min); at the app's own
-average, the app is late less often (5.0% vs 6.1% more than 5 min late). In one sentence: we predict
-when food arrives more accurately, but turning that into a better promise is harder, because the app
-can still act after the order.
+We tie. Against the promise as shown we're 3.1 min closer (6.49 vs 9.62), but that's its padding. Take
+off its average padding (8.2 min, measured on the training days only) and the platform's estimate is as
+accurate as ours: 6.48 vs 6.49, CI −0.01 to +0.04. On the CV folds we were better on 3 of 4 days. By
+segment we look better under 1 km and over 3 km (partly an artefact of one average padding, see below);
+the platform is better on 1–3 km trips (63% of orders) and at lunch (6.69 vs 7.22), probably because it
+knows how many riders are free. Padded
+vs padded is the promise test: there we win only for shorter promises (average below ~37 min); at the
+app's own average it is late less often (5.0% vs 6.1% > 5 min late). In one sentence: with public
+order-time data we reach the platform's own estimate, not beyond it, and a better promise needs what the
+platform does after the order. (B11)
+
+**Why remove the padding with an average, not per order?**
+A single number measured on the training days is the simplest fair version that uses no test
+information. A smarter de-padding (per district or hour) would need its own model of the platform,
+which is what our model already is.
+
+**Why are you better on short and long trips but worse in between?**
+Partly because of how we de-padded. The padding isn't constant: about 10 min under 1 km (the 30-min
+floor), about 7 min at 1–3 km, 12–14 min beyond 4 km. Subtracting one average (8.2) leaves the
+platform's estimate too long at both ends, so part of our advantage there is the simple de-padding, not
+our model. We say this openly; the overall tie is the fair headline. For the common 1–3 km trips at
+lunch, the platform's real-time information (riders, restaurants) likely helps.
 
 **Isn't order #85188 cherry-picked?**
 No: it sits at the median of the 634 Sunday 11:xx orders 3–5 km away (actual 45.3, promise 52.2, our
 prediction 45.2). In that group we're off by 8.4 min on average and the app by 11.0. Our 80th-percentile
 promise for it would have been about 53 min before the +2.7 shift, longer than the app's 51: at the
-lunch peak our model is more cautious, which fits the promise-test result.
+lunch peak our model is more cautious, which fits the promise-test result. Honest note: the de-padded
+promise for this order (51 − 8.2 = 42.8) was even closer than ours to the actual 43, which is the tie on
+slide 9 in one order.
 
 **Then what is your model useful for?**
-A 3-minute-better estimate of when food will arrive, a ranked list of what makes orders slow, and a
-starting point for promises that are then updated after dispatch (future work).
+An estimate as good as the platform's own from public order-time data alone, built and checked openly;
+a ranked list of what makes orders slow; an estimate that scales with distance; and a starting point
+for promises that are then updated after dispatch (future work).
+
+## 5b. Instructor feedback, new analyses [Lynn]
+
+**Do weekends behave differently? Do you need a weekday feature?**
+Same daily shape (hourly medians correlate at 0.92), but weekends run 1–3.5 min slower from noon to
+18:00. With one weekend day in training we can't learn or validate that (the `is_weekend` flag blew up
+fold 4), so it stays a limitation; the Sunday test day was our hardest (6.77, predicted 2.1 min too
+short). With more weeks, a day-of-week feature would be the first thing to add. (B14)
+
+**Is the pattern drifting over time?**
+Not within the week: Monday 17 and Monday 24 differ by 0.5 min per busy hour on average (max 1.3).
+Eight days can't show longer drift, so deployment would need monitoring and retraining. (B14)
+
+**What about rider availability?**
+We counted, for each order, the riders who finished a delivery in its district in the last 30 min and
+the orders still waiting, using only deliveries finished before the order (a unit test checks this).
+When more than three orders wait per free rider (19% of orders), the median delivery is 35.6 min vs 26.4.
+Riders are scarcest at 11:00 and 17–18:00, much more in some districts (B13). New orders alone (our load
+feature) barely matter; orders per free rider do.
+
+**Did more features help?**
+Yes, on the validation folds: riders + each restaurant's past delivery and pickup times take CV MAE from
+6.25 to 5.97 (CI −0.29 to −0.28), R² 0.51 → 0.56. Restaurant history gives most of it (−0.24), riders
+−0.05. We did **not** re-score the test days with them: they were designed after the single test run, and
+using the test set twice would make it training data. (B15)
+
+**How does this compare with industry?**
+Ele.me's deployed model (KDD 2020) uses the same kinds of inputs we added (real-time supply–demand,
+orders waiting at the restaurant, nearby couriers) and cut MAE by 9.8% in an online test. Uber's
+DeepETA uses an asymmetric loss so late predictions cost more than early ones, the same idea as the
+platform's padding. Errors can't be compared across companies (different data and targets). (B16)
+
+**How much of the data was missing or duplicated?**
+No exact duplicate rows. 13.1% of raw rows were refused dispatch attempts repeating an order (removed).
+Of accepted orders, 3.9% were pre-booked (excluded) and 1 had no arrival time. Of modelling orders, 1.4%
+had no prep estimate and 13.8% a default one (both imputed + flagged, since they are not missing at
+random). (B17)
 
 ## 6. Leakage audit and stages [Sumaiya]
 
@@ -175,19 +232,22 @@ meal peaks. Where it differs: late orders lose more on the road in the 7 big are
 
 ## 7. Limitations, ethics, next steps [Lynn]
 
-**Limitations?** Eight days, one weekend day for training, one platform in one city, no weather, traffic
-or courier data at ordering, coordinates shifted for privacy.
+**Limitations?** Eight days, one weekend day for training, one platform in one city, no weather or
+traffic, rider availability only approximated from past deliveries, coordinates shifted for privacy,
+extra features checked on validation days only.
 
 **Ethical concerns?** Errors differ by district (4.4 to 9.0 min), so some areas get less reliable
 estimates. Shorter promises pressure couriers; padded promises shift the cost to customers.
 
-**What would you do next?** Restaurant history and busy-courier counts as features (computed inside
-folds), combining the estimate with updates after dispatch, and testing over several weeks for drift
-with retraining and input monitoring.
+**What would you do next?** Confirm the rider and restaurant features on new days, add a day-of-week
+feature once several weekends are available, combine the estimate with updates after dispatch, and
+test over several weeks for drift with retraining and input monitoring.
 
 **Why not deep learning?** 11 tabular features and a few hundred thousand rows: tree ensembles are the
 standard strong choice there, and the three model families already agree within 0.3 min, so a more
 complex model would chase the same information ceiling.
 
-**Can we reproduce your results?** Yes: clone, install the pinned requirements, run the tests, then
-`python -m experiments.final`; the data download automatically. Seed 42 throughout.
+**Can we reproduce your results?** Yes, with one command: `python -m experiments.reproduce` runs the
+tests, downloads the data, rebuilds every final result, table and figure and re-executes every notebook
+(`--tune` also reruns the hyperparameter searches). Pinned requirements, seed 42 throughout. The test
+days are never re-scored: their predictions were written once.
