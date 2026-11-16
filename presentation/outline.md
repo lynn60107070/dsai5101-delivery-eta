@@ -159,8 +159,10 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 - `figures/results/delay_drivers`: distance +3.10 ≫ time +0.86 ≈ district +0.83 > prep +0.67 > load +0.19
 - Extension (CV only, test untouched): riders + restaurant history + recent district delays + restaurant
   queue, CV MAE 6.25 → 5.92 (CI −0.34 to −0.32), R² 0.51 → 0.57; restaurant history −0.24, riders −0.05,
-  prep bias (Sumaiya) −0.03, the rest −0.01. **Beats the app's de-padded promise on the validation days: overall 5.92 vs 6.24 and in
-  6 of 7 segments; the app still wins at lunch (6.66 vs 6.75).** Small inset or B13/B15
+  prep bias (Sumaiya) −0.03, the rest −0.01. **Beats the app's de-padded promise on the validation days: overall 5.92 vs 6.24, better in
+  5 of 7 segments, level on 1–3 km (CI includes 0); the app still wins at lunch (6.66 vs 6.75).
+  Elastic-Net and RF gain as much (−0.33, −0.31): the gain is the information, not model complexity.
+  It closes only a fifth of the leakage gap (0.33 of 1.72 min)** Small inset or B13/B15
 - Pickup and road each take a median 13.1 min; both ~2.7 min slower at peaks
 - Proposal: right on distance and peaks, wrong on load
 
@@ -245,7 +247,7 @@ the full answer is ready here. Full spoken answers are in [qa_prep.md](qa_prep.m
 - B11 **Scorecard, won and lost** (`report/tables/depadded_test.tex`): vs the promise as shown ✓ (6.49 vs
   9.62) · vs the de-padded promise = (6.49 vs 6.48 one average; ✗ 6.49 vs 6.36 per distance band) ·
   per band: under 1 km ✓ (5.61 vs 5.86) · over 3 km ✓ (8.73 vs 9.94) · 1–3 km ✗ (6.67 vs 6.19) · lunch ✗
-  (7.22 vs 6.68) · explains why ✓ · shorter promises ✓ · extended model on CV ✓ 6 of 7 segments
+  (7.22 vs 6.68) · explains why ✓ · shorter promises ✓ · extended model on CV ✓ 5 of 7 segments + level on 1–3 km
   (`report/tables/extension_vs_platform.tex`)
   (below ~37 min) · promises at the app's own length ✗ (6.1% vs 5.0% > 5 min late)
 - B12 **Order #85188 is typical**: its segment's medians (actual 45.3, promise 52.2, ours 45.2) and
@@ -259,7 +261,8 @@ the full answer is ready here. Full spoken answers are in [qa_prep.md](qa_prep.m
 - B14 **Weekday vs weekend, and drift** (`figures/results/day_profiles`): same daily shape (r = 0.92),
   weekend 1–3.5 min slower noon–18:00; Mon 17 vs Mon 24 differ by 0.5 min per busy hour
 - B15 **What the extended model learned** (`figures/results/partial_dependence`) + `report/tables/extension_cv.tex`
-  + `report/tables/extension_vs_platform.tex` (re-tuning chose the same settings, so no gain there)
+  + `report/tables/extension_vs_platform.tex` + `extension_models.tex` (EN/RF/HGB on the extended
+  features) + `elasticnet_effects.tex` (effects in minutes). Re-tuning chose the same settings
 - B16 **Industry benchmark** (`report/tables/benchmark.tex`): Ele.me (MAE −9.8% online, uses supply–demand
   and restaurant backlog, like our extension), Uber DeepETA (asymmetric loss: late costs more, like padding)
 - B17 **Data issues with %** (`report/tables/data_issues.tex`): no exact duplicates; 13.1% refused dispatch

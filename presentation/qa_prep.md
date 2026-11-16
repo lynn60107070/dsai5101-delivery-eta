@@ -149,7 +149,7 @@ only) and it ties with us: 6.48 vs 6.49, CI −0.01 to +0.04. Take off each dist
 (fairer to the app) and it's slightly better, 6.36. Even then we're better under 1 km (5.61 vs 5.86) and
 over 3 km (8.73 vs 9.94), 37% of orders; the app is better on 1–3 km trips (63%) and at lunch (6.68 vs
 7.22). With the real-time features (riders, restaurant history), our model beats the app's own estimate
-on the validation days: 5.92 vs 6.24, and in 6 of 7 segments, but still not at lunch. Padded vs padded is
+on the validation days: 5.92 vs 6.24, better in 5 of 7 segments, level on medium trips, but still not at lunch. Padded vs padded is
 the promise test: we win only for shorter promises (average below ~37 min); at the app's own average it
 is late less often (5.0% vs 6.1% > 5 min late). In one sentence: from order-time data we reach the
 app's own estimate, beat it with real-time features on validation days, and a better promise needs what
@@ -205,7 +205,7 @@ feature) barely matter; orders per free rider do.
 **Did more features help?**
 Yes, on the validation folds: riders + each restaurant's past delivery and pickup times take CV MAE from
 6.25 to 5.92 (CI −0.34 to −0.32), R² 0.51 → 0.57, and beat the app's de-padded promise overall (5.92 vs
-6.24) and in 6 of 7 segments, not at lunch. Restaurant history gives most of it (−0.24), riders
+6.24), in 5 of 7 segments and level on medium trips, not at lunch. Restaurant history gives most of it (−0.24), riders
 −0.05. We did **not** re-score the test days with them: they were designed after the single test run, and
 using the test set twice would make it training data. (B15)
 
@@ -220,6 +220,27 @@ No exact duplicate rows. 13.1% of raw rows were refused dispatch attempts repeat
 Of accepted orders, 3.9% were pre-booked (excluded) and 1 had no arrival time. Of modelling orders, 1.4%
 had no prep estimate and 13.8% a default one (both imputed + flagged, since they are not missing at
 random). (B17)
+
+**Did the new features only help the complex model?**
+No. On the validation days Elastic-Net goes 6.60 → 6.27, Random Forest 6.32 → 6.00 and boosting 6.25 →
+5.92: all about −0.3, same order. The gain is the information in the features, not extra model
+complexity. (B15, `extension_models.tex`)
+
+**So can more features close the gap to the leaky model?**
+Only partly. The leakage audit says after-order times are worth 1.72 min (6.25 → 4.53). Our leakage-safe
+real-time features recover 0.33 of that, about a fifth. The rest (pickup time, what happens on the road)
+only exists after the order.
+
+**How many features do you have?**
+Main model (scored on test): 10 engineered features + district one-hot = 33 inputs. Extended model: 23
+engineered features = 46 inputs. Every one is built from raw columns (distance from coordinates, cyclical
+time, flags, rolling past-only counts and averages); none is a raw column used as is.
+
+**Which model is interpretable, and what does it say?**
+Elastic-Net, in minutes: +6.1 per km, +4.8 at the lunch peak, +3.6 at dinner, +0.66 per estimated prep
+minute, +2.0–2.5 for an order with no real prep estimate, and only +1.1 when the district runs at twice its
+usual load. Its test error (6.80) is only 0.31 above boosting, so the readable model captures most of it.
+(`elasticnet_effects.tex`)
 
 ## 6. Leakage audit and stages [Sumaiya]
 

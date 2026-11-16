@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{Simple to complex models on the base and the extended features (CV only, frozen settings, the same orders). $\Delta$ with paired bootstrap 95\% intervals.}
+\label{tab:ladder}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Model & Base & Extended & $\Delta$ & $R^2$ \\
+\midrule
+Elastic-Net & 6.60 & 6.27 & -0.33 [-0.34, -0.32] & 0.47 $\to$ 0.52 \\
+Random Forest & 6.32 & 6.00 & -0.31 [-0.32, -0.30] & 0.51 $\to$ 0.57 \\
+Gradient boosting & 6.25 & 5.92 & -0.33 [-0.34, -0.32] & 0.51 $\to$ 0.57 \\
+\bottomrule
+\end{tabular}
+\end{table}

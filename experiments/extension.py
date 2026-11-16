@@ -14,6 +14,8 @@ Writes
                                               rider pressure, Elastic-Net effects in minutes
     report/tables/extension_cv.tex            the CV comparison for the report
     report/tables/extension_vs_platform.tex   best model vs the de-padded promise by segment (CV)
+    report/tables/extension_models.tex        Elastic-Net, Random Forest and boosting on base vs all features (CV)
+    report/tables/elasticnet_effects.tex      Elastic-Net effects in minutes per unit, base and all features
     figures/results/rider_pressure            orders per available rider, by district and hour (F3)
     figures/results/partial_dependence        how the best model's prediction moves with 6 inputs (F2)
 """
@@ -237,6 +239,73 @@ def elasticnet_effects(train: pd.DataFrame) -> dict:
     return out
 
 
+EFFECTS = [("dist_haversine_km", "Distance (per km)"), ("prep_min", "Prep estimate (per min)"),
+           ("prep_default", "Prep estimate is a default"), ("prep_missing", "Prep estimate missing"),
+           ("lunch_peak", "Lunch peak (11:00)"), ("dinner_peak", "Dinner peak (17--19)"),
+           ("load_15m_rel", "District load (per $\\times$ usual)"),
+           ("orders_per_rider", "Orders per available rider (per order)"),
+           ("rest_hist_min", "Restaurant's past delivery time (per min)"),
+           ("rest_pickup_hist", "Restaurant's past pickup time (per min)"),
+           ("prep_bias", "Restaurant's prep-estimate bias (per min)"),
+           ("recent_delivery_30m", "District's recent delivery time (per min)"),
+           ("rest_backlog", "Orders waiting at the restaurant (per order)")]
+LADDER = [("elasticnet", "Elastic-Net"), ("rf", "Random Forest"), ("hgb", "Gradient boosting")]
+
+
+def model_ladder(train: pd.DataFrame) -> dict:
+    """Simple vs complex on the extended features: each model with its frozen settings, base vs all features,
+    on the same CV orders. Every fitted step (imputer, scaler, model) is refitted inside each fold."""
+    out = {}
+    for model, _ in LADDER:
+        base = pd.read_parquet(RESULTS / "final" / "cv" / model / "predictions.parquet")
+        path = OUT / f"{model}_all_cv.parquet"
+        if model == "hgb":
+            path = OUT / "hgb_all_cv.parquet"  # written by compare()
+        else:
+            params, _ = frozen_params(model)
+            cross_validate(model, FEATURE_SETS["all"], train, params).to_parquet(path, index=False)
+        ext = pd.read_parquet(path)
+        keys = ["order_id", "fold"]
+        both = base.merge(ext[keys + ["pred"]].rename(columns={"pred": "ext"}), on=keys)
+        e_base, e_ext = (both["pred"] - both["y"]).abs(), (both["ext"] - both["y"]).abs()
+        out[model] = {"base_mae": float(e_base.mean()), "all_mae": float(e_ext.mean()),
+                      "base_r2": point_metrics(both["y"], both["pred"])["r2"],
+                      "all_r2": point_metrics(both["y"], both["ext"])["r2"],
+                      "all_vs_base": paired_bootstrap(e_ext, e_base)}
+        print(f"{model:10s} base {e_base.mean():.3f} -> all {e_ext.mean():.3f}")
+    return out
+
+
+def write_ladder_tables(ladder: dict, effects: dict) -> None:
+    lines = [r"\begin{table}[t]", r"\centering",
+             r"\caption{Simple to complex models on the base and the extended features (CV only, frozen settings, "
+             r"the same orders). $\Delta$ with paired bootstrap 95\% intervals.}", r"\label{tab:ladder}", r"\small",
+             r"\begin{tabular}{@{}lcccc@{}}", r"\toprule",
+             r"Model & Base & Extended & $\Delta$ & $R^2$ \\", r"\midrule"]
+    for model, label in LADDER:
+        r = ladder[model]
+        lo, hi = r["all_vs_base"]["ci95"]
+        lines.append(f"{label} & {r['base_mae']:.2f} & {r['all_mae']:.2f} & {r['all_vs_base']['diff']:+.2f} "
+                     f"[{lo:+.2f}, {hi:+.2f}] & {r['base_r2']:.2f} $\\to$ {r['all_r2']:.2f} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    (REPO_ROOT / "report" / "tables" / "extension_models.tex").write_text("\n".join(lines) + "\n", encoding="utf8")
+
+    lines = [r"\begin{table}[t]", r"\centering",
+             r"\caption{Elastic-Net effects in minutes of delivery time per unit of each input, holding the others "
+             r"fixed (fitted on the six training days). Correlated inputs share their effect, so read signs and sizes, "
+             r"not causes. A default prep estimate sets both prep flags, so its total effect is their sum (base: "
+             r"$+2.0$). Time of day (sine and cosine) and districts are left out.}",
+             r"\label{tab:effects}", r"\small", r"\begin{tabular}{@{}lrr@{}}", r"\toprule",
+             r"Input & Base & Extended \\", r"\midrule"]
+    for col, label in EFFECTS:
+        base, ext = effects["base"].get(col), effects["all"].get(col)
+        cell = lambda v: "--" if v is None else f"{v:+.2f}"
+        lines.append(f"{label} & {cell(base)} & {cell(ext)} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    (REPO_ROOT / "report" / "tables" / "elasticnet_effects.tex").write_text("\n".join(lines) + "\n", encoding="utf8")
+    print("-> report/tables/extension_models.tex, report/tables/elasticnet_effects.tex")
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     orders = load_table()
@@ -247,6 +316,8 @@ def main():
     write_tables(rows, segments)
     summary["rider_pressure"] = rider_pressure(train)
     summary["elasticnet_minutes_per_unit"] = elasticnet_effects(train)
+    summary["model_ladder"] = model_ladder(train)
+    write_ladder_tables(summary["model_ladder"], summary["elasticnet_minutes_per_unit"])
     summary["partial_dependence"] = partial_dependence(train, params)
     (OUT / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf8")
     print("->", OUT / "summary.json")
