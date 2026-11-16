@@ -125,6 +125,25 @@ class TestFeatures(unittest.TestCase):
         self.assertAlmostEqual(mean_y[4], 5)
         self.assertAlmostEqual(mean_pickup[3], (2 + 4) / 2)
 
+    def test_prep_bias_uses_only_orders_picked_up_before(self):
+        """Restaurant prep bias: mean (pickup - prep estimate) over the restaurant's orders already picked up."""
+        t = [0, 10, 20, 30, 40, 50, 60, 3000, 3100, 3600]
+        df = pd.DataFrame({
+            "order_ts": t, "restaurant": ["r"] * 10,
+            # picked up at 60, 610, 1220, 1830, 2440, 3050, 4000 (after t=3600), ...
+            "fetch_min": [1.0, 10, 20, 30, 40, 50, 65.6, 1, 1, 1],
+            "prep_min": [0.5, 8, 15, 30, 40, np.nan, 60, 1, 1, 1],  # order 5 has no real estimate
+            "is_prebook": [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]})        # order 7 is pre-booked
+        bias, n = features.restaurant_prep_bias(df, min_n=5)
+        # at 3600: orders 0-4 and 8 count (picked up before 3600, real estimate, not pre-booked)
+        self.assertEqual(n[9], 6)
+        self.assertAlmostEqual(bias[9], (0.5 + 2 + 5 + 0 + 0 + 0) / 6)
+        self.assertEqual(n[8], 5)  # at 3100: orders 0-4 (order 8 itself is not picked up yet)
+        self.assertAlmostEqual(bias[8], (0.5 + 2 + 5 + 0 + 0) / 5)
+        self.assertEqual(n[0], 0)
+        self.assertTrue(np.isnan(bias[0]))  # no history yet
+        self.assertTrue(np.isnan(features.restaurant_prep_bias(df, min_n=7)[0][9]))  # too few orders -> missing
+
     def test_no_leakage_in_deployable_feature_sets(self):
         for name, fs in features.FEATURE_SETS.items():
             if name != "leaky":
