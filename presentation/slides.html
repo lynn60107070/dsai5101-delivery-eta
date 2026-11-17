@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery Time Slides</title>
+<!--
+  DSAI 5101 presentation, Sun 22 Nov 2026 (10 min talk + 10-15 min Q&A).
+  Plan, scripts and backup list: outline.md. Q&A answers: qa_prep.md.
+
+  Keys:  → / Space / PageDown  next      ← / PageUp  previous   (or the on-screen arrows)
+         O                     all slides (click one to jump)   F  full screen
+         Home / End            first / last
+         a number + Enter      go to that slide (backups: B then the number, e.g. b13 Enter)
+         N                     speaker notes + timer      T  reset the timer
+  PDF:   open in Chrome → Print → Save as PDF (layout landscape, margins none, background graphics on).
+  Figures come from ../figures, so open this file inside the repo.
+-->
+<style>
+:root{
+  --blue:#2a78d6; --orange:#eb6834; --aqua:#1baf7a;
+  --ink:#0b0b0b; --muted:#52514e; --faint:#8a8984; --grid:#e6e5e0;
+  --paper:#ffffff; --tint:#f5f4f0; --blue-tint:#eaf2fc; --orange-tint:#fdeee8;
+  --stage:#1d1d1b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--stage);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+body{overflow:hidden}
+
+/* ---------- slide canvas: 1280 x 720, scaled to fit ---------- */
+#deck{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--paper);display:none;flex-direction:column;
+  padding:44px 64px 52px;overflow:hidden}
+.slide.active{display:flex}
+
+.kicker{font-size:15px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kicker::before{content:"";width:28px;height:4px;border-radius:2px;background:var(--blue)}
+h2{font-size:36px;line-height:1.16;font-weight:680;letter-spacing:-.01em;max-width:1120px;margin-bottom:22px}
+.body{flex:1;min-height:0;display:flex;gap:36px;align-items:stretch}
+.col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.grow{flex:1}
+.center{justify-content:center}
+
+figure{display:flex;align-items:center;justify-content:center;min-height:0;min-width:0}
+figure img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+
+ul.pts{list-style:none;display:flex;flex-direction:column;gap:16px}
+ul.pts li{font-size:24px;line-height:1.3;padding-left:22px;position:relative}
+ul.pts li::before{content:"";position:absolute;left:0;top:.52em;width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.small{font-size:19px;line-height:1.35;color:var(--muted)}
+.big{font-size:56px;font-weight:720;line-height:1;letter-spacing:-.02em}
+.big .unit{font-size:26px;font-weight:600;color:var(--muted);margin-left:6px}
+.label{font-size:19px;color:var(--muted);line-height:1.3;margin-top:6px}
+.blue{color:var(--blue)} .orange{color:var(--orange)} .aqua{color:var(--aqua)} .muted{color:var(--muted)}
+b{font-weight:680}
+
+/* "EDA finding -> modelling decision" callout, the instructor's request */
+.decision{background:var(--tint);border-left:5px solid var(--ink);border-radius:4px;padding:14px 18px;
+  font-size:22px;line-height:1.3}
+.decision .tag{display:block;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px}
+
+.bait{font-size:21px;font-style:italic;color:var(--muted)}
+.qbox{border:3px solid var(--blue);border-radius:10px;padding:26px 30px;font-size:29px;line-height:1.32;font-weight:560}
+.qbox .tag{display:block;font-size:15px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+
+.card{border:1.5px solid var(--grid);border-radius:10px;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+.card h3{font-size:16px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card p,.card li{font-size:22px;line-height:1.32}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.card.platform{border-color:var(--orange)} .card.ours{border-color:var(--blue)}
+
+/* order #85188 card */
+.order{border:2px solid var(--ink);border-radius:12px;padding:20px 24px;min-width:300px}
+.order h3{font-size:22px;font-weight:720;margin-bottom:12px}
+.order table{border-collapse:collapse;width:100%}
+.order td{font-size:22px;padding:7px 0;border-top:1px solid var(--grid)}
+.order td:last-child{text-align:right;font-weight:650}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:17px;font-weight:650;padding:5px 12px;border-radius:999px;
+  border:1.5px solid var(--ink);white-space:nowrap}
+
+/* tables on backup slides */
+table.t{border-collapse:collapse;width:100%;font-size:20px}
+table.t th{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;
+  padding:8px 10px;border-bottom:2px solid var(--ink)}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top;line-height:1.3}
+table.t td.n,table.t th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.win{color:var(--blue);font-weight:700} .lose{color:var(--orange);font-weight:700} .tie{color:var(--muted);font-weight:700}
+
+/* segment scorecard (slide 12) */
+.score{display:flex;flex-wrap:wrap;gap:10px}
+.score span{font-size:19px;font-weight:650;padding:7px 13px;border-radius:8px}
+.score .w{background:var(--blue-tint);color:#1c5aa5}
+.score .l{background:var(--orange-tint);color:#b4461c}
+.score .e{background:var(--tint);color:var(--muted)}
+
+/* footer */
+.foot{position:absolute;left:64px;right:64px;bottom:18px;display:flex;justify-content:space-between;align-items:center;
+  font-size:14px;color:var(--faint)}
+
+/* title & closing slides */
+.slide.cover{justify-content:center;padding:72px 96px}
+.cover h1{font-size:50px;line-height:1.1;font-weight:720;letter-spacing:-.015em;max-width:1000px}
+.cover .sub{font-size:24px;color:var(--muted);margin-top:16px}
+.names{display:flex;gap:44px;margin-top:52px}
+.names div{font-size:23px;font-weight:650}
+.names span{display:block;font-size:18px;font-weight:400;color:var(--muted);margin-top:4px}
+.cover .meta{font-size:18px;color:var(--muted);margin-top:40px}
+.rule{width:72px;height:6px;border-radius:3px;background:var(--blue);margin-bottom:28px}
+
+.slide.divider{justify-content:center;background:var(--tint)}
+.idx{display:grid;grid-template-columns:1fr 1fr;gap:6px 40px;margin-top:8px}
+.idx a{font-size:19px;color:var(--ink);text-decoration:none;padding:5px 0;border-bottom:1px solid var(--grid)}
+.idx a b{display:inline-block;width:46px;color:var(--blue)}
+.idx a:hover{color:var(--blue)}
+
+/* ---------- speaker notes ---------- */
+aside.notes{display:none}
+#notes{position:fixed;left:0;right:0;bottom:0;height:34vh;background:#111110;color:#eeede8;border-top:3px solid var(--blue);
+  padding:14px 28px 18px;display:none;font-size:18px;line-height:1.45;overflow:auto;z-index:5}
+#notes.on{display:block}
+#notes .bar{display:flex;gap:22px;align-items:baseline;font-size:15px;color:#a9a8a2;margin-bottom:8px}
+#notes .bar strong{color:#fff;font-size:17px}
+#notes .timer{margin-left:auto;font-variant-numeric:tabular-nums;font-size:22px;color:#fff}
+#notes p{margin:6px 0} #notes em{color:#ffd9c9} #notes .small{color:#b9b8b2;font-size:16px}
+#jump{position:fixed;right:20px;top:16px;background:#111110;color:#fff;font-size:20px;padding:6px 12px;border-radius:6px;display:none;z-index:6}
+
+/* ---------- print / PDF: one slide per page ---------- */
+@page{size:1280px 720px;margin:0}
+@media print{
+  html,body{background:#fff;overflow:visible;height:auto}
+  #deck{position:static;transform:none!important;width:1280px;height:auto}
+  .slide{display:flex!important;position:relative;width:1280px;height:720px;page-break-after:always;break-after:page}
+  #notes,#jump{display:none!important}
+}
+
+/* ================= modern look + interactivity (v2) ================= */
+html,body{background:radial-gradient(1200px 700px at 50% 40%,#1b1f27 0%,#0d0f13 70%)}
+.slide{display:flex;opacity:0;visibility:hidden;transform:translateX(36px) scale(.985);
+  transition:opacity .45s ease,transform .55s cubic-bezier(.2,.8,.2,1),visibility 0s linear .45s;
+  background:linear-gradient(180deg,#fdfcfa 0%,#ffffff 55%);border-radius:6px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.slide.active{opacity:1;visibility:visible;transform:none;transition:opacity .45s ease,transform .55s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.slide.before{transform:translateX(-36px) scale(.985)}
+.slide::after{content:"";position:absolute;left:0;top:0;height:5px;width:100%;
+  background:linear-gradient(90deg,var(--blue) 0%,var(--blue) 62%,var(--aqua) 62%,var(--aqua) 81%,var(--orange) 81%)}
+
+.kicker{display:inline-flex;align-self:flex-start;padding:6px 14px 6px 12px;border-radius:999px;background:var(--blue-tint);
+  color:#1c5aa5;font-size:13.5px;letter-spacing:.1em}
+.kicker::before{width:8px;height:8px;border-radius:50%}
+h2{font-size:37px;font-weight:720;letter-spacing:-.018em;margin-top:6px}
+
+figure{background:#fff;border-radius:16px;padding:12px;border:1px solid #ecebe6;
+  box-shadow:0 1px 2px rgba(20,20,10,.04),0 10px 30px rgba(20,20,10,.07)}
+.cover figure{box-shadow:none}
+
+.decision{background:linear-gradient(135deg,#f3f7fd,#f6f5f1);border-left:0;border-radius:14px;position:relative;
+  padding:16px 20px 16px 26px;box-shadow:inset 0 0 0 1px #e4e9f2}
+.decision::before{content:"";position:absolute;left:10px;top:14px;bottom:14px;width:5px;border-radius:3px;background:var(--blue)}
+.decision .tag{color:#1c5aa5}
+
+.card{border:1px solid #ecebe6;border-radius:16px;background:#fff;box-shadow:0 8px 26px rgba(20,20,10,.06);
+  transition:transform .25s ease,box-shadow .25s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(20,20,10,.10)}
+.card.ours{border-top:5px solid var(--blue)} .card.platform{border-top:5px solid var(--orange)}
+.card.platform,.card.ours{border-left-color:#ecebe6;border-right-color:#ecebe6;border-bottom-color:#ecebe6}
+.order{border:0;background:#fff;border-radius:16px;box-shadow:0 0 0 1.5px var(--ink),0 12px 30px rgba(20,20,10,.08)}
+.chip{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.qbox{border:0;background:linear-gradient(135deg,#eaf2fc,#f7fbff);box-shadow:inset 0 0 0 2px var(--blue),0 18px 40px rgba(42,120,214,.15);border-radius:18px}
+.big{background:none}
+.score span{border-radius:999px;padding:7px 15px}
+table.t tr{transition:background .2s} table.t tr:hover td{background:#f6f8fc}
+
+/* staggered entrance of slide content */
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.slide.active .kicker,.slide.active h2,.slide.active .body>*,.slide.active .body .col>*,.slide.active .cover-anim{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.slide.active h2{animation-delay:.05s}
+.slide.active .body>*:nth-child(1){animation-delay:.12s}
+.slide.active .body>*:nth-child(2){animation-delay:.22s}
+.slide.active .body>*:nth-child(3){animation-delay:.32s}
+.slide.active .body .col>*:nth-child(1){animation-delay:.28s}
+.slide.active .body .col>*:nth-child(2){animation-delay:.38s}
+.slide.active .body .col>*:nth-child(3){animation-delay:.48s}
+.slide.active .body .col>*:nth-child(4){animation-delay:.58s}
+.slide.active .body .col>*:nth-child(5){animation-delay:.68s}
+
+/* dark cover slides */
+.slide.cover{background:radial-gradient(900px 520px at 85% 15%,rgba(42,120,214,.55),transparent 60%),
+  radial-gradient(700px 460px at 0% 100%,rgba(235,104,52,.32),transparent 60%),#0f1626;color:#fff}
+.slide.cover::after{display:none}
+.cover h1{color:#fff;font-size:54px}
+.cover .sub,.cover .meta,.names span{color:#c9d3e6}
+.cover .rule{background:linear-gradient(90deg,var(--blue),var(--aqua))}
+.names div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:14px 20px;border-radius:14px;backdrop-filter:blur(4px)}
+.cover code{background:rgba(255,255,255,.1);padding:2px 8px;border-radius:6px}
+.slide.active.cover>*{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.slide.active.cover>*:nth-child(2){animation-delay:.08s}.slide.active.cover>*:nth-child(3){animation-delay:.18s}
+.slide.active.cover>*:nth-child(4){animation-delay:.28s}.slide.active.cover>*:nth-child(5){animation-delay:.38s}
+/* title slide: text left, illustration right */
+.title-grid{display:grid;grid-template-columns:1fr 470px;gap:20px;align-items:center;height:100%}
+.slide.cover:has(.title-grid){padding:48px 40px 48px 80px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#c9d3e6;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:7px 14px;border-radius:999px;margin-bottom:26px}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--aqua);box-shadow:0 0 0 4px rgba(27,175,122,.25)}
+.title-text h1{font-size:52px;line-height:1.06;letter-spacing:-.025em;font-weight:780}
+.title-text h1 .grad{display:block;background:linear-gradient(90deg,#7fb3f0 0%,#5fd3a9 55%,#f19a72 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.title-text .sub{font-size:21px;margin-top:18px}
+.title-text .names{gap:14px;margin-top:34px}
+.title-text .names div{font-size:19px;padding:12px 16px}
+.title-text .names span{font-size:15px}
+.title-text .meta{font-size:15px;line-height:1.5;margin-top:26px}
+.slide.active .title-text>*{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.slide.active .title-text>*:nth-child(2){animation-delay:.08s}.slide.active .title-text>*:nth-child(3){animation-delay:.16s}
+.slide.active .title-text>*:nth-child(4){animation-delay:.24s}.slide.active .title-text>*:nth-child(5){animation-delay:.32s}
+.hero{width:100%;height:auto;overflow:visible}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero .float1{animation:bob 4.5s ease-in-out infinite}
+.hero .float2{animation:bob 5s ease-in-out .8s infinite}
+.hero .float3{animation:bob 5.5s ease-in-out 1.6s infinite}
+.slide.active .hero{animation:heroIn .9s cubic-bezier(.2,.8,.2,1) .15s both}
+@keyframes heroIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.thumb .hero *{animation:none!important}
+/* pizza receipt card (slide 3) */
+.receipt{background:#fff;border-radius:18px;padding:18px 20px 10px;box-shadow:0 0 0 1px #ecebe6,0 16px 36px rgba(20,20,10,.10);position:relative}
+.receipt::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;border-radius:18px 18px 0 0;background:linear-gradient(90deg,#eb6834,#f2b45a)}
+.r-head{display:flex;gap:14px;align-items:center;margin:6px 0 10px}
+.r-head .pizza{width:58px;height:58px;flex:none;filter:drop-shadow(0 4px 8px rgba(200,55,45,.25))}
+.slide.active .r-head .pizza{animation:spin 1.2s cubic-bezier(.2,.8,.2,1) .3s both}
+@keyframes spin{from{transform:rotate(-120deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
+.r-head b{display:block;font-size:23px;font-weight:720}
+.r-head span{display:block;font-size:16px;color:var(--muted);margin-top:2px}
+.receipt table{border-collapse:collapse;width:100%}
+.receipt td{font-size:20px;padding:9px 0;border-top:1px dashed #dddcd6}
+.receipt td:last-child{text-align:right;font-weight:680}
+/* team row (title and closing slides) */
+.team{display:flex;gap:24px;margin-top:36px;flex-wrap:wrap}
+.cover > .team{gap:40px}
+.person{display:flex;align-items:center;gap:12px}
+.av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:750;letter-spacing:.04em;color:#fff;
+  box-shadow:0 0 0 3px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.3);flex:none}
+.av.a1{background:linear-gradient(135deg,#4b93e6,#1c5aa5)} .av.a2{background:linear-gradient(135deg,#34c792,#12845b)} .av.a3{background:linear-gradient(135deg,#f38a5c,#c4521f)}
+.person b{display:block;font-size:18px;font-weight:680;color:#fff;white-space:nowrap}
+.person small{display:block;font-size:14px;color:#aebbd3;margin-top:2px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.slide.divider{background:linear-gradient(135deg,#eef4fc,#fbfaf7)}
+.idx a{border-radius:8px;padding:6px 10px;transition:background .15s}
+.idx a:hover{background:#fff}
+
+/* ---------- on-screen controls ---------- */
+#progress{position:fixed;left:0;top:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--aqua));width:0;z-index:7;
+  transition:width .4s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px rgba(42,120,214,.7)}
+#bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:6px;
+  background:rgba(20,22,28,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;z-index:8;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:opacity .35s,transform .35s}
+#bar.idle{opacity:0;transform:translateX(-50%) translateY(10px);pointer-events:none}
+#bar button{all:unset;cursor:pointer;height:38px;min-width:38px;padding:0 10px;border-radius:999px;display:flex;align-items:center;
+  justify-content:center;font-size:15px;color:#e8eaf0;gap:6px;transition:background .15s}
+#bar button:hover{background:rgba(255,255,255,.12)}
+#bar button.on{background:var(--blue);color:#fff}
+#bar .count{font-size:14px;font-variant-numeric:tabular-nums;color:#c8ccd6;padding:0 10px;min-width:72px;text-align:center}
+#bar .sep{width:1px;height:22px;background:rgba(255,255,255,.15);margin:0 4px}
+#bar svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.edge{position:fixed;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;z-index:7;cursor:pointer;
+  background:rgba(20,22,28,.55);border:1px solid rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);transition:opacity .3s,background .15s}
+.edge:hover{background:rgba(42,120,214,.85)} .edge svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#prevE{left:14px} #nextE{right:14px} .edge.idle{opacity:0;pointer-events:none} .edge.off{opacity:.15;pointer-events:none}
+#hint{position:fixed;left:50%;top:22px;transform:translateX(-50%);background:rgba(20,22,28,.85);color:#fff;font-size:14px;
+  padding:9px 16px;border-radius:999px;z-index:9;border:1px solid rgba(255,255,255,.12);transition:opacity .6s}
+#hint kbd{background:rgba(255,255,255,.15);border-radius:5px;padding:1px 6px;font-family:inherit;margin:0 2px}
+
+/* ---------- overview grid ---------- */
+#overview{position:fixed;inset:0;z-index:10;background:rgba(10,12,16,.94);backdrop-filter:blur(6px);overflow:auto;padding:30px 36px 90px;
+  display:none}
+#overview.on{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#overview h4{color:#fff;font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:18px 4px 12px;opacity:.75}
+#overview .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(256px,1fr));gap:18px}
+.thumb{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;
+  outline:2px solid transparent;transition:transform .2s,outline-color .2s;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+.thumb:hover{transform:translateY(-3px);outline-color:var(--blue)}
+.thumb.cur{outline-color:var(--orange)}
+.thumb .slide{position:absolute;left:0;top:0;width:1280px;height:720px;opacity:1;visibility:visible;transform-origin:0 0;
+  transition:none;box-shadow:none;border-radius:0;pointer-events:none}
+.thumb .slide *{animation:none!important}
+.thumb .n{position:absolute;left:8px;bottom:8px;background:rgba(15,22,38,.85);color:#fff;font-size:12px;padding:3px 8px;border-radius:6px}
+
+@media print{
+  .slide{opacity:1!important;visibility:visible!important;transform:none!important;box-shadow:none;border-radius:0}
+  .slide *{animation:none!important}
+  #bar,#progress,.edge,#hint,#overview{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ======================= 1 · TITLE ======================= -->
+<section class="slide cover" data-time="5" data-speaker="Lynn">
+  <div class="title-grid">
+    <div class="title-text">
+      <div class="eyebrow"><span class="dot"></span>DSAI 5101 · Final project</div>
+      <h1>Predicting Food<br>Delivery Time <span class="grad">and Its Key Delay Drivers</span></h1>
+      <p class="sub">For ETA and dispatch support · 546,340 real orders, one city, eight days</p>
+      <div class="team">
+        <div class="person"><span class="av a1">LY</span><div><b>Lynn Younes</b><small>60107070</small></div></div>
+        <div class="person"><span class="av a2">SR</span><div><b>Sumaiya Rizwan</b><small>60102626</small></div></div>
+        <div class="person"><span class="av a3">MA</span><div><b>Mahmoud Abdelaziz</b><small>60328910</small></div></div>
+      </div>
+      <p class="meta">Principles of Data Science and Machine Learning · Fall 2026<br>University of Doha for Science and Technology · 22 November 2026</p>
+    </div>
+    <svg class="hero" viewBox="0 0 520 470" role="img" aria-label="A delivery app on a phone: a rider travels on a map from a restaurant to a home, with an arrival estimate of 45 minutes against a promise of 51">
+      <defs>
+        <clipPath id="scr"><rect x="160" y="24" width="210" height="422" rx="28"/></clipPath>
+        <linearGradient id="phoneG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b3550"/><stop offset="1" stop-color="#0a0f1c"/></linearGradient>
+        <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#2a78d6" stop-opacity=".55"/><stop offset="1" stop-color="#2a78d6" stop-opacity="0"/></radialGradient>
+        <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity=".45"/></filter>
+        <filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0b1220" flood-opacity=".18"/></filter>
+      </defs>
+      <circle cx="265" cy="235" r="230" fill="url(#glow)"/>
+
+      <!-- phone -->
+      <g filter="url(#sh)">
+        <rect x="148" y="12" width="234" height="446" rx="38" fill="url(#phoneG)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+      </g>
+      <g clip-path="url(#scr)">
+        <rect x="160" y="24" width="210" height="422" fill="#eef3f9"/>
+        <!-- city blocks -->
+        <g fill="#dfe7f1">
+          <rect x="166" y="40" width="50" height="50" rx="6"/><rect x="224" y="40" width="44" height="50" rx="6"/><rect x="290" y="40" width="30" height="50" rx="6"/>
+          <rect x="166" y="118" width="96" height="66" rx="6"/><rect x="290" y="118" width="74" height="66" rx="6"/>
+          <rect x="166" y="212" width="16" height="72" rx="5"/><rect x="210" y="212" width="52" height="72" rx="6"/><rect x="290" y="212" width="74" height="72" rx="6"/>
+          <rect x="342" y="40" width="22" height="50" rx="6"/>
+        </g>
+        <rect x="224" y="124" width="32" height="54" rx="6" fill="#d3eee1"/>
+        <!-- route: restaurant to home -->
+        <path id="route" d="M196 268 L196 214 Q196 200 210 200 L262 200 Q276 200 276 186 L276 118 Q276 104 290 104 L330 104 L330 82" fill="none" stroke="#2a78d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".25"/>
+        <path d="M196 268 L196 214 Q196 200 210 200 L262 200 Q276 200 276 186 L276 118 Q276 104 290 104 L330 104 L330 82" fill="none" stroke="#2a78d6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 11">
+          <animate attributeName="stroke-dashoffset" from="26" to="0" dur="1s" repeatCount="indefinite"/>
+        </path>
+        <!-- restaurant pin -->
+        <g transform="translate(196 268)">
+          <circle r="16" fill="#eb6834" stroke="#fff" stroke-width="3"/>
+          <path d="M-5 -7 v6 a3 3 0 0 0 6 0 v-6 M-2 -1 v9 M5 -7 v15 M5 -7 q-4 2 -3 8 h3" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <!-- home pin -->
+        <g transform="translate(330 76)">
+          <circle r="16" fill="#2a78d6" stroke="#fff" stroke-width="3"/>
+          <path d="M-7 1 L0 -6 L7 1 M-5 -1 V7 H5 V-1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <!-- rider moving along the route -->
+        <g>
+          <circle r="11" fill="#fff" stroke="#2a78d6" stroke-width="3" filter="url(#sh2)"/>
+          <circle r="4" fill="#2a78d6"/>
+          <animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.85;1" calcMode="linear">
+            <mpath href="#route"/>
+          </animateMotion>
+        </g>
+        <!-- ETA card -->
+        <g filter="url(#sh2)"><rect x="172" y="306" width="186" height="124" rx="18" fill="#fff"/></g>
+        <text x="188" y="330" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#8a8984">PEPPERONI PIZZA · 3.2 KM</text>
+        <text x="188" y="350" font-size="12.5" fill="#52514e">Arriving in</text>
+        <text x="188" y="382" font-size="32" font-weight="800" fill="#2a78d6" letter-spacing="-.5">45 min</text>
+        <rect x="292" y="362" width="54" height="24" rx="12" fill="#fdeee8"/>
+        <text x="319" y="378" font-size="11.5" font-weight="700" fill="#c4521f" text-anchor="middle">app: 51</text>
+        <rect x="188" y="400" width="158" height="7" rx="3.5" fill="#e6e5e0"/>
+        <rect x="188" y="400" width="20" height="7" rx="3.5" fill="#2a78d6">
+          <animate attributeName="width" values="20;150;150" keyTimes="0;.85;1" dur="7s" repeatCount="indefinite"/>
+        </rect>
+        <text x="188" y="423" font-size="10.5" fill="#8a8984">Picked up · on the road</text>
+      </g>
+      <rect x="232" y="30" width="66" height="16" rx="8" fill="#0a0f1c"/>
+
+      <!-- floating chips -->
+      <g class="float1">
+        <rect x="6" y="120" width="132" height="54" rx="16" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)"/>
+        <circle cx="32" cy="147" r="13" fill="#eb6834"/>
+        <path d="M27 147 h10 M32 142 v10" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        <text x="54" y="143" font-size="11" fill="#c9d3e6">Ordered</text>
+        <text x="54" y="161" font-size="15" font-weight="700" fill="#fff">Sun 11:13</text>
+      </g>
+      <g class="float2">
+        <rect x="388" y="214" width="126" height="54" rx="16" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)"/>
+        <circle cx="414" cy="241" r="13" fill="#1baf7a"/>
+        <path d="M408 241 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="436" y="237" font-size="11" fill="#c9d3e6">Delivered</text>
+        <text x="436" y="255" font-size="15" font-weight="700" fill="#fff">in 43 min</text>
+      </g>
+      <g class="float3">
+        <circle cx="440" cy="92" r="34" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.2)"/>
+        <circle cx="440" cy="92" r="22" fill="none" stroke="#fff" stroke-width="2.5"/>
+        <line x1="440" y1="92" x2="440" y2="78" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+          <animateTransform attributeName="transform" type="rotate" from="0 440 92" to="360 440 92" dur="7s" repeatCount="indefinite"/>
+        </line>
+        <line x1="440" y1="92" x2="450" y2="92" stroke="#eb6834" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="440" cy="92" r="2.8" fill="#fff"/>
+      </g>
+    </svg>
+  </div>
+  <aside class="notes">
+    <p>No script: say the title and go straight into the hook on the next slide.</p>
+  </aside>
+</section>
+
+<!-- ======================= 2 · PROBLEM ======================= -->
+<section class="slide" data-time="45" data-speaker="Lynn">
+  <div class="kicker">Problem &amp; motivation</div>
+  <h2>Same wait, different feeling: can we predict delivery time the moment you order?</h2>
+  <div class="body">
+    <div class="col center" style="width:360px">
+      <div class="big blue">~50</div>
+      <div class="label">orders a minute, in one city.<br>Each one is given a promise at checkout.</div>
+      <div class="decision" style="margin-top:22px"><span class="tag">Who uses the answer</span>The platform's operations team: how long to promise, how many riders to plan</div>
+    </div>
+    <div class="col grow center">
+      <div class="qbox"><span class="tag">Research question</span>Using only information available when an order is placed, how accurately can we predict delivery time, and what drives long deliveries?</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><em>Hook (Houston):</em> "Houston airport had a problem: passengers complained they waited too long for their bags. The airport fixed it without making a single bag faster. They moved the arrival gates further away, so people walked six times longer, and the complaints almost disappeared. Same wait, different feeling."</p>
+    <p>"Right now, while I'm talking, about fifty people in one city just pressed 'order', and every one of them was immediately given a promise. Our question: using only what's known at that moment, how accurately can we predict how long the food will take, and what makes the long ones long?"</p>
+    <p class="small">Source check: NYT, Alex Stone, "Why Waiting Is Torture", 2012. 546,340 orders ÷ 8 days ÷ 1,440 min ≈ 47 a minute.</p>
+  </aside>
+</section>
+
+<!-- ======================= 3 · THE ORDER ======================= -->
+<section class="slide" data-time="40" data-speaker="Lynn">
+  <div class="kicker">Problem &amp; motivation</div>
+  <h2>Say you order a pepperoni pizza at 11:13. The app says 51 minutes. What does it actually know?</h2>
+  <div class="body">
+    <figure class="grow"><img src="../figures/eda/order_timeline.png" alt="Timeline of an order: placed, dispatched, accepted, picked up, delivered, with the promise; only the order moment is known when we predict"></figure>
+    <div class="col center" style="width:370px">
+      <div class="receipt">
+        <div class="r-head">
+          <svg class="pizza" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#f2b45a"/><circle cx="24" cy="24" r="17.5" fill="#f7d48a"/><circle cx="24" cy="24" r="16" fill="#e8743b" opacity=".35"/><g fill="#c8372d"><circle cx="17" cy="17" r="3.6"/><circle cx="30" cy="15" r="3.2"/><circle cx="29" cy="28" r="3.8"/><circle cx="17" cy="30" r="3.2"/><circle cx="24" cy="22" r="2.6"/></g></svg>
+          <div><b>Pepperoni pizza</b><span>Pizza Corner · 3.2 km away</span></div>
+        </div>
+        <table>
+          <tr><td>Ordered</td><td>Sunday, 11:13</td></tr>
+          <tr><td>App promises</td><td class="orange">51 min</td></tr>
+          <tr><td>Really arrives in</td><td>?</td></tr>
+        </table>
+      </div>
+      <p class="bait">We predict how long it actually takes, not the promise.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Timings are a real order from the data (#85188); the pizza is for illustration · Meituan, INFORMS TSL 2024 · 546,340 orders · 8 days · 23 districts</span><span></span></div>
+  <aside class="notes">
+    <p>"Let's follow one of them, and let's make it you. It's Sunday, 11:13, you're hungry, and you order a pepperoni pizza from a place 3.2 km away. The app says: 51 minutes. The blue strip is everything the app knows at that second: where you are, where the restaurant is, the time. Everything in grey (finding a rider, the pickup, the ride) hasn't happened yet, so our model never gets to see it. Using it would be cheating, which we call leakage."</p>
+    <p class="small">If asked: the times, distance and promise are a real order from the data (#85188, a test day the model never saw). The data doesn't say what was ordered; the pizza just makes it relatable. B12 shows it's a typical order.</p>
+    <p><em>Bait:</em> "We predict how long it actually takes, not the promise." Invites "what's the difference / why not predict delay?" → B9.</p>
+  </aside>
+</section>
+
+<!-- ======================= 4 · CLEANING ======================= -->
+<section class="slide" data-time="35" data-speaker="Sumaiya">
+  <div class="kicker">Data &amp; EDA</div>
+  <h2>The raw data needed real cleaning: 654k rows became 546k orders</h2>
+  <div class="body">
+    <figure style="width:640px"><img src="../figures/eda/cleaning_funnel.png" alt="Cleaning funnel from 654,343 raw dispatch attempts to 546,340 orders"></figure>
+    <div class="col grow center">
+      <ul class="pts">
+        <li><b>13.1% refused dispatches:</b> the same order offered again, not new orders. Keep the accepted one</li>
+        <li><b>3.9% pre-booked:</b> timed by the slot the customer chose, a different population. Excluded</li>
+        <li><b>15% placeholder prep estimates:</b> not missing at random, so kept and flagged</li>
+      </ul>
+      <div class="decision"><span class="tag">→ Modelling decision</span>One row per order; a "prep estimate missing" flag the model can learn from</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"Before we could follow any order, we had to find the real ones. 13% of the rows were the same order offered again after a rider refused it, so we kept only the accepted offer. Pre-booked orders follow the slot the customer picked, not the kitchen, so they're a different population and we left them out. And about 15% of prep-time estimates are a placeholder. Those aren't random, so instead of dropping the orders we kept them and told the model the estimate was missing."</p>
+    <p class="small">Numbers: refused −85,797 · no arrival time −1 · pre-booked −22,181 · over 3 h −24. Prep missing 7,439 (1.4%) + default under 5 min 75,361 (13.8%) = 82,800. No exact duplicates. Full table: B1 and B17.</p>
+  </aside>
+</section>
+
+<!-- ======================= 5 · DISTANCE ======================= -->
+<section class="slide" data-time="30" data-speaker="Sumaiya">
+  <div class="kicker">Data &amp; EDA</div>
+  <h2>Every kilometre adds about 7 minutes, and distance matters in all 23 districts</h2>
+  <div class="body">
+    <figure style="width:600px"><img src="../figures/eda/delivery_vs_distance.png" alt="Median delivery time rising with distance"></figure>
+    <div class="col grow center">
+      <div><div class="big blue">+7.1<span class="unit">min per km</span></div>
+        <div class="label">up to 3 km, where 93% of orders fall (5.2 beyond).<br>Within each district: 4.9 to 7.7 min per km</div></div>
+      <ul class="pts">
+        <li>The spread grows too: 13 → 24 min between the 20th and 80th percentile</li>
+      </ul>
+      <div class="decision"><span class="tag">→ Modelling decision</span>Distance is the core feature; long trips need a wider promise</div>
+      <div><span class="chip">Your pizza · 3.2 km</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"Your pizza place was 3.2 kilometres away. Every kilometre adds about seven minutes, and that holds in all 23 districts. So a friend ordering the same pizza from 1 km away would get it about 15 minutes sooner. That made distance our core feature. The spread also grows with distance, which matters later when we set promises."</p>
+    <p class="small">Training days only. Haversine distance; Manhattan made no difference (B6).</p>
+  </aside>
+</section>
+
+<!-- ======================= 6 · PEAKS ======================= -->
+<section class="slide" data-time="25" data-speaker="Sumaiya">
+  <div class="kicker">Data &amp; EDA</div>
+  <h2>Deliveries are slowest at meal peaks: median 34 min at 11:00 against 28 overall</h2>
+  <div class="body">
+    <figure style="width:470px"><img src="../figures/eda/delivery_by_hour.png" alt="Share of orders and median delivery time by hour of day"></figure>
+    <div class="col grow center">
+      <ul class="pts">
+        <li>Lunch at 11:00 is the busiest and slowest hour</li>
+        <li>How many orders a district has barely matters once district and hour are known</li>
+      </ul>
+      <div class="decision"><span class="tag">→ Modelling decision</span>Lunch and dinner peak flags, and time of day as a circle (23:59 sits next to 00:00)</div>
+      <div><span class="chip">Your pizza · ordered 11:13</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"And you ordered at the slowest hour of the day: half the city had the same idea. The median delivery at 11:00 is 34 minutes, against 28 overall. So the model gets lunch and dinner flags, and the time of day as a circle, so 23:59 sits next to midnight. One surprise: how many orders a district has barely matters once you know the district and the hour."</p>
+  </aside>
+</section>
+
+<!-- ======================= 7 · RIDERS ======================= -->
+<section class="slide" data-time="30" data-speaker="Sumaiya">
+  <div class="kicker">Data &amp; EDA</div>
+  <h2>What matters is free riders: over 3 orders per free rider means 36 minutes, not 26</h2>
+  <div class="body">
+    <figure style="width:700px"><img src="../figures/results/rider_pressure.png" alt="Heatmap of orders waiting per available rider by district and hour"></figure>
+    <div class="col grow center">
+      <div><div class="big">19%</div>
+        <div class="label">of orders wait with more than 3 orders per free rider: median <b>35.6</b> min against <b>26.4</b></div></div>
+      <div class="decision"><span class="tag">→ Modelling decision</span>Rider availability became a real-time feature (slide 12)</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"What does matter is riders. This map shows, for every district and hour, how many orders are waiting for each rider who's free. At 11:00 almost every district turns dark. When more than three orders wait per free rider, which is 19% of orders, the median delivery takes 36 minutes instead of 26. So rider availability became a feature in our extended model."</p>
+    <p class="small">Riders are counted from past deliveries only (who has finished and is free), so nothing from the future is used. Instructor feedback #3. Detail: B13.</p>
+  </aside>
+</section>
+
+<!-- ======================= 8 · METHODS ======================= -->
+<section class="slide" data-time="40" data-speaker="Lynn">
+  <div class="kicker">Methods &amp; evaluation</div>
+  <h2>Two baselines, three models, and only what is known when the order is placed</h2>
+  <div class="body">
+    <div class="card platform grow">
+      <h3>Baselines</h3>
+      <ul><li>Guess the median every time</li><li class="orange"><b>The app's own promise</b></li></ul>
+      <p class="bait" style="margin-top:auto">The app's promise: padded, and still late 15% of the time.</p>
+    </div>
+    <div class="card ours grow">
+      <h3>Models</h3>
+      <ul><li><b>Elastic-Net</b>: readable</li><li><b>Random Forest</b>: robust</li><li><b>Gradient boosting</b>: strongest on tabular data</li></ul>
+      <p class="small" style="margin-top:auto">Tuned by random search on the CV folds</p>
+    </div>
+    <div class="card grow">
+      <h3>Inputs</h3>
+      <ul><li>✓ distance, prep estimate, time of day, district, district load</li><li class="muted">✗ courier, dispatch, pickup: they happen after ordering</li></ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><em>Hook (cut first if over time):</em> "You know the friend who texts 'five minutes away' and arrives twenty minutes later? The app is the opposite friend: it never promises under 30 minutes and promises 38 on average."</p>
+    <p>"We measure ourselves against two baselines: guessing the median every time, and the app's own promise. Padded, and still late 15% of the time. Then three models, each for a reason: Elastic-Net because we can read it, Random Forest because it's robust, gradient boosting because it's usually the strongest on tables like ours. And only what's known at ordering: never the courier, the dispatch or the pickup."</p>
+    <p><em>Bait:</em> "Padded, and still late 15% of the time." Invites "isn't arriving early a good thing?" → B10.</p>
+  </aside>
+</section>
+
+<!-- ======================= 9 · EVALUATION ======================= -->
+<section class="slide" data-time="35" data-speaker="Lynn">
+  <div class="kicker">Methods &amp; evaluation</div>
+  <h2>Tested like real life: the model only ever sees the past</h2>
+  <div class="body" style="flex-direction:column;gap:18px">
+    <figure class="grow"><img src="../figures/results/time_split.png" alt="Forward-chaining cross-validation folds on 17 to 22 October, test days 23 and 24 October"></figure>
+    <div style="display:flex;gap:28px">
+      <div class="decision grow"><span class="tag">Metric</span>MAE in minutes, plus RMSE, R² and bootstrap 95% intervals</div>
+      <div class="decision grow"><span class="tag">No leaks</span>Imputing, scaling and encoding refitted on each fold's training days</div>
+      <div class="decision grow"><span class="tag">Dropped</span>Weekend flag: only one weekend day to learn from</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"We held ourselves to the app's rules. The model learns from earlier days and predicts later ones, four times over. The last two days, including our Sunday order, were locked away and scored once at the very end. We report the mean absolute error in minutes: operations think in minutes, and a few extreme orders don't dominate it."</p>
+    <p class="small">Tuning mattered: at 511 leaves boosting's training error is 2.45 min but validation 6.63 (B3). Weekend flag: Elastic-Net's Saturday-fold error jumped 6.8 → 18.0 (B5).</p>
+  </aside>
+</section>
+
+<!-- ======================= 10 · MAIN RESULT ======================= -->
+<section class="slide" data-time="50" data-speaker="Mahmoud">
+  <div class="kicker">Results &amp; insights</div>
+  <h2>We miss by 6.5 minutes: as accurate as the app's own estimate, once its padding is removed</h2>
+  <div class="body" style="flex-direction:column;gap:16px">
+    <figure class="grow"><img src="../figures/results/test_mae.png" alt="Test MAE: platform promise 9.62, median 9.46, promise minus padding 6.48, Elastic-Net 6.80, Random Forest 6.54, boosting 6.49"></figure>
+    <div style="display:flex;gap:28px;align-items:center">
+      <div class="order" style="min-width:0;padding:12px 20px"><span style="font-size:21px">Your pizza: app <b class="orange">51</b> · ours <b class="blue">45</b> · actual <b>43</b> min</span></div>
+      <p class="small grow">31% better than the median guess · three models within 0.3 min, so the limit is the information, not the model · 140k test orders, scored once</p>
+    </div>
+    <p class="bait">We do better on short and long trips; the app on medium trips and at lunch.</p>
+  </div>
+  <aside class="notes">
+    <p>"So, your pizza. The app said 51. Our model said 45. It arrived in 43. Across all 140,000 test orders, we're off by 6.5 minutes on average, 31% better than guessing. The app looks 3 minutes worse, but that's its padding: take off its usual 8 minutes and it's about as accurate as we are, 6.48 against 6.49. With public data from the moment you order, we reach the platform's own level."</p>
+    <p><em>Bait:</em> "Better on short and long trips, the app on medium trips and at lunch." → B11. "Your pizza order is a typical one" → B12.</p>
+    <p class="small">CIs: boosting vs median −2.97 [−3.00, −2.93]; boosting vs RF −0.05 [−0.06, −0.04]. Test R² 0.49 (ceiling: slide 15). Test ≈ CV + 0.2 min, same ranking. Padding 8.2 min measured on training days only.</p>
+  </aside>
+</section>
+
+<!-- ======================= 11 · DRIVERS ======================= -->
+<section class="slide" data-time="30" data-speaker="Mahmoud">
+  <div class="kicker">Results &amp; insights</div>
+  <h2>Distance drives delivery time most, then time of day and district</h2>
+  <div class="body">
+    <figure style="width:700px"><img src="../figures/results/delay_drivers.png" alt="Permutation importance: distance +3.10, time of day +0.85, area +0.84, prep +0.68, load +0.20 minutes"></figure>
+    <div class="col grow center">
+      <ul class="pts">
+        <li>Shuffle one input and the error rises: by <b>3.1 min</b> for distance</li>
+        <li>District load: only <b>+0.2 min</b></li>
+      </ul>
+      <div class="order" style="min-width:0"><h3>Why your pizza took 43 min</h3>
+        <p style="font-size:21px;line-height:1.35">12.5 min until pickup (typical: 13.1), then 31 min on the road</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"So why did your pizza take 43 minutes? 12.5 minutes until pickup, about average, then 31 on the road. Mostly distance, then lunchtime. We measured this by shuffling one input at a time and watching how much worse the model gets: distance by far, then time of day and district. How many new orders come in barely matters."</p>
+    <p class="small">Pickup and road each take a median 13.1 min; both about 2.7 min slower at peaks. Proposal check: right on distance and peaks, wrong on load. Stages by district: B7.</p>
+  </aside>
+</section>
+
+<!-- ======================= 12 · EXTENSION ======================= -->
+<section class="slide" data-time="40" data-speaker="Mahmoud">
+  <div class="kicker">Results &amp; insights</div>
+  <h2>Adding what the app knows in real time puts us ahead of its estimate</h2>
+  <div class="body">
+    <div class="col center" style="width:380px">
+      <div><div class="big blue">5.92<span class="unit">min</span></div>
+        <div class="label">our error with real-time features<br>(was 6.25; R² 0.51 → 0.57)</div></div>
+      <div><div class="big orange" style="font-size:44px">6.24<span class="unit">min</span></div>
+        <div class="label">the app's estimate, padding removed</div></div>
+    </div>
+    <div class="col grow center">
+      <div class="card">
+        <h3>Added, all from deliveries already finished</h3>
+        <ul><li>Restaurant's track record <span class="muted">−0.24</span></li><li>Free riders <span class="muted">−0.05</span></li><li>Prep-estimate bias <span class="muted">−0.03</span></li><li>Recent district delays, pickup queue <span class="muted">−0.01</span></li></ul>
+      </div>
+      <div class="score">
+        <span class="w">✓ under 1 km</span><span class="w">✓ over 3 km</span><span class="w">✓ dinner</span><span class="w">✓ Saturday</span><span class="e">= 1–3 km</span><span class="l">✗ lunch</span>
+      </div>
+      <p class="small">Validation days only; the test days were not touched again.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"So what does the app know that we don't? What's happening right now. We added four kinds of information, each built only from deliveries that had already finished when the order was placed. The restaurant's track record helps most. Our error drops from 6.25 to 5.92, and now we're ahead of the app's own estimate with its padding removed: 5.92 against 6.24. Better on short trips, long trips, dinner and Saturday, level on medium trips. Lunch is the one place the app still wins."</p>
+    <p class="small">Elastic-Net and RF gain as much (−0.33, −0.31): the gain is the information, not model complexity. Closes only a fifth of the leakage gap (0.33 of 1.72 min). Lunch: app 6.66 vs ours 6.75; 1–3 km 6.09 vs 6.08. Detail: B15.</p>
+  </aside>
+</section>
+
+<!-- ======================= 13 · ERRORS ======================= -->
+<section class="slide" data-time="25" data-speaker="Mahmoud">
+  <div class="kicker">Results &amp; insights</div>
+  <h2>We struggle most with long trips and the lunch rush</h2>
+  <div class="body">
+    <figure style="width:700px"><img src="../figures/results/errors_by_distance.png" alt="MAE by distance band on CV and test days, rising from about 5.6 to 14.4 minutes"></figure>
+    <div class="col grow center">
+      <div><div class="big">5.6 → 14.4<span class="unit">min</span></div><div class="label">error under 1 km against over 7 km</div></div>
+      <ul class="pts">
+        <li>Lunch: 7.2 min, where the app's estimate wins (6.7)</li>
+        <li>Districts range from 4.4 to 9.0 min</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>"Lunch is our hardest hour: we're off by 7.2 minutes, not 6.5, and this is where the app's own estimate beats ours. It probably knows how many riders are free right now. Long trips are harder still: 5.6 minutes under a kilometre, 14 over seven. Weekends are slower too, and we had only one weekend day to learn from."</p>
+    <p class="small">Test days. Sunday 6.77 vs Monday 6.17. By hour: errors_by_hour; all districts: B4.</p>
+  </aside>
+</section>
+
+<!-- ======================= 14 · PROMISE TEST ======================= -->
+<section class="slide" data-time="50" data-speaker="Lynn">
+  <div class="kicker">Results &amp; insights</div>
+  <h2>At the same average promise, the app is still late less often</h2>
+  <div class="body">
+    <figure style="width:600px"><img src="../figures/promise/final_test_gap.png" alt="Late-rate difference between our promises and the platform's at each mean promise length"></figure>
+    <div class="col grow" style="gap:12px">
+      <div><div class="label" style="margin:0 0 4px">over 5 min late, both promising 38.2 min on average</div>
+        <div class="big" style="font-size:46px"><span class="orange">5.0%</span> <span class="muted" style="font-size:24px">app</span> &nbsp;<span class="blue">6.1%</span> <span class="muted" style="font-size:24px">ours</span></div></div>
+      <figure style="height:230px;justify-content:flex-start"><img src="../figures/eda/promise_padding.png" alt="Histogram of actual minus promised time, with a sharp drop at 8 minutes late"></figure>
+      <p class="small">Late orders more than halve at exactly +8 min: someone starts rushing after the order</p>
+      <p class="bait">Except for shorter promises.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><em>Hook:</em> "A weather forecast tells you it will probably rain. A promise says you'll stay dry. Those are different jobs."</p>
+    <p>"We turned our forecast into promises with the same average length as the app's, 38.2 minutes, and the app was still late less often: 5.0% of orders more than five minutes late, against our 6.1%. Look at this cliff on the right: late orders more than halve at exactly 8 minutes late. Something happens after the order is placed. Someone starts rushing, and a model at ordering can't see that. Better estimates are not the same as better promises."</p>
+    <p class="small">How: boosting with quantile loss at the 80th percentile, shifted +2.7 min so the average equals the app's 38.2; compare share over 0, 5, 10 min late with bootstrap CIs. Gap +1.2 pp [+1.1, +1.3]. <em>Bait:</em> "Except for shorter promises" → B11.</p>
+  </aside>
+</section>
+
+<!-- ======================= 15 · CONCLUSION ======================= -->
+<section class="slide" data-time="45" data-speaker="Mahmoud">
+  <div class="kicker">Conclusion</div>
+  <h2>What it means, and what it can't tell us</h2>
+  <div class="body">
+    <div class="card ours grow">
+      <h3>Answer</h3>
+      <p>At ordering, delivery time can be predicted to about <b>6.5 min</b>; distance drives it.</p>
+      <p class="small">The ceiling is missing information: with after-order times, error 6.25 → 4.53 and R² 0.51 → 0.72.</p>
+    </div>
+    <div class="card grow">
+      <h3>Limitations</h3>
+      <p>Eight days with one weekend day; no weather or traffic; free riders estimated from past deliveries.</p>
+    </div>
+    <div class="card grow">
+      <h3>Ethics and next</h3>
+      <p>Error is uneven across districts (4.4–9.0 min), and every minute cut from a promise lands on a rider.</p>
+      <p class="small">Next: confirm the new features on new days; update the estimate after dispatch.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><em>Hook (Trapped in the system):</em> "That 'someone rushing' is a real person. In 2020 a Chinese magazine published a viral article, 'Delivery Riders, Trapped in the System', about algorithms shortening delivery times until riders ran red lights to keep up. The company in that story is the one whose data we used."</p>
+    <p>"So: at the moment of ordering, delivery time can be predicted to about six and a half minutes, and distance is the main driver. If we were allowed to see what happens after the order, the error would fall to 4.5: that missing information is the ceiling, and it's why R² is 0.49 without the model being weak. Our limits: eight days, one weekend day, no weather or traffic. And every minute cut from a promise lands on a rider."</p>
+    <p class="small">Source check: Renwu magazine, Sept 2020. Leakage audit: B2.</p>
+  </aside>
+</section>
+
+<!-- ======================= 16 · THANK YOU ======================= -->
+<section class="slide cover" data-time="15" data-speaker="Mahmoud">
+  <div class="rule"></div>
+  <h1>A good promise needs more than an accurate number.</h1>
+  <p class="sub">Thank you. Questions?</p>
+  <div class="team">
+    <div class="person"><span class="av a1">LY</span><div><b>Lynn Younes</b><small>60107070</small></div></div>
+    <div class="person"><span class="av a2">SR</span><div><b>Sumaiya Rizwan</b><small>60102626</small></div></div>
+    <div class="person"><span class="av a3">MA</span><div><b>Mahmoud Abdelaziz</b><small>60328910</small></div></div>
+  </div>
+  <p class="meta">Code, notebooks and outputs: github.com/lynn60107070/dsai5101-delivery-eta · rebuild everything with <code>python -m experiments.reproduce</code></p>
+  <aside class="notes">
+    <p>"Houston didn't make the bags faster, it changed the wait. Since we started talking, about 500 people in one city were given a promise. We can make that number more accurate. What we learned is that a good promise needs more than an accurate number. Thank you."</p>
+  </aside>
+</section>
+
+<!-- ======================= BACKUP INDEX ======================= -->
+<section class="slide divider" data-backup="index">
+  <div class="kicker">For the Q&amp;A</div>
+  <h2>Backup slides</h2>
+  <div class="idx">
+    <a href="#B1"><b>B1</b>Cleaning steps with counts</a>
+    <a href="#B10"><b>B10</b>Why a padded promise isn't free</a>
+    <a href="#B2"><b>B2</b>Leakage audit</a>
+    <a href="#B11"><b>B11</b>Scorecard: won and lost</a>
+    <a href="#B3"><b>B3</b>Tuning and settings</a>
+    <a href="#B12"><b>B12</b>The pizza order is typical</a>
+    <a href="#B4"><b>B4</b>Error by district</a>
+    <a href="#B13"><b>B13</b>Rider pressure map</a>
+    <a href="#B5"><b>B5</b>Why no weekend flag</a>
+    <a href="#B14"><b>B14</b>Weekday vs weekend, drift</a>
+    <a href="#B6"><b>B6</b>Haversine vs Manhattan</a>
+    <a href="#B15"><b>B15</b>What the extended model learned</a>
+    <a href="#B7"><b>B7</b>Stages by district</a>
+    <a href="#B16"><b>B16</b>Industry benchmark</a>
+    <a href="#B8"><b>B8</b>Promise padding</a>
+    <a href="#B17"><b>B17</b>Data issues with %</a>
+    <a href="#B9"><b>B9</b>Delivery time vs promise vs delay</a>
+  </div>
+  <aside class="notes"><p>Click a line, or type b and the number then Enter (b13 Enter). Answers: qa_prep.md.</p></aside>
+</section>
+
+<!-- B1 -->
+<section class="slide" data-backup="B1">
+  <div class="kicker">Backup B1 · Data</div>
+  <h2>Every cleaning step, with before and after counts</h2>
+  <div class="body"><div class="col grow">
+    <table class="t">
+      <tr><th>Step</th><th class="n">Removed</th><th class="n">Left</th><th>Why</th></tr>
+      <tr><td>Raw dispatch attempts</td><td class="n">–</td><td class="n">654,343</td><td>one row per offer to a rider</td></tr>
+      <tr><td>C1 keep the accepted attempt</td><td class="n">−85,797</td><td class="n">568,546</td><td>refused offers repeat the same order</td></tr>
+      <tr><td>C3 has an arrival time</td><td class="n">−1</td><td class="n">568,545</td><td>no target</td></tr>
+      <tr><td>C4 not pre-booked</td><td class="n">−22,181</td><td class="n">546,364</td><td>timed by the chosen slot, not the kitchen</td></tr>
+      <tr><td>C5 delivery ≤ 180 min</td><td class="n">−24</td><td class="n">546,340</td><td>implausible</td></tr>
+      <tr><td>Split by day</td><td class="n">–</td><td class="n">406,553 / 139,787</td><td>train 17–22 Oct · test 23–24 Oct</td></tr>
+    </table>
+    <p class="small">Flagged, not removed: 82,800 prep estimates stored as 0 or a default under 5 min (C2, C2b, C6), imputed inside each fold's pipeline.</p>
+  </div></div>
+</section>
+
+<!-- B2 -->
+<section class="slide" data-backup="B2">
+  <div class="kicker">Backup B2 · Leakage</div>
+  <h2>With after-order times the error would drop to 4.5 min: that is the ceiling, and why we don't use them</h2>
+  <div class="body"><figure class="grow"><img src="../figures/eda/leakage_audit.png" alt="CV MAE as after-order timestamps are added: 6.25, 5.86, 5.83, 4.55, 4.53"></figure></div>
+  <div class="foot"><span>CV MAE: order time only 6.25 · + dispatch 5.86 · + accept 5.83 · + pickup 4.55 · all 4.53 (R² 0.51 → 0.72)</span><span></span></div>
+</section>
+
+<!-- B3 -->
+<section class="slide" data-backup="B3">
+  <div class="kicker">Backup B3 · Tuning</div>
+  <h2>Tuning mattered: bigger trees overfit</h2>
+  <div class="body">
+    <figure style="width:620px"><img src="../figures/results/hgb_complexity_curve.png" alt="Training and validation error against the number of leaves"></figure>
+    <div class="col grow center">
+      <table class="t">
+        <tr><th>Model</th><th>Final settings</th></tr>
+        <tr><td>Elastic-Net</td><td>α 0.002, L1 ratio 0.66 (30 tries)</td></tr>
+        <tr><td>Random Forest</td><td>200 trees, min. leaf 6, 31% of features, depth 20 (10 tries)</td></tr>
+        <tr><td>Boosting</td><td>absolute-error loss, lr 0.038, 76 leaves, min. leaf 70, 800 iterations (20 tries)</td></tr>
+        <tr><td>Boosting q80</td><td>quantile loss, lr 0.055, 29 leaves, 200 iterations</td></tr>
+      </table>
+      <p class="small">Random search on the forward CV folds. At 511 leaves: train 2.45 vs CV 6.63.</p>
+    </div>
+  </div>
+</section>
+
+<!-- B4 -->
+<section class="slide" data-backup="B4">
+  <div class="kicker">Backup B4 · Errors</div>
+  <h2>Error differs by district: 4.4 to 9.0 minutes</h2>
+  <div class="body"><figure class="grow"><img src="../figures/results/errors_by_area.png" alt="MAE for each of the 23 districts"></figure></div>
+</section>
+
+<!-- B5 -->
+<section class="slide" data-backup="B5">
+  <div class="kicker">Backup B5 · Weekend</div>
+  <h2>Why no weekend flag: one weekend day to learn from, and it broke a fold</h2>
+  <div class="body">
+    <figure style="width:560px"><img src="../figures/eda/weekend_and_days.png" alt="Orders and delivery time by day"></figure>
+    <div class="col grow center">
+      <ul class="pts">
+        <li>Folds 1–3 never see a weekend; fold 4 validates on the only one</li>
+        <li>With the flag, Elastic-Net's Saturday-fold error jumped from <b>6.8 to 18.0</b> min</li>
+        <li>Weekends run 1–3.5 min slower noon–18:00: stated as a limitation (B14)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- B6 -->
+<section class="slide" data-backup="B6">
+  <div class="kicker">Backup B6 · Distance</div>
+  <h2>Straight-line or street-grid distance makes no difference</h2>
+  <div class="body"><div class="col grow center">
+    <div style="display:flex;gap:60px">
+      <div><div class="big blue">6.282</div><div class="label">CV MAE, Haversine (kept)</div></div>
+      <div><div class="big muted">6.284</div><div class="label">CV MAE, Manhattan</div></div>
+    </div>
+    <ul class="pts" style="margin-top:20px">
+      <li>Difference −0.002 min, 95% CI −0.007 to +0.003: includes zero</li>
+      <li>So we kept Haversine: simpler, and the default</li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- B7 -->
+<section class="slide" data-backup="B7">
+  <div class="kicker">Backup B7 · Stages</div>
+  <h2>Pickup and road time by district</h2>
+  <div class="body"><figure class="grow"><img src="../figures/eda/stages_by_area.png" alt="Time to pickup and time on the road for each district"></figure></div>
+  <div class="foot"><span>Pickup and road each take a median 13.1 min; both about 2.7 min slower at meal peaks. District 22 has few orders.</span><span></span></div>
+</section>
+
+<!-- B8 -->
+<section class="slide" data-backup="B8">
+  <div class="kicker">Backup B8 · Promise</div>
+  <h2>The app pads its promise: most orders arrive early, 35% of promises sit at the 30-minute minimum</h2>
+  <div class="body"><figure class="grow"><img src="../figures/eda/promise_padding.png" alt="Histogram of actual minus promised time"></figure></div>
+  <div class="foot"><span>Median 8.3 min early, yet 14.7% late; late orders more than halve at exactly +8 min. Training days.</span><span></span></div>
+</section>
+
+<!-- B9 -->
+<section class="slide" data-backup="B9">
+  <div class="kicker">Backup B9 · Definitions</div>
+  <h2>Delivery time, promise and delay are three different numbers</h2>
+  <div class="body"><div class="col grow">
+    <table class="t">
+      <tr><th>Term</th><th>What it is</th><th class="n">Your pizza</th></tr>
+      <tr><td><b>Delivery time</b></td><td>How long the food actually took, order to arrival. <b>What we predict.</b></td><td class="n">43 min</td></tr>
+      <tr><td class="orange"><b>Promise</b></td><td>What the app showed at checkout: a commitment, deliberately padded</td><td class="n">51 min</td></tr>
+      <tr><td><b>Delay</b></td><td>Delivery time minus promise. Only used to describe the data and count late orders</td><td class="n">−8 min</td></tr>
+    </table>
+    <div style="display:flex;gap:24px;margin-top:10px">
+      <div class="card ours grow"><h3>Our estimate</h3><p>Aims at the middle: "when will it most likely arrive?"</p></div>
+      <div class="card grow"><h3>Our promise</h3><p>Aims at the 80th percentile: "a time it will almost certainly arrive by"</p></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- B10 -->
+<section class="slide" data-backup="B10">
+  <div class="kicker">Backup B10 · Promise</div>
+  <h2>A padded promise isn't free</h2>
+  <div class="body"><div class="col grow center">
+    <ul class="pts">
+      <li>Lost orders: a long promise sends customers elsewhere</li>
+      <li>Customers can't plan, and trust wears off when "38 minutes" always means 30</li>
+      <li>Operations need the real time to plan riders</li>
+      <li>One buffer for every order: too much at 1 km, too little at 7 km</li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- B11 -->
+<section class="slide" data-backup="B11">
+  <div class="kicker">Backup B11 · Scorecard</div>
+  <h2>What we won and what we lost against the app</h2>
+  <div class="body"><div class="col grow">
+    <table class="t">
+      <tr><th>Comparison</th><th class="n">Ours</th><th class="n">App</th><th>Result</th></tr>
+      <tr><td>Against the promise as shown (test)</td><td class="n">6.49</td><td class="n">9.62</td><td class="win">✓ won</td></tr>
+      <tr><td>Against the de-padded promise, one average padding</td><td class="n">6.49</td><td class="n">6.48</td><td class="tie">= level</td></tr>
+      <tr><td>Against the de-padded promise, padding per distance band</td><td class="n">6.49</td><td class="n">6.36</td><td class="lose">✗ lost</td></tr>
+      <tr><td>Under 1 km · over 3 km</td><td class="n">5.61 · 8.73</td><td class="n">5.86 · 9.94</td><td class="win">✓ won</td></tr>
+      <tr><td>1–3 km · lunch</td><td class="n">6.67 · 7.22</td><td class="n">6.19 · 6.68</td><td class="lose">✗ lost</td></tr>
+      <tr><td>Extended model, validation days (B15)</td><td class="n">5.92</td><td class="n">6.24</td><td class="win">✓ 5 of 7, level on 1–3 km</td></tr>
+      <tr><td>Promises at the app's average length: over 5 min late</td><td class="n">6.1%</td><td class="n">5.0%</td><td class="lose">✗ lost</td></tr>
+    </table>
+    <p class="small">Also won: explaining why (drivers), and shorter promises (below about 37 min). MAE in minutes; test days unless noted.</p>
+  </div></div>
+</section>
+
+<!-- B12 -->
+<section class="slide" data-backup="B12">
+  <div class="kicker">Backup B12 · Example</div>
+  <h2>The pizza order (#85188) is typical, not cherry-picked</h2>
+  <div class="body"><div class="col grow center">
+    <p class="small" style="font-size:22px">The 634 Sunday orders placed at 11:xx, 3–5 km away:</p>
+    <div style="display:flex;gap:56px">
+      <div><div class="big">45.3</div><div class="label">median actual</div></div>
+      <div><div class="big orange">52.2</div><div class="label">median promise</div></div>
+      <div><div class="big blue">45.2</div><div class="label">median ours</div></div>
+    </div>
+    <ul class="pts" style="margin-top:16px">
+      <li>In that group our error is 8.4 min, the promise's 11.0; 26% arrived after the promise</li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- B13 -->
+<section class="slide" data-backup="B13">
+  <div class="kicker">Backup B13 · Riders</div>
+  <h2>Orders waiting per free rider, by district and hour</h2>
+  <div class="body"><figure class="grow"><img src="../figures/results/rider_pressure.png" alt="Heatmap of orders waiting per available rider"></figure></div>
+  <div class="foot"><span>Over 3 orders per free rider (19% of orders): median 35.6 vs 26.4 min. Riders counted from past deliveries only.</span><span></span></div>
+</section>
+
+<!-- B14 -->
+<section class="slide" data-backup="B14">
+  <div class="kicker">Backup B14 · Days</div>
+  <h2>Weekends have the same shape, 1–3.5 min slower in the afternoon; no drift within the week</h2>
+  <div class="body"><figure class="grow"><img src="../figures/results/day_profiles.png" alt="Median delivery time by hour for each day"></figure></div>
+  <div class="foot"><span>Day profiles correlate at r = 0.92. Mon 17 vs Mon 24 differ by 0.5 min per busy hour. Eight days can't show longer drift.</span><span></span></div>
+</section>
+
+<!-- B15 -->
+<section class="slide" data-backup="B15">
+  <div class="kicker">Backup B15 · Extension</div>
+  <h2>What the extended model learned, and where it beats the app</h2>
+  <div class="body">
+    <figure style="width:520px"><img src="../figures/results/partial_dependence.png" alt="Partial dependence plots of the extended model's features"></figure>
+    <div class="col grow center">
+      <table class="t">
+        <tr><th>Orders</th><th class="n">Share</th><th class="n">App</th><th class="n">Base</th><th class="n">Extended</th></tr>
+        <tr><td>All</td><td class="n">100%</td><td class="n">6.24</td><td class="n">6.25</td><td class="n win">5.92</td></tr>
+        <tr><td>Under 1 km</td><td class="n">30%</td><td class="n">5.82</td><td class="n">5.44</td><td class="n win">5.14</td></tr>
+        <tr><td>1–3 km</td><td class="n">63%</td><td class="n">6.09</td><td class="n">6.42</td><td class="n tie">6.08</td></tr>
+        <tr><td>Over 3 km</td><td class="n">7%</td><td class="n">9.44</td><td class="n">8.23</td><td class="n win">7.91</td></tr>
+        <tr><td>Lunch (11:00)</td><td class="n">17%</td><td class="n lose">6.66</td><td class="n">7.04</td><td class="n">6.75</td></tr>
+        <tr><td>Dinner (17–19)</td><td class="n">30%</td><td class="n">6.44</td><td class="n">6.67</td><td class="n win">6.30</td></tr>
+        <tr><td>Saturday 22</td><td class="n">27%</td><td class="n">6.30</td><td class="n">6.44</td><td class="n win">6.01</td></tr>
+      </table>
+      <p class="small">CV MAE, validation days only. Elastic-Net 6.60 → 6.27, RF 6.32 → 6.00: same gain, so it's the information. Re-tuning chose the same settings.</p>
+    </div>
+  </div>
+</section>
+
+<!-- B16 -->
+<section class="slide" data-backup="B16">
+  <div class="kicker">Backup B16 · Related work</div>
+  <h2>Industry systems use the same kinds of information as our extension</h2>
+  <div class="body"><div class="col grow">
+    <table class="t">
+      <tr><th>System</th><th>Model</th><th>Inputs at prediction time</th><th>Reported result</th></tr>
+      <tr><td><b>Ele.me</b> (Alibaba), KDD 2020</td><td>Deep network, attention over nearby couriers</td><td>Area, restaurant, time, order size; live supply–demand; restaurant backlog; restaurant history</td><td>Online A/B: MAE −9.8%, complaints −19.3%</td></tr>
+      <tr><td><b>Uber DeepETA</b></td><td>Linear transformer correcting a routing ETA</td><td>Origin, destination, time, live traffic, request type</td><td>Beat XGBoost; asymmetric loss so being late costs more, like padding</td></tr>
+      <tr><td><b>Ours</b></td><td>Gradient boosting (+ EN, RF)</td><td>Distance, prep, time, district, load; extension: riders, restaurant history</td><td>Test 6.49; CV 5.92 extended</td></tr>
+    </table>
+  </div></div>
+</section>
+
+<!-- B17 -->
+<section class="slide" data-backup="B17">
+  <div class="kicker">Backup B17 · Data</div>
+  <h2>Data issues, how often, and what we did</h2>
+  <div class="body"><div class="col grow">
+    <table class="t">
+      <tr><th>Issue</th><th class="n">Rows</th><th class="n">%</th><th>Decision</th></tr>
+      <tr><td>Exact duplicate rows</td><td class="n">0</td><td class="n">0.0</td><td>none found</td></tr>
+      <tr><td>Refused dispatch attempts</td><td class="n">85,797</td><td class="n">13.1</td><td>removed: keep the accepted attempt</td></tr>
+      <tr><td>No arrival time</td><td class="n">1</td><td class="n">0.0</td><td>removed</td></tr>
+      <tr><td>Pre-booked orders</td><td class="n">22,181</td><td class="n">3.9</td><td>excluded: timing follows the chosen slot</td></tr>
+      <tr><td>Over 3 h, not pre-booked</td><td class="n">24</td><td class="n">0.0</td><td>removed as implausible</td></tr>
+      <tr><td>Prep estimate missing (stored as 0)</td><td class="n">7,439</td><td class="n">1.4</td><td>imputed in the pipeline + flag</td></tr>
+      <tr><td>Prep estimate a default (under 5 min)</td><td class="n">75,361</td><td class="n">13.8</td><td>treated as missing + flag</td></tr>
+    </table>
+    <p class="small">% of the 654,343 raw rows (first two), the 568,546 accepted orders (next three), the 546,340 modelling orders (last two).</p>
+  </div></div>
+</section>
+
+</div>
+
+<div id="notes"></div>
+<div id="jump"></div>
+<div id="progress"></div>
+<div id="hint">Use <kbd>←</kbd> <kbd>→</kbd> or the arrows to move · <kbd>O</kbd> all slides · <kbd>N</kbd> notes · <kbd>F</kbd> full screen</div>
+<div class="edge" id="prevE" title="Previous (←)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+<div class="edge" id="nextE" title="Next (→)"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>
+<div id="bar">
+  <button id="bPrev" title="Previous (←)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <span class="count" id="count">1 / 16</span>
+  <button id="bNext" title="Next (→)"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+  <span class="sep"></span>
+  <button id="bGrid" title="All slides (O)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Slides</button>
+  <button id="bBackup" title="Backup slides for Q&amp;A"><svg viewBox="0 0 24 24"><path d="M12 3v12M6 9l6 6 6-6"/><path d="M4 21h16"/></svg>Q&amp;A</button>
+  <button id="bNotes" title="Speaker notes and timer (N)"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Notes</button>
+  <button id="bFull" title="Full screen (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</div>
+<div id="overview"></div>
+
+
+<script>
+(function(){
+  var deck=document.getElementById('deck');
+  var slides=[].slice.call(deck.querySelectorAll('.slide'));
+  var notes=document.getElementById('notes'), jump=document.getElementById('jump');
+  var mainCount=slides.filter(function(s){return !s.dataset.backup}).length;
+  var cur=0, typed='', t0=null, notesOn=false;
+  var $=function(id){return document.getElementById(id)};
+
+  // footers: slide number on main slides, B-number on backups
+  slides.forEach(function(s,i){
+    var f=s.querySelector('.foot');
+    if(!f){f=document.createElement('div');f.className='foot';f.innerHTML='<span></span><span></span>';s.appendChild(f);}
+    var right=f.lastElementChild;
+    if(s.dataset.backup){ right.textContent = s.dataset.backup==='index' ? 'Backup' : s.dataset.backup; s.id=s.dataset.backup==='index'?'backup':s.dataset.backup; }
+    else { right.textContent=(i+1)+' / '+mainCount; }
+    if(i===0) f.style.display='none';
+  });
+
+  // ---- count-up numbers (big figures animate when their slide opens) ----
+  var counters=[];
+  slides.forEach(function(s,i){
+    [].slice.call(s.querySelectorAll('.big, .big span')).forEach(function(el){
+      var tn=[].slice.call(el.childNodes).filter(function(n){return n.nodeType===3&&n.textContent.trim()})[0];
+      if(!tn) return;
+      var m=tn.textContent.trim().match(/^([~+]?)(\d+(?:\.\d+)?)(%?)$/); if(!m) return;
+      var dec=(m[2].split('.')[1]||'').length;
+      counters.push({slide:i,node:tn,pre:m[1],val:parseFloat(m[2]),dec:dec,suf:m[3],orig:tn.textContent});
+    });
+  });
+  function runCounters(i){
+    counters.forEach(function(c){
+      if(c.slide!==i) return;
+      var start=null, dur=900;
+      function step(ts){ if(!start) start=ts; var p=Math.min(1,(ts-start)/dur), e=1-Math.pow(1-p,3);
+        c.node.textContent=c.pre+(c.val*e).toFixed(c.dec)+c.suf; if(p<1) requestAnimationFrame(step); else c.node.textContent=c.orig; }
+      requestAnimationFrame(step);
+    });
+  }
+
+  function fit(){
+    var h=window.innerHeight*(notesOn?0.66:1)-(notesOn?0:24), w=window.innerWidth-(window.innerWidth>900?140:16);
+    var k=Math.min(w/1280,h/720);
+    deck.style.transform='translate(-50%,-50%) scale('+k+')';
+    deck.style.top=notesOn?(window.innerHeight*0.33)+'px':'calc(50% - 12px)';
+  }
+  function fmt(s){var m=Math.floor(s/60), r=Math.floor(s%60);return m+':'+(r<10?'0':'')+r}
+  function planned(upto){var t=0;for(var i=0;i<=upto&&i<slides.length;i++){t+=+(slides[i].dataset.time||0)}return t}
+  function label(i){var s=slides[i];return s.dataset.backup?(s.dataset.backup==='index'?'Backup':s.dataset.backup):((i+1)+' / '+mainCount)}
+  function renderNotes(){
+    var s=slides[cur], n=s.querySelector('aside.notes');
+    var lab=s.dataset.backup?('Backup '+(s.dataset.backup==='index'?'':s.dataset.backup)):('Slide '+(cur+1)+' of '+mainCount);
+    var who=s.dataset.speaker?('<span>Speaker: <strong>'+s.dataset.speaker+'</strong></span>'):'';
+    var tm=s.dataset.time?('<span>Target <strong>'+s.dataset.time+' s</strong> · planned end '+fmt(planned(cur))+'</span>'):'';
+    notes.innerHTML='<div class="bar"><strong>'+lab+'</strong>'+who+tm+'<span class="timer" id="tmr">'+(t0?fmt((Date.now()-t0)/1000):'0:00')+'</span></div>'+(n?n.innerHTML:'');
+  }
+  function show(i){
+    i=Math.max(0,Math.min(slides.length-1,i));
+    var old=cur;
+    slides.forEach(function(s,j){s.classList.toggle('before',j<i)});
+    slides[old].classList.remove('active'); cur=i; slides[cur].classList.add('active');
+    var id=slides[cur].dataset.backup? slides[cur].id : String(cur+1);
+    if(location.hash.slice(1)!==id) history.replaceState(null,'','#'+id);
+    if(t0===null && cur>0) t0=Date.now();
+    if(notesOn) renderNotes();
+    $('count').textContent=label(cur);
+    $('progress').style.width=(Math.min(cur+1,mainCount)/mainCount*100)+'%';
+    $('prevE').classList.toggle('off',cur===0); $('nextE').classList.toggle('off',cur===slides.length-1);
+    runCounters(cur);
+  }
+  function fromHash(){
+    var h=decodeURIComponent(location.hash.slice(1));
+    if(!h) return 0;
+    var el=document.getElementById(h);
+    if(el && el.classList.contains('slide')) return slides.indexOf(el);
+    var n=parseInt(h,10); return isNaN(n)?0:n-1;
+  }
+  function toggleNotes(){notesOn=!notesOn;notes.classList.toggle('on',notesOn);$('bNotes').classList.toggle('on',notesOn);fit();if(notesOn)renderNotes();}
+  function toggleFull(){ if(!document.fullscreenElement){(document.documentElement.requestFullscreen||function(){}).call(document.documentElement)} else document.exitFullscreen(); }
+
+  // ---- overview grid ----
+  var ov=$('overview'), built=false;
+  function buildOverview(){
+    var html='', groups=[['Talk',function(s){return !s.dataset.backup}],['Backup slides (Q&A)',function(s){return !!s.dataset.backup}]];
+    ov.innerHTML='';
+    groups.forEach(function(g){
+      var h=document.createElement('h4');h.textContent=g[0];ov.appendChild(h);
+      var grid=document.createElement('div');grid.className='grid';ov.appendChild(grid);
+      slides.forEach(function(s,i){
+        if(!g[1](s)) return;
+        var t=document.createElement('div');t.className='thumb';t.dataset.i=i;
+        var c=s.cloneNode(true);c.removeAttribute('id');c.classList.add('active');c.classList.remove('before');
+        [].slice.call(c.querySelectorAll('aside.notes')).forEach(function(a){a.remove()});
+        t.appendChild(c);
+        var n=document.createElement('span');n.className='n';n.textContent=label(i);t.appendChild(n);
+        t.addEventListener('click',function(){closeOverview();show(i)});
+        grid.appendChild(t);
+      });
+    });
+    built=true;
+  }
+  function scaleThumbs(){[].slice.call(ov.querySelectorAll('.thumb')).forEach(function(t){t.firstChild.style.transform='scale('+(t.clientWidth/1280)+')'})}
+  function openOverview(){ if(!built) buildOverview(); ov.classList.add('on'); $('bGrid').classList.add('on');
+    [].slice.call(ov.querySelectorAll('.thumb')).forEach(function(t){t.classList.toggle('cur',+t.dataset.i===cur)});
+    scaleThumbs(); var c=ov.querySelector('.thumb.cur'); if(c) c.scrollIntoView({block:'center'}); }
+  function closeOverview(){ ov.classList.remove('on'); $('bGrid').classList.remove('on'); }
+
+  // ---- input ----
+  document.addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    var k=e.key; wake();
+    if(ov.classList.contains('on')){ if(k==='Escape'||k==='o'||k==='O'||k==='g'||k==='G') closeOverview(); return; }
+    if(/^[0-9bB]$/.test(k)){typed+=k.toUpperCase();jump.textContent='go to '+typed;jump.style.display='block';return;}
+    if(k==='Enter'&&typed){var el=document.getElementById(typed);show(el?slides.indexOf(el):parseInt(typed,10)-1);typed='';jump.style.display='none';return;}
+    if(k==='Escape'){typed='';jump.style.display='none';return;}
+    if(k==='ArrowRight'||k===' '||k==='PageDown'||k==='ArrowDown'){e.preventDefault();show(cur+1);}
+    else if(k==='ArrowLeft'||k==='PageUp'||k==='ArrowUp'){e.preventDefault();show(cur-1);}
+    else if(k==='Home'){show(0);} else if(k==='End'){show(mainCount-1);}
+    else if(k==='n'||k==='N'){toggleNotes();}
+    else if(k==='o'||k==='O'||k==='g'||k==='G'){openOverview();}
+    else if(k==='f'||k==='F'){toggleFull();}
+    else if(k==='t'||k==='T'){t0=Date.now();if(notesOn)renderNotes();}
+  });
+  $('bPrev').onclick=$('prevE').onclick=function(){show(cur-1)};
+  $('bNext').onclick=$('nextE').onclick=function(){show(cur+1)};
+  $('bGrid').onclick=function(){ov.classList.contains('on')?closeOverview():openOverview()};
+  $('bNotes').onclick=toggleNotes; $('bFull').onclick=toggleFull;
+  $('bBackup').onclick=function(){closeOverview();show(slides.indexOf($('backup')))};
+
+  // swipe on touch screens
+  var sx=null; deck.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+  deck.addEventListener('touchend',function(e){ if(sx===null) return; var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50) show(cur+(dx<0?1:-1)); sx=null });
+
+  // controls fade out when the mouse rests (cleaner while presenting)
+  var idleT; function wake(){ ['bar','prevE','nextE'].forEach(function(id){$(id).classList.remove('idle')});
+    clearTimeout(idleT); idleT=setTimeout(function(){ if(!ov.classList.contains('on')) ['bar','prevE','nextE'].forEach(function(id){$(id).classList.add('idle')}) },2600); }
+  document.addEventListener('mousemove',wake);
+
+  window.addEventListener('hashchange',function(){show(fromHash())});
+  setInterval(function(){var el=document.getElementById('tmr');if(el&&t0)el.textContent=fmt((Date.now()-t0)/1000)},500);
+  window.addEventListener('resize',function(){fit(); if(ov.classList.contains('on')) scaleThumbs();});
+  slides[0].classList.add('active'); fit(); show(fromHash()); wake();
+  setTimeout(function(){var h=$('hint'); if(h){h.style.opacity=0; setTimeout(function(){h.remove()},700)}},5000);
+})();
+</script>
+</body>
+</html>
