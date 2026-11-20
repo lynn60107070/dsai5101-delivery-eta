@@ -79,6 +79,7 @@ body { font-family: var(--font); color: var(--charcoal); }
 .content { position: absolute; inset: 80px 120px 72px 120px; }
 .sec { display: flex; align-items: center; gap: 28px; font-size: 30px; font-weight: 700; color: var(--navy); letter-spacing: .04em; }
 .sec::after { content: ""; width: 110px; height: 3px; background: var(--sky); border-radius: 2px; }
+.sec-name { font-weight: 600; color: var(--blue); letter-spacing: .02em; margin-left: -10px; }
 h1, h2 { font-weight: 800; color: var(--navy); letter-spacing: -.02em; line-height: 1.04; }
 h1 { font-size: 150px; }
 h2 { font-size: 72px; margin-top: 20px; }
@@ -279,7 +280,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
   <div class="orb" style="width:860px;height:860px;right:-120px;top:110px"></div>
   <div class="orb ring" style="width:1060px;height:1060px;right:-220px;top:10px"></div>
   <div class="content">
-    <div class="sec reveal d1">01</div>
+    <div class="sec reveal d1">01<span class="sec-name">Problem &amp; Motivation</span></div>
     <h2 class="reveal d2">Same wait, <span class="accent">different feeling</span></h2>
     <p class="sub reveal d3" style="max-width:920px">Every order gets a promised time at checkout, before a rider is even assigned. How good can that number be?</p>
     <div class="card reveal d4" style="width:960px;margin-top:52px;border-left:8px solid var(--blue)">
@@ -313,7 +314,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~40 s.</b> &quot;Let's follow one of them. Sunday, 23 October, 11:13. Someone orders lunch from a restaurant 3.2 km away. The app says: 51 minutes. Here's everything it knows at that second, and everything it doesn't.&quot; Point at the two lists. Bait line: &quot;We predict how long it actually takes, not the promise.&quot; (backup B1)">
   <div class="map-slot reveal d2" style="position:absolute;right:0;top:0;width:760px;height:1080px;opacity:.9;-webkit-mask-image:linear-gradient(90deg,transparent,#000 35%);mask-image:linear-gradient(90deg,transparent,#000 35%)"></div>
   <div class="content">
-    <div class="sec reveal d1">02</div>
+    <div class="sec reveal d1">02<span class="sec-name">Data &amp; EDA</span></div>
     <h2 class="reveal d2">Meet order <span class="accent">#85188</span></h2>
     <p class="sub reveal d3">Sunday 23 Oct, 11:13 · lunch from a restaurant 3.2 km away</p>
     <div class="reveal d3" style="margin-top:18px"><span class="chip" style="font-size:24px"><svg style="width:26px;height:26px"><use href="#i-book"/></svg>Source: Meituan's public data, INFORMS TSL Research Challenge 2024 · one city, real orders</span></div>
@@ -352,7 +353,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~40 s.</b> &quot;Before we could follow any order, we had to find the real ones.&quot; Walk the three removals and their reasons, then the default prep estimates: kept and flagged, because those orders are slower, so they're not missing at random. Full table with % in backup B16.">
   <div class="orb soft" style="width:600px;height:600px;right:-200px;top:-220px"></div>
   <div class="content">
-    <div class="sec reveal d1">02</div>
+    <div class="sec reveal d1">02<span class="sec-name">Data &amp; EDA</span></div>
     <h2 class="reveal d2">654k rows → <span class="accent">546k orders</span></h2>
     <p class="sub reveal d3">The raw log is dispatch attempts, not orders. Every rule has a reason.</p>
     <div class="row" style="margin-top:40px;gap:48px;height:675px">
@@ -373,7 +374,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~30 s.</b> &quot;Our order was 3.2 km away. Every kilometre adds about seven minutes, so a friend ordering the same dish from 1 km away would get it about 15 minutes sooner.&quot; The slope holds inside every district (no Simpson's paradox). The spread widens with distance, so promises need a higher percentile.">
   <div class="orb" style="width:700px;height:700px;left:-360px;bottom:-380px;opacity:.7"></div>
   <div class="content">
-    <div class="sec reveal d1">02</div>
+    <div class="sec reveal d1">02<span class="sec-name">Data &amp; EDA</span></div>
     <h2 class="reveal d2">~7 minutes <span class="accent">per kilometre</span></h2>
     <p class="sub reveal d3">In every one of the 23 districts. Distance is the core of the model.</p>
     <div class="row" style="margin-top:44px;gap:48px;height:660px">
@@ -393,7 +394,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~30 s.</b> &quot;And our customer ordered at the slowest hour of the day. Half the city had the same idea.&quot; Load looks important but mostly measures big districts and busy hours: within the same district and hour the correlation drops to 0.09.">
   <div class="orb soft" style="width:640px;height:640px;right:-260px;bottom:-300px"></div>
   <div class="content">
-    <div class="sec reveal d1">02</div>
+    <div class="sec reveal d1">02<span class="sec-name">Data &amp; EDA</span></div>
     <h2 class="reveal d2">Slowest at <span class="accent">meal peaks</span></h2>
     <p class="sub reveal d3">Our customer ordered at 11:13: the slowest hour of the day.</p>
     <div class="row" style="margin-top:44px;gap:48px;height:660px">
@@ -413,7 +414,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~50 s · Hook.</b> &quot;You know the friend who texts 'five minutes away' and arrives twenty minutes later? The app is the opposite friend: it never promises under 30 minutes, promises 38 on average, and food takes 30.&quot; Then the flow left to right. Each model has a reason. Bait line at the bottom, no explanation (backup B1/B2).">
   <div class="orb" style="width:640px;height:640px;right:-240px;top:-260px;opacity:.8"></div>
   <div class="content">
-    <div class="sec reveal d1">03</div>
+    <div class="sec reveal d1">03<span class="sec-name">Methods &amp; Evaluation</span></div>
     <h2 class="reveal d2">Our <span class="accent">Approach</span></h2>
     <p class="sub reveal d3">Two baselines, three models, and only what is known at checkout.</p>
     <!-- process flow like the reference: icon circles joined by arrows -->
@@ -441,7 +442,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~40 s.</b> &quot;We held ourselves to the app's rules. The model learns from earlier days and predicts later ones. The last two days, including our Sunday order, were locked away until the very end.&quot; Then the three cards: MAE and why; nothing fitted on future days; tuning mattered (complexity curve in backup B6).">
   <div class="orb soft" style="width:560px;height:560px;left:-280px;top:-260px"></div>
   <div class="content">
-    <div class="sec reveal d1">03</div>
+    <div class="sec reveal d1">03<span class="sec-name">Methods &amp; Evaluation</span></div>
     <h2 class="reveal d2">Tested like <span class="accent">real life</span></h2>
     <p class="sub reveal d3">The model only sees the past; the test days were scored once, at the end.</p>
     <div class="fig reveal d3" style="margin-top:32px;height:400px"><img src="../../figures/results/time_split.png" alt="Forward-chaining validation folds and the test days"></div>
@@ -459,7 +460,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~55 s.</b> &quot;So, our order. The app said 51. Our model said 45. It arrived in 43. Across all 140,000 test orders, we're off by 6.5 minutes on average, 31% better than guessing. The app looks 3 minutes worse, but that's its padding: take off its usual 8 minutes and it's about as accurate as we are, 6.48 against 6.49. With public data from the moment you order, we reach the platform's own level.&quot; Baits: short/long trips vs lunch (B2) and 'our order is typical' (B3).">
   <div class="orb" style="width:720px;height:720px;right:-300px;top:-320px;opacity:.75"></div>
   <div class="content">
-    <div class="sec reveal d1">04</div>
+    <div class="sec reveal d1">04<span class="sec-name">Results &amp; Insights</span></div>
     <h2 class="reveal d2"><span class="accent">Results</span></h2>
     <p class="sub reveal d3">Test days, never seen during training: 139,787 orders.</p>
     <div class="row" style="margin-top:36px;gap:44px;height:695px">
@@ -491,7 +492,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~50 s.</b> &quot;So why did our order take 43 minutes? 12.5 minutes until pickup, about average, then 31 on the road. Mostly distance, then lunchtime. How many new orders come in barely matters. What matters is how many riders are free: when more than three orders wait per free rider, the median delivery takes 36 minutes instead of 26. Add that and each restaurant's track record, and our error drops another 0.3 minutes.&quot; Backups: B11 drivers, B7 rider map, B8 partial dependence, B13/B14 extension tables, B17 features.">
   <div class="orb" style="width:620px;height:620px;right:-260px;top:-300px;opacity:.75"></div>
   <div class="content">
-    <div class="sec reveal d1">04</div>
+    <div class="sec reveal d1">04<span class="sec-name">Results &amp; Insights</span></div>
     <h2 class="reveal d2">Key <span class="accent">Insights</span></h2>
     <p class="sub reveal d3">What makes a delivery slow, ranked by how much the model relies on it.</p>
     <!-- three insights separated by hairlines, like the reference -->
@@ -516,7 +517,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~40 s.</b> &quot;Every step answered something we found. The instructor asked whether riders were available, so we counted free riders: a small gain. Our stage analysis showed half the wait is before pickup, so we added each restaurant's track record: the biggest gain. The app beat us at lunch, so we added how late the district's last deliveries were: almost nothing. And Sumaiya noticed some restaurants always run late on their own estimate: another three hundredths. 6.25 to 5.92. Every feature uses only deliveries that had already happened, re-tuning picked the same settings, and all three model types gain the same, so it's the information, not the model. One honest caveat: this is on the validation days, because we designed these features after our one test run.&quot; Tables: B13, B14.">
   <div class="orb soft" style="width:600px;height:600px;right:-260px;top:-300px"></div>
   <div class="content">
-    <div class="sec reveal d1">04</div>
+    <div class="sec reveal d1">04<span class="sec-name">Results &amp; Insights</span></div>
     <h2 class="reveal d2">From base to <span class="accent">extended</span></h2>
     <p class="sub reveal d3">Each step answered something we found. Validation error, minutes.</p>
     <!-- waterfall: one column per step, bar height shows the error after that step -->
@@ -562,7 +563,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~30 s.</b> &quot;Lunch is our hardest hour: we're off by 7.2 minutes, not 6.5, and this is where the app's own estimate beats ours. It probably knows how many riders are free right now. Weekends are slower too: 1 to 3.5 minutes in the afternoon, and we only had one weekend day to learn from.&quot; Backups: B12 districts, B9 weekday/drift.">
   <div class="orb soft" style="width:600px;height:600px;left:-300px;bottom:-320px"></div>
   <div class="content">
-    <div class="sec reveal d1">04</div>
+    <div class="sec reveal d1">04<span class="sec-name">Results &amp; Insights</span></div>
     <h2 class="reveal d2">Where it <span class="accent">struggles</span></h2>
     <p class="sub reveal d3">Long trips, the lunch rush and the weekend.</p>
     <div class="row" style="margin-top:34px;gap:48px;height:700px">
@@ -583,7 +584,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~60 s · Hook.</b> &quot;A weather forecast tells you it will probably rain. A promise says you'll stay dry. Those are different jobs.&quot; Then: &quot;We turned our forecast into promises with the same average length as the app's, 38.2 minutes, and the app was still late less often: 5.0% of orders more than five minutes late, against our 6.1%. Look at this cliff: late orders more than halve at exactly 8 minutes late. Something happens after the order is placed. Someone starts rushing, and a model at ordering can't see that.&quot; Bait: 'except for shorter promises' (B2). Cliff figure: B10.">
   <div class="orb" style="width:700px;height:700px;right:-280px;bottom:-360px;opacity:.7"></div>
   <div class="content">
-    <div class="sec reveal d1">04</div>
+    <div class="sec reveal d1">04<span class="sec-name">Results &amp; Insights</span></div>
     <h2 class="reveal d2">Better estimate ≠ <span class="accent">better promise</span></h2>
     <p class="sub reveal d3">Same average promise (38.2 min): the app is still late less often.</p>
     <div class="row" style="margin-top:44px;gap:48px;height:650px">
@@ -607,7 +608,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide" data-notes="<b>~50 s · Hook.</b> &quot;That 'someone rushing' is a real person. In 2020 a Chinese magazine published a viral article, 'Delivery Riders, Trapped in the System', on algorithms shortening delivery times until riders ran red lights to keep up. The company in that story is the one whose data we used.&quot; Then the answer, the bars (missing information is the ceiling), one limitation, one ethics point.">
   <div class="orb soft" style="width:620px;height:620px;right:-260px;top:-300px"></div>
   <div class="content">
-    <div class="sec reveal d1">05</div>
+    <div class="sec reveal d1">05<span class="sec-name">Conclusion</span></div>
     <h2 class="reveal d2">What it means, <span class="accent">and what it can't tell us</span></h2>
     <div class="row" style="margin-top:50px;gap:48px">
       <div class="col" style="width:930px">
@@ -665,7 +666,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <!-- B1 · Definitions -->
 <section class="slide backup" data-title="Delivery time vs promise vs delay">
   <div class="content">
-    <div class="sec">B1</div>
+    <div class="sec">B1<span class="sec-name">Backup</span></div>
     <h2>Three words we <span class="accent">use precisely</span></h2>
     <div class="row" style="margin-top:56px">
       <div class="card" style="flex:1"><div class="tile"><svg><use href="#i-target"/></svg></div><h3 style="margin-top:22px">Delivery time</h3><p>How long the food actually took, order → arrival. <b class="strong">What we predict.</b></p><div class="stat-num mid" style="margin-top:20px">43 min</div></div>
@@ -679,7 +680,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <!-- B2 · Scorecard -->
 <section class="slide backup" data-title="Did we beat the app? Scorecard">
   <div class="content">
-    <div class="sec">B2</div>
+    <div class="sec">B2<span class="sec-name">Backup</span></div>
     <h2>Did we beat the app? <span class="accent">Scorecard</span></h2>
     <div class="card" style="margin-top:44px">
       <table class="t">
@@ -699,7 +700,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <!-- B3 · Order is typical -->
 <section class="slide backup" data-title="Order #85188 is typical">
   <div class="content">
-    <div class="sec">B3</div>
+    <div class="sec">B3<span class="sec-name">Backup</span></div>
     <h2>Order #85188 is <span class="accent">typical</span></h2>
     <p class="sub">Not cherry-picked: it sits at the median of its group.</p>
     <div class="card" style="margin-top:44px">
@@ -715,54 +716,54 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 
 <!-- B4–B12 · figure backups (generic layout: title + one figure + one note) -->
 <section class="slide backup" data-title="Leakage audit">
-  <div class="content"><div class="sec">B4</div><h2>Leakage <span class="accent">audit</span></h2>
+  <div class="content"><div class="sec">B4<span class="sec-name">Backup</span></div><h2>Leakage <span class="accent">audit</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/eda/leakage_audit.png" alt="Leakage audit"></div>
     <div class="col" style="width:520px"><div class="card ice"><p>With after-order times, validation MAE falls <b class="strong">6.25 → 4.53</b> (R² 0.51 → 0.72). Pickup time alone gives almost all of it (4.55). None of it exists at ordering.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Delivery stages by district">
-  <div class="content"><div class="sec">B5</div><h2>Restaurant or <span class="accent">road?</span></h2>
+  <div class="content"><div class="sec">B5<span class="sec-name">Backup</span></div><h2>Restaurant or <span class="accent">road?</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/eda/stages_by_area.png" alt="Delivery stages by district"></div>
     <div class="col" style="width:520px"><div class="card ice"><p>Pickup and road each take a median <b class="strong">13.1 min</b>, both ~2.7 min slower at peaks. Late orders lose more on the road in the 7 big districts (72% of late orders), more at pickup elsewhere.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Complexity curve (tuning)">
-  <div class="content"><div class="sec">B6</div><h2>Why tuning <span class="accent">mattered</span></h2>
+  <div class="content"><div class="sec">B6<span class="sec-name">Backup</span></div><h2>Why tuning <span class="accent">mattered</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/results/hgb_complexity_curve.png" alt="Training vs validation error by tree size"></div>
     <div class="col" style="width:520px"><div class="card ice"><p>Best at 16 leaves with default settings; at 511 leaves train 2.45 vs validation 6.63. The tuned model uses 76 leaves, held back by a small learning rate, big leaves and strong L2.</p></div><div class="card"><p class="small">Errors by district: 4.4 (district 18) to 9.0 (district 21).</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Rider pressure map">
-  <div class="content"><div class="sec">B7</div><h2>Rider <span class="accent">pressure</span></h2>
+  <div class="content"><div class="sec">B7<span class="sec-name">Backup</span></div><h2>Rider <span class="accent">pressure</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/results/rider_pressure.png" alt="Orders waiting per available rider by district and hour"></div>
     <div class="col" style="width:460px"><div class="card ice"><p>Orders waiting per free rider, by district and hour. Over 3 per rider (19% of orders): median <b class="strong">35.6 vs 26.4 min</b>. Built only from deliveries already finished.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="What the extended model learned">
-  <div class="content"><div class="sec">B8</div><h2>What the model <span class="accent">learned</span></h2>
+  <div class="content"><div class="sec">B8<span class="sec-name">Backup</span></div><h2>What the model <span class="accent">learned</span></h2>
     <div class="row" style="margin-top:30px;height:740px;gap:44px"><div class="fig" style="width:820px"><img src="../../figures/results/partial_dependence.png" alt="Partial dependence of the extended model"></div>
     <div class="col" style="flex:1"><div class="card ice"><p>Average prediction as one input changes: about <b class="strong">+24 min</b> from 0.2 to 4.9 km, +6 as orders per rider go 0.5 → 3, +4 across the day, +3 slow vs fast restaurants.</p></div><div class="card"><p class="small">Elastic-Net, in minutes: +6.1 per km · lunch +4.8 · dinner +3.6 · no real prep estimate +2.0–2.5 · twice the usual load only +1.1.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Weekdays, weekend and drift">
-  <div class="content"><div class="sec">B9</div><h2>Weekend and <span class="accent">drift</span></h2>
+  <div class="content"><div class="sec">B9<span class="sec-name">Backup</span></div><h2>Weekend and <span class="accent">drift</span></h2>
     <div class="fig" style="margin-top:40px;height:520px"><img src="../../figures/results/day_profiles.png" alt="Hourly delivery time by day"></div>
     <div class="row" style="margin-top:30px"><div class="card ice" style="flex:1"><p>Same daily shape (r = 0.92); weekend <b class="strong">1–3.5 min slower</b> noon–18:00. One weekend day to learn from, so no weekend feature.</p></div><div class="card ice" style="flex:1"><p>Mon 17 vs Mon 24 differ by <b class="strong">0.5 min</b> per busy hour: no drift within the week.</p></div></div></div>
 </section>
 <section class="slide backup" data-title="Promise padding and the 8-minute cliff">
-  <div class="content"><div class="sec">B10</div><h2>The <span class="accent">8-minute cliff</span></h2>
+  <div class="content"><div class="sec">B10<span class="sec-name">Backup</span></div><h2>The <span class="accent">8-minute cliff</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/eda/promise_padding.png" alt="Actual minus promised time"></div>
     <div class="col" style="width:520px"><div class="card ice"><p>35% of promises sit at the 30-min floor; the median order arrives 8.3 min early. Late arrivals drop from 798 to 336 orders across exactly <b class="strong">+8 min</b>, at every promise level.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Delay drivers (permutation importance)">
-  <div class="content"><div class="sec">B11</div><h2>Delay <span class="accent">drivers</span></h2>
+  <div class="content"><div class="sec">B11<span class="sec-name">Backup</span></div><h2>Delay <span class="accent">drivers</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/results/delay_drivers.png" alt="Grouped permutation importance"></div>
     <div class="col" style="width:520px"><div class="card ice"><p>Error added when each group is scrambled: distance <b class="strong">+3.10</b> ≫ time +0.86 ≈ district +0.83 &gt; prep +0.67 &gt; load +0.19. Proposal right on distance and peaks, wrong on load.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Errors by district">
-  <div class="content"><div class="sec">B12</div><h2>Errors by <span class="accent">district</span></h2>
+  <div class="content"><div class="sec">B12<span class="sec-name">Backup</span></div><h2>Errors by <span class="accent">district</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="flex:1"><img src="../../figures/results/errors_by_area.png" alt="Error by district"></div>
     <div class="col" style="width:520px"><div class="card ice"><p>4.4 (district 18) to 9.0 (district 21). District 21 is only bad on Sunday (one-day event); district 16 is hard on both CV and test, predicted 3.8 min too short.</p></div></div></div></div>
 </section>
 
 <!-- B13–B17 · table backups -->
 <section class="slide backup" data-title="Extension: features and models">
-  <div class="content"><div class="sec">B13</div><h2>Extension, <span class="accent">feature by feature</span></h2>
+  <div class="content"><div class="sec">B13<span class="sec-name">Backup</span></div><h2>Extension, <span class="accent">feature by feature</span></h2>
     <div class="row" style="margin-top:40px;gap:40px">
       <div class="card" style="flex:1.2"><table class="t">
         <tr><th>Features (boosting)</th><th>Val. MAE</th><th>Δ</th></tr>
@@ -782,7 +783,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     </div></div>
 </section>
 <section class="slide backup" data-title="Extended model vs the app, by segment">
-  <div class="content"><div class="sec">B14</div><h2>Extended model vs <span class="accent">the app</span></h2>
+  <div class="content"><div class="sec">B14<span class="sec-name">Backup</span></div><h2>Extended model vs <span class="accent">the app</span></h2>
     <p class="sub">Validation days; the app's promise minus its per-distance padding.</p>
     <div class="card" style="margin-top:40px;width:1300px"><table class="t">
       <tr><th>Orders</th><th>Share</th><th>App</th><th>Ours (base)</th><th>Ours (extended)</th></tr>
@@ -796,7 +797,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     </table></div></div>
 </section>
 <section class="slide backup" data-title="Industry benchmark">
-  <div class="content"><div class="sec">B15</div><h2>How the industry <span class="accent">does it</span></h2>
+  <div class="content"><div class="sec">B15<span class="sec-name">Backup</span></div><h2>How the industry <span class="accent">does it</span></h2>
     <div class="card" style="margin-top:44px"><table class="t">
       <tr><th>System</th><th>Model</th><th>Inputs at prediction time</th><th>Reported result</th></tr>
       <tr><td>Ele.me (KDD 2020)</td><td>Deep network, attention over nearby couriers</td><td>Real-time supply–demand, orders waiting at the restaurant, couriers' load, restaurant history</td><td>Online A/B: MAE −9.8%, complaints −19.3%</td></tr>
@@ -805,7 +806,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     </table><p class="small" style="margin-top:20px">Errors are not comparable across rows: different data and targets.</p></div></div>
 </section>
 <section class="slide backup" data-title="Data issues with %">
-  <div class="content"><div class="sec">B16</div><h2>Data issues, <span class="accent">with reasons</span></h2>
+  <div class="content"><div class="sec">B16<span class="sec-name">Backup</span></div><h2>Data issues, <span class="accent">with reasons</span></h2>
     <div class="card" style="margin-top:44px"><table class="t">
       <tr><th>Issue</th><th>Rows</th><th>%</th><th>Decision</th></tr>
       <tr><td>Exact duplicate rows</td><td class="num">0</td><td class="num">0.0</td><td>none found</td></tr>
@@ -818,7 +819,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     </table></div></div>
 </section>
 <section class="slide backup" data-title="Features we engineered">
-  <div class="content"><div class="sec">B17</div><h2>Features we <span class="accent">engineered</span></h2>
+  <div class="content"><div class="sec">B17<span class="sec-name">Backup</span></div><h2>Features we <span class="accent">engineered</span></h2>
     <div class="row" style="margin-top:44px">
       <div class="card" style="flex:1"><h3>Main model: 10 features, 33 inputs</h3><p class="small" style="font-size:24px">Haversine distance · time of day as sine/cosine · lunch and dinner flags · prep estimate + missing and default flags · district load relative to its usual level + flag · district (one-hot, 23)</p></div>
       <div class="card" style="flex:1"><h3>Extended: 23 features, 46 inputs</h3><p class="small" style="font-size:24px">+ riders who finished in the district in 30 min · open orders · orders per rider · restaurant's past delivery and pickup times · recent district delays · restaurant queue · prep-estimate bias</p></div>
@@ -868,7 +869,7 @@ class SlidePresentation {
       const card = document.createElement('div');
       card.className = 'card';
       card.style.cssText = 'padding:22px 26px;cursor:pointer';
-      card.innerHTML = `<div class="small" style="font-weight:700;color:var(--blue)">${s.querySelector('.sec').textContent}</div><div style="font-size:23px;font-weight:600;color:var(--navy);margin-top:6px">${s.dataset.title}</div>`;
+      card.innerHTML = `<div class="small" style="font-weight:700;color:var(--blue)">${s.querySelector('.sec').firstChild.textContent}</div><div style="font-size:23px;font-weight:600;color:var(--navy);margin-top:6px">${s.dataset.title}</div>`;
       card.addEventListener('click', () => this.show(i));
       grid.appendChild(card);
     });
