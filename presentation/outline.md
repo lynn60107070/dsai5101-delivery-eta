@@ -69,6 +69,8 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 - Hook (right now): *"Right now, while I'm talking, about fifty people in one city just pressed
   'order', and every one of them was immediately given a promise."*
 - Who uses the answer: the platform's operations team (promise length, courier planning)
+- Why it matters (stakes, rubric top band): *"Promise too short and the food is late; too long and people
+  order elsewhere; either way, a rider pays for it."* (three warning chips on the slide)
 - **Research question, boxed:** using only information available when an order is placed, how
   accurately can we predict delivery time, and what drives long deliveries?
 - On slide: baggage-claim image or icon, the boxed question, "~50 orders a minute, in one city"

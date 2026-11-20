@@ -84,7 +84,7 @@ h1 { font-size: 150px; }
 h2 { font-size: 72px; margin-top: 20px; }
 .accent { color: var(--blue); }
 .sub { font-size: 29px; color: var(--muted); line-height: 1.4; margin-top: 16px; max-width: 1200px; }
-.small { font-size: 23px; color: var(--muted); line-height: 1.5; }
+.small { font-size: 24px; color: var(--muted); line-height: 1.5; }
 .strong { font-weight: 700; color: var(--navy); }
 .rule { width: 120px; height: 4px; background: var(--blue); border-radius: 2px; margin: 38px 0; }
 
@@ -116,7 +116,7 @@ h2 { font-size: 72px; margin-top: 20px; }
 .checks .no svg { color: #b4423d; }
 .checks .no { color: var(--muted); }
 .chip { display: inline-flex; align-items: center; gap: 10px; background: var(--ice); color: var(--navy); border-radius: 999px;
-  padding: 12px 24px; font-size: 22px; font-weight: 600; }
+  padding: 12px 24px; font-size: 23px; font-weight: 600; }
 .fig { background: #fff; border-radius: 30px; border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(16,42,67,.08);
   padding: 22px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .fig img { width: 100%; height: 100%; object-fit: contain; }
@@ -124,7 +124,7 @@ h2 { font-size: 72px; margin-top: 20px; }
 .bait { font-size: 25px; color: var(--blue); font-weight: 600; display: flex; gap: 12px; align-items: center; }
 .bait svg { width: 30px; height: 30px; }
 .insight { background: var(--ice); border-radius: 26px; padding: 26px 32px; }
-.insight .k { font-size: 21px; font-weight: 700; color: var(--blue); letter-spacing: .08em; text-transform: uppercase; }
+.insight .k { font-size: 22px; font-weight: 700; color: var(--blue); letter-spacing: .08em; text-transform: uppercase; }
 .insight .v { font-size: 27px; color: var(--navy); line-height: 1.45; margin-top: 10px; font-weight: 500; }
 .insight .v::after { content: ""; display: block; width: 80px; height: 3px; background: var(--blue); margin-top: 18px; border-radius: 2px; }
 .row { display: flex; gap: 32px; }
@@ -144,7 +144,7 @@ h2 { font-size: 72px; margin-top: 20px; }
 .eta { position: absolute; background: rgba(255,255,255,.96); border-radius: 30px; padding: 26px 34px; display: flex; gap: 22px; align-items: center;
   box-shadow: 0 30px 70px rgba(16,42,67,.22); transform: rotate(5deg); }
 .eta svg { width: 58px; height: 58px; color: var(--navy); }
-.eta .t { font-size: 20px; color: var(--muted); }
+.eta .t { font-size: 22px; color: var(--muted); }
 .eta .m { font-size: 48px; font-weight: 800; color: var(--navy); line-height: 1.05; }
 
 /* ===========================================
@@ -275,7 +275,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <!-- =========================================================
      SLIDE 2 · 01 THE PROBLEM (Houston hook + research question)
      ========================================================= -->
-<section class="slide" data-notes="<b>~50 s · Hook.</b> &quot;Houston airport had a problem: passengers complained they waited too long for their bags. The airport fixed it without making a single bag faster. They moved the arrival gates further away, so people walked six times longer, and the complaints almost disappeared. Same wait, different feeling.&quot; Then: &quot;Right now, while I'm talking, about fifty people in one city just pressed 'order', and every one of them was immediately given a promise.&quot; Read the question in the box. Who uses it: the platform's operations team.">
+<section class="slide" data-notes="<b>~50 s · Hook.</b> &quot;Houston airport had a problem: passengers complained they waited too long for their bags. The airport fixed it without making a single bag faster. They moved the arrival gates further away, so people walked six times longer, and the complaints almost disappeared. Same wait, different feeling.&quot; Then: &quot;Right now, while I'm talking, about fifty people in one city just pressed 'order', and every one of them was immediately given a promise.&quot; Read the question in the box. Who uses it: the platform's operations team. Why it matters, one breath: &quot;Promise too short and the food is late; too long and people order elsewhere; either way, a rider pays for it.&quot;">
   <div class="orb" style="width:860px;height:860px;right:-120px;top:110px"></div>
   <div class="orb ring" style="width:1060px;height:1060px;right:-220px;top:10px"></div>
   <div class="content">
@@ -289,6 +289,12 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     <div class="row reveal d5" style="margin-top:40px;width:960px">
       <div class="card ice" style="flex:1;display:flex;gap:22px;align-items:center"><div class="tile" style="background:#fff"><svg><use href="#i-clock"/></svg></div><div><div class="stat-num mid">~50</div><div class="stat-lbl">orders a minute, in one city</div></div></div>
       <div class="card ice" style="flex:1.3;display:flex;gap:22px;align-items:center"><div class="tile" style="background:#fff"><svg><use href="#i-users"/></svg></div><div><div class="strong" style="font-size:26px">Who uses it</div><div class="stat-lbl" style="margin-top:4px">The operations team: promise length and rider planning</div></div></div>
+    </div>
+    <!-- stakes: what goes wrong when the promise is off (rubric: "why it matters") -->
+    <div class="row reveal d6" style="margin-top:28px;width:960px;gap:14px;flex-wrap:wrap">
+      <span class="chip" style="font-size:24px"><svg style="width:26px;height:26px;color:var(--platform)"><use href="#i-alert"/></svg>Too short: late food</span>
+      <span class="chip" style="font-size:24px"><svg style="width:26px;height:26px;color:var(--platform)"><use href="#i-alert"/></svg>Too long: lost orders</span>
+      <span class="chip" style="font-size:24px"><svg style="width:26px;height:26px;color:var(--platform)"><use href="#i-alert"/></svg>Either way: riders pay</span>
     </div>
   </div>
   <!-- baggage-claim illustration inside the big orb -->
@@ -310,6 +316,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     <div class="sec reveal d1">02</div>
     <h2 class="reveal d2">Meet order <span class="accent">#85188</span></h2>
     <p class="sub reveal d3">Sunday 23 Oct, 11:13 · lunch from a restaurant 3.2 km away</p>
+    <div class="reveal d3" style="margin-top:18px"><span class="chip" style="font-size:24px"><svg style="width:26px;height:26px"><use href="#i-book"/></svg>Source: Meituan's public data, INFORMS TSL Research Challenge 2024 · one city, real orders</span></div>
     <div class="row" style="margin-top:56px;gap:44px">
       <div class="col reveal d3" style="width:400px">
         <div class="card ice" style="display:flex;gap:22px;align-items:center;padding:28px 30px"><div class="tile" style="background:#fff;width:84px;height:84px"><svg style="width:44px;height:44px"><use href="#i-db"/></svg></div><div><div class="stat-num mid" style="font-size:52px">546k</div><div class="stat-lbl" style="margin-top:4px">orders, after cleaning</div></div></div>
@@ -337,7 +344,6 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     <svg><use href="#i-clock"/></svg>
     <div><div class="t">The app promised</div><div class="m">51 min</div></div>
   </div>
-  <div class="foot" style="left:auto;right:120px;bottom:40px">Meituan INFORMS TSL 2024 dataset</div>
 </section>
 
 <!-- =========================================================
@@ -514,38 +520,38 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     <h2 class="reveal d2">From base to <span class="accent">extended</span></h2>
     <p class="sub reveal d3">Each step answered something we found. Validation error, minutes.</p>
     <!-- waterfall: one column per step, bar height shows the error after that step -->
-    <div class="row reveal d3" style="margin-top:30px;gap:22px;align-items:flex-end;height:490px">
+    <div class="row reveal d3" style="margin-top:22px;gap:22px;align-items:flex-end;height:500px">
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
         <div class="stat-num mid" style="font-size:44px">6.25</div>
         <div style="width:150px;height:302px;margin-top:12px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#c9dbee,#a7c7e7)"></div>
-        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">Main model</div><div class="small" style="text-align:center;font-size:21px">10 features, scored on test</div></div>
+        <div style="height:92px;margin-top:16px;text-align:center"><div class="strong" style="font-size:24px">Main model</div><div class="small" style="text-align:center;font-size:23px">10 features, scored on test</div></div>
       </div>
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-        <div class="stat-num mid" style="font-size:44px">6.20</div><div class="up" style="font-size:22px;margin-top:2px">−0.05</div>
+        <div class="stat-num mid" style="font-size:44px">6.20</div><div class="up" style="font-size:25px;margin-top:2px">−0.05</div>
         <div style="width:150px;height:275px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#8fb3dc,#6f9bd0)"></div>
-        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Free riders</div><div class="small" style="text-align:center;font-size:21px">Instructor: are riders available?</div></div>
+        <div style="height:92px;margin-top:16px;text-align:center"><div class="strong" style="font-size:24px">+ Free riders</div><div class="small" style="text-align:center;font-size:23px">The instructor's question</div></div>
       </div>
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-        <div class="stat-num mid" style="font-size:44px">5.96</div><div class="up" style="font-size:22px;margin-top:2px">−0.24</div>
+        <div class="stat-num mid" style="font-size:44px">5.96</div><div class="up" style="font-size:25px;margin-top:2px">−0.24</div>
         <div style="width:150px;height:145px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#5a8fd0,#2E6EB8)"></div>
-        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Restaurant record</div><div class="small" style="text-align:center;font-size:21px">Stages: half the wait is before pickup</div></div>
+        <div style="height:92px;margin-top:16px;text-align:center"><div class="strong" style="font-size:24px">+ Restaurant record</div><div class="small" style="text-align:center;font-size:23px">Half the wait is pre-pickup</div></div>
       </div>
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-        <div class="stat-num mid" style="font-size:44px">5.95</div><div class="up" style="font-size:22px;margin-top:2px">−0.01</div>
+        <div class="stat-num mid" style="font-size:44px">5.95</div><div class="up" style="font-size:25px;margin-top:2px">−0.01</div>
         <div style="width:150px;height:140px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#4a7fc0,#245a9a)"></div>
-        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Recent delays</div><div class="small" style="text-align:center;font-size:21px">The app beat us at lunch</div></div>
+        <div style="height:92px;margin-top:16px;text-align:center"><div class="strong" style="font-size:24px">+ Recent delays</div><div class="small" style="text-align:center;font-size:23px">The app beat us at lunch</div></div>
       </div>
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
-        <div class="stat-num mid" style="font-size:44px;color:var(--blue)">5.92</div><div class="up" style="font-size:22px;margin-top:2px">−0.03</div>
+        <div class="stat-num mid" style="font-size:44px;color:var(--blue)">5.92</div><div class="up" style="font-size:25px;margin-top:2px">−0.03</div>
         <div style="width:150px;height:123px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#2E6EB8,#102A43)"></div>
-        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Prep-estimate bias</div><div class="small" style="text-align:center;font-size:21px">Review: some restaurants always run late</div></div>
+        <div style="height:92px;margin-top:16px;text-align:center"><div class="strong" style="font-size:24px">+ Prep-estimate bias</div><div class="small" style="text-align:center;font-size:23px">Some run late every time</div></div>
       </div>
     </div>
-    <div class="small reveal d3" style="margin-top:6px;font-size:19px">Bars start at 5.7 min to show the steps.</div>
+    <div class="small reveal d3" style="margin-top:6px;font-size:21px">Bars start at 5.7 min to show the steps.</div>
     <div class="row" style="margin-top:22px">
-      <div class="card ice reveal d4" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-shield"/></svg></div><p class="small" style="font-size:22px"><b class="strong">No leakage:</b> only deliveries already finished when the order is placed</p></div>
-      <div class="card ice reveal d5" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-layers"/></svg></div><p class="small" style="font-size:22px"><b class="strong">Not the model:</b> Elastic-Net and RF gain the same; re-tuning changed nothing</p></div>
-      <div class="card ice reveal d6" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-cal"/></svg></div><p class="small" style="font-size:22px"><b class="strong">Validation days only:</b> designed after our one test run</p></div>
+      <div class="card ice reveal d4" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-shield"/></svg></div><p class="small" style="font-size:23px"><b class="strong">No leakage:</b> only deliveries already finished when the order is placed</p></div>
+      <div class="card ice reveal d5" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-layers"/></svg></div><p class="small" style="font-size:23px"><b class="strong">Not the model:</b> Elastic-Net and RF gain the same; re-tuning changed nothing</p></div>
+      <div class="card ice reveal d6" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-cal"/></svg></div><p class="small" style="font-size:23px"><b class="strong">Validation days only:</b> designed after our one test run</p></div>
     </div>
   </div>
 </section>
