@@ -184,6 +184,8 @@ table.t tr.hl td { background: var(--ice); font-weight: 700; color: var(--navy);
    CHROME OUTSIDE THE STAGE: progress, counter, notes panel, edit toggle
    =========================================== */
 .progress { position: fixed; left: 0; top: 0; height: 4px; background: var(--blue); z-index: 1000; transition: width .4s var(--ease); }
+a.link { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+a.chip.link { text-decoration: none; }
 .counter { position: fixed; right: 18px; bottom: 14px; z-index: 1000; font: 600 13px var(--font); color: #5B6B7F; background: rgba(255,255,255,.8); padding: 6px 12px; border-radius: 999px; }
 .notes { position: fixed; left: 50%; bottom: 0; transform: translate(-50%, 110%); width: min(1100px, 94vw); max-height: 42vh; overflow: auto; z-index: 1001;
   background: #102A43; color: #e9f2fa; border-radius: 18px 18px 0 0; padding: 22px 28px; font: 400 17px/1.6 var(--font); transition: transform .35s var(--ease); }
@@ -263,7 +265,8 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     <div class="reveal d4" style="font-size:23px;color:var(--charcoal);line-height:1.7">
       <b class="strong">Lynn Younes</b> 60107070 &nbsp;·&nbsp; <b class="strong">Sumaiya Rizwan</b> 60102626 &nbsp;·&nbsp; <b class="strong">Mahmoud Abdelaziz</b> 60328910
     </div>
-    <div class="small reveal d5" style="margin-top:8px">DSAI 5101 · Principles of Data Science and ML · Meituan dataset · 22 Nov 2026</div>
+    <div class="small reveal d5" style="margin-top:8px">DSAI 5101 · Principles of Data Science and ML · 22 Nov 2026</div>
+    <div class="small reveal d5" style="margin-top:6px">Dataset: <a class="link" href="https://github.com/meituan/Meituan-INFORMS-TSL-Research-Challenge" target="_blank" rel="noopener">Meituan INFORMS TSL Research Challenge (github.com/meituan)</a></div>
   </div>
   <div class="phone reveal d3" style="right:150px;top:50px"><div class="screen"><div class="notch"></div><div class="map-slot" style="width:100%;height:100%"></div></div></div>
   <div class="eta reveal d5 float" style="right:330px;top:470px">
@@ -317,7 +320,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     <div class="sec reveal d1">02<span class="sec-name">Data &amp; EDA</span></div>
     <h2 class="reveal d2">Meet order <span class="accent">#85188</span></h2>
     <p class="sub reveal d3">Sunday 23 Oct, 11:13 · lunch from a restaurant 3.2 km away</p>
-    <div class="reveal d3" style="margin-top:18px"><span class="chip" style="font-size:24px"><svg style="width:26px;height:26px"><use href="#i-book"/></svg>Source: Meituan's public data, INFORMS TSL Research Challenge 2024 · one city, real orders</span></div>
+    <div class="reveal d3" style="margin-top:18px"><a class="chip link" style="font-size:24px" href="https://github.com/meituan/Meituan-INFORMS-TSL-Research-Challenge" target="_blank" rel="noopener"><svg style="width:26px;height:26px"><use href="#i-book"/></svg>Source: Meituan's public data, INFORMS TSL Research Challenge 2024 · one city, real orders</a></div>
     <div class="row" style="margin-top:56px;gap:44px">
       <div class="col reveal d3" style="width:400px">
         <div class="card ice" style="display:flex;gap:22px;align-items:center;padding:28px 30px"><div class="tile" style="background:#fff;width:84px;height:84px"><svg style="width:44px;height:44px"><use href="#i-db"/></svg></div><div><div class="stat-num mid" style="font-size:52px">546k</div><div class="stat-lbl" style="margin-top:4px">orders, after cleaning</div></div></div>
@@ -915,8 +918,14 @@ class SlidePresentation {
     this.slides.forEach((s, k) => { s.classList.toggle('active', k === this.current); s.classList.toggle('visible', k === this.current); });
     const s = this.slides[this.current];
     this.notes.innerHTML = s.dataset.notes || '<b>No notes.</b>';
-    document.getElementById('counter').textContent = `${this.current + 1} / ${this.slides.length}`;
-    document.getElementById('progress').style.width = `${(this.current + 1) / this.slides.length * 100}%`;
+    // Main slides are numbered 1..N; the backup index and backups (appendix) are numbered on their own
+    const nMain = this.slides.indexOf(document.getElementById('backup-index'));
+    const nBackup = this.slides.length - nMain - 1;
+    let label = `${this.current + 1} / ${nMain}`;
+    if (this.current === nMain) label = 'Appendix';
+    else if (this.current > nMain) label = `Appendix B${this.current - nMain} / ${nBackup}`;
+    document.getElementById('counter').textContent = label;
+    document.getElementById('progress').style.width = `${Math.min(this.current + 1, nMain) / nMain * 100}%`;
     history.replaceState(null, '', `#/${this.current + 1}`);
   }
 }
