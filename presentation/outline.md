@@ -166,6 +166,14 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
 - Pickup and road each take a median 13.1 min; both ~2.7 min slower at peaks
 - Proposal: right on distance and peaks, wrong on load
 
+**Slide 10b · From base to extended** (40 s; slide 10's strip is now a one-line teaser, so the net cost is ~30 s)
+- Step bar chart, validation error: main model 6.25 → + free riders 6.20 (instructor: are riders
+  available?) → + restaurant record 5.96 (stages: half the wait is before pickup) → + recent delays 5.95
+  (the app beat us at lunch) → + prep-estimate bias **5.92** (Sumaiya's review)
+- Under it: no leakage (only deliveries already finished) · not the model (EN and RF gain the same,
+  re-tuning changed nothing) · validation days only (designed after the one test run)
+- Script: *"Every step answered something we found …"* (deck speaker notes, press N)
+
 **Slide 11 · Our model struggles with long trips and the lunch rush** (30 s)
 - Script: *"Lunch is our hardest hour: we're off by 7.2 minutes, not 6.5, and this is where the app's
   own estimate beats ours (6.7). It probably knows how many riders are free right now. Weekends are

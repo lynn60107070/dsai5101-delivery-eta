@@ -498,7 +498,54 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
     </div>
     <div class="card navy reveal d5" style="margin-top:64px;display:flex;gap:40px;align-items:center;padding:34px 44px">
       <div style="font-size:72px;font-weight:800;line-height:1">5.92</div>
-      <p style="font-size:26px;line-height:1.5;color:#dbe8f5">Extended model, 23 features (validation days): error 6.25 → 5.92, R² 0.51 → 0.57. Beats the app's own estimate overall, level on medium trips, behind only at lunch. Simple and complex models gain the same: it's the information.</p>
+      <p style="font-size:26px;line-height:1.5;color:#dbe8f5">Adding what the app knows in real time takes our error from 6.25 to 5.92 on the validation days, and beats the app's own estimate overall. Next: how we got there.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     SLIDE 11 · 04 FROM BASE TO EXTENDED (step-by-step waterfall)
+     Bar heights: (MAE - 5.7) / 0.6 x 330px, so the axis starts at 5.7 min (labelled on the slide).
+     ========================================================= -->
+<section class="slide" data-notes="<b>~40 s.</b> &quot;Every step answered something we found. The instructor asked whether riders were available, so we counted free riders: a small gain. Our stage analysis showed half the wait is before pickup, so we added each restaurant's track record: the biggest gain. The app beat us at lunch, so we added how late the district's last deliveries were: almost nothing. And Sumaiya noticed some restaurants always run late on their own estimate: another three hundredths. 6.25 to 5.92. Every feature uses only deliveries that had already happened, re-tuning picked the same settings, and all three model types gain the same, so it's the information, not the model. One honest caveat: this is on the validation days, because we designed these features after our one test run.&quot; Tables: B13, B14.">
+  <div class="orb soft" style="width:600px;height:600px;right:-260px;top:-300px"></div>
+  <div class="content">
+    <div class="sec reveal d1">04</div>
+    <h2 class="reveal d2">From base to <span class="accent">extended</span></h2>
+    <p class="sub reveal d3">Each step answered something we found. Validation error, minutes.</p>
+    <!-- waterfall: one column per step, bar height shows the error after that step -->
+    <div class="row reveal d3" style="margin-top:30px;gap:22px;align-items:flex-end;height:490px">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div class="stat-num mid" style="font-size:44px">6.25</div>
+        <div style="width:150px;height:302px;margin-top:12px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#c9dbee,#a7c7e7)"></div>
+        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">Main model</div><div class="small" style="text-align:center;font-size:21px">10 features, scored on test</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div class="stat-num mid" style="font-size:44px">6.20</div><div class="up" style="font-size:22px;margin-top:2px">−0.05</div>
+        <div style="width:150px;height:275px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#8fb3dc,#6f9bd0)"></div>
+        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Free riders</div><div class="small" style="text-align:center;font-size:21px">Instructor: are riders available?</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div class="stat-num mid" style="font-size:44px">5.96</div><div class="up" style="font-size:22px;margin-top:2px">−0.24</div>
+        <div style="width:150px;height:145px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#5a8fd0,#2E6EB8)"></div>
+        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Restaurant record</div><div class="small" style="text-align:center;font-size:21px">Stages: half the wait is before pickup</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div class="stat-num mid" style="font-size:44px">5.95</div><div class="up" style="font-size:22px;margin-top:2px">−0.01</div>
+        <div style="width:150px;height:140px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#4a7fc0,#245a9a)"></div>
+        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Recent delays</div><div class="small" style="text-align:center;font-size:21px">The app beat us at lunch</div></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div class="stat-num mid" style="font-size:44px;color:var(--blue)">5.92</div><div class="up" style="font-size:22px;margin-top:2px">−0.03</div>
+        <div style="width:150px;height:123px;margin-top:8px;border-radius:18px 18px 6px 6px;background:linear-gradient(180deg,#2E6EB8,#102A43)"></div>
+        <div style="height:96px;margin-top:18px;text-align:center"><div class="strong" style="font-size:24px">+ Prep-estimate bias</div><div class="small" style="text-align:center;font-size:21px">Review: some restaurants always run late</div></div>
+      </div>
+    </div>
+    <div class="small reveal d3" style="margin-top:6px;font-size:19px">Bars start at 5.7 min to show the steps.</div>
+    <div class="row" style="margin-top:22px">
+      <div class="card ice reveal d4" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-shield"/></svg></div><p class="small" style="font-size:22px"><b class="strong">No leakage:</b> only deliveries already finished when the order is placed</p></div>
+      <div class="card ice reveal d5" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-layers"/></svg></div><p class="small" style="font-size:22px"><b class="strong">Not the model:</b> Elastic-Net and RF gain the same; re-tuning changed nothing</p></div>
+      <div class="card ice reveal d6" style="flex:1;display:flex;gap:20px;align-items:center;padding:24px 28px"><div class="tile" style="background:#fff;width:80px;height:80px"><svg style="width:42px;height:42px"><use href="#i-cal"/></svg></div><p class="small" style="font-size:22px"><b class="strong">Validation days only:</b> designed after our one test run</p></div>
     </div>
   </div>
 </section>
