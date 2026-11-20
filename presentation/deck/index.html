@@ -52,6 +52,12 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
   .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
   .slide:last-child { break-after: auto; page-break-after: auto; }
   .deck-controls { display: none !important; }
+  /* print / PDF: show every animated element in its final state, hide on-screen chrome */
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .bar .fill { width: var(--w) !important; transition: none !important; }
+  .float { animation: none !important; }
+  .progress, .counter, .notes, .edit-hotzone, .edit-toggle { display: none !important; }
+  @page { size: 1920px 1080px; margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
