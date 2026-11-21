@@ -81,6 +81,46 @@ Random search on the CV folds: Elastic-Net 30 tries on all rows; boosting 20 and
 on samples (they are slow), then refitted on all rows. The error curve shows bigger trees overfit
 (511 leaves: train 2.45 vs CV 6.63).
 
+**Why these three models?**
+They're a ladder from simple to flexible, each answering a different question:
+- **Elastic-Net:** the simplest model that uses features. It's one weighted sum, so every effect reads in
+  minutes (1 km ≈ +6.1 min, lunch peak +4.8). The L1/L2 penalty handles correlated inputs like the 23
+  district columns. It answers: how far do straight-line effects get us?
+- **Random Forest:** averages many deep trees, so it picks up interactions and curves (distance matters
+  more at peaks) without much tuning, and it's robust to outliers. It answers: do non-linear effects help?
+- **Gradient boosting:** builds trees one after another, each fixing the last one's errors. It's usually
+  the strongest on tabular data, and it can optimise MAE directly (absolute-error loss). It answers: what
+  is the best we can get from these features?
+
+All three are standard for tabular regression, fast on 400k rows, and explainable, either directly or
+through permutation importance. That's why we didn't use a neural network.
+
+**Why is the app's promise a baseline? Did you make your own baseline?**
+We have two baselines, and one is our own:
+1. **Median predictor (ours).** It guesses the training median (27.8 min) for every order, so it uses no
+   features. It's the "do nothing" bar any model must beat. We use the median rather than the mean because
+   the median is the constant that minimises MAE.
+2. **The app's promise (business baseline).** It's what customers actually see and what Meituan operates on
+   today, so it's the number that matters to the business. It's in the data, so it costs nothing to compare.
+   But it's padded on purpose, so we never compare against it naively. We also compare:
+   - our estimate against the promise minus its padding (6.48, or 6.36 per distance band)
+   - our 80th-percentile model against the promise at the same average length (the promise test)
+
+**Was each step up in complexity worth it?**
+Measured on the test days, against the median baseline (9.46):
+- Median → Elastic-Net (6.80): −2.66 min. That's 90% of the total gain, from a few simple features.
+- Elastic-Net → Random Forest (6.54): −0.26 min more. Non-linearity helps a little.
+- Random Forest → boosting (6.49): −0.05 min more. Statistically real but practically nothing.
+
+So complexity pays off once, from "nothing" to a linear model, and then the returns shrink fast. That's
+our key finding: the limit is the information available at ordering, not the model. It's confirmed by the
+extension, where all three models gain the same −0.31 to −0.33 from the new features.
+
+**If they're so close, why not just use Elastic-Net?**
+For explanation, we do: its effects in minutes are in the report (Table VIII). For the headline accuracy
+we report boosting, because it's the best and costs nothing extra to run. If a platform wanted something
+simple and auditable, Elastic-Net loses only 0.31 min.
+
 **Why 16 leaves on the curve but 76 in the final model?**
 The curve changes only the number of leaves with everything else at default. The tuned model also has
 a smaller learning rate, larger minimum leaf size and strong L2 regularisation, which control
