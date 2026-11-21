@@ -14,8 +14,9 @@ Steps, in order (each one stops the run if it fails):
     7. slide figures                                                            (experiments.slide_figures)
     8. every notebook, executed top to bottom in place                          (notebooks/*.ipynb)
 
-The test days are never re-scored: their predictions were written once on 9 Nov
-(`python -m experiments.final --eval test --i-am-at-cp4`) and every step above only reads them.
+The test days were scored once on 9 Nov (`python -m experiments.final --eval test --i-am-at-cp4`) and every
+step above only reads them. Their per-order predictions contain dataset rows, so they are not committed; on a
+fresh clone step 4b rebuilds them from the frozen settings and seed 42 (the same scoring, nothing tuned on it).
 """
 
 import argparse
@@ -68,6 +69,13 @@ def main(argv=None):
         for flags in TUNING:
             step(f"3. tuning {' '.join(flags)}", [py, "-m", "experiments.tune", *flags])
     step("4. final models on the CV folds", [py, "-m", "experiments.final"])
+    if not (REPO_ROOT / "results" / "final" / "test" / "hgb" / "predictions.parquet").exists():
+        # Fresh clone: the per-order test predictions hold dataset rows, so they are not committed (licence).
+        # Rebuild them with the frozen settings and seed 42; this repeats the 9 Nov scoring, it does not tune on it.
+        print("\nTest-day predictions are not in the repo (they contain dataset rows). Rebuilding them from the "
+              "frozen settings (seed 42): the same scoring as 9 Nov, nothing is tuned on it.")
+        step("4b. final models on the test days (frozen settings)",
+             [py, "-m", "experiments.final", "--eval", "test", "--i-am-at-cp4"])
     step("5. fair comparison, day profiles, data issues", [py, "-m", "experiments.feedback"])
     step("6. extra features + explainability (CV only)", [py, "-m", "experiments.extension"])
     step("7. slide figures", [py, "-m", "experiments.slide_figures"])

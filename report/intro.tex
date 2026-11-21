@@ -18,8 +18,9 @@ We study this with the public Meituan dataset released for the INFORMS TSL data-
 challenge~\cite{zhao2024meituan} (eight days, 23 districts). Two choices define the problem. First, we predict the \emph{delivery time} (minutes from
 order placement to arrival), not the delay relative to the platform's promise; delay is used only to
 describe the data and to score promises. Second, the prediction is made \emph{at order placement}:
-anything recorded later, such as the assigned courier, dispatch and pickup times, or the platform's
-promise itself, is never a model input.
+anything recorded later, such as the assigned courier, dispatch and pickup times, is never a model
+input. The platform's promise, though shown at checkout, is also kept out, so that our estimate stays
+independent of it and can be compared with it.
 
 \medskip
 \noindent\fbox{\parbox{0.96\columnwidth}{\textbf{Research question.} At the moment an order is placed,
@@ -28,22 +29,18 @@ order-time conditions drive long deliveries?}}
 \medskip
 
 We set two success criteria before modelling. The technical one is a test-set mean absolute error (MAE)
-at least 20\% below a median predictor, with a confidence interval that excludes zero. The business one
+at least 20\% below a median predictor, with a bootstrap interval that excludes zero. The business one
 is that an 80th-percentile model, used as a promise, is late less often than the platform when both
 promise the same average time.
 
 \textbf{Contributions.}
 \begin{itemize}
-  \item A leakage-safe, time-split comparison of three model families (Elastic-Net, Random Forest,
-        gradient boosting) against two baselines, with paired bootstrap intervals; the best model cuts
-        test MAE by 31\% against the median predictor and matches the platform's own estimate once the
-        padding is removed from its promise.
-  \item An extension with real-time rider availability and restaurant history, computed only from
-        deliveries completed before each order, which lowers the cross-validated MAE by a further 0.33
-        minutes and beats the platform's de-padded promise on the validation days.
-  \item A ranking of order-time delay drivers by grouped permutation importance, an analysis of where
-        the model fails (district, hour, distance, day), and a leakage audit that measures how much of the
-        remaining error is information that does not exist at ordering.
-  \item A promise-setting test against the platform at the same mean promised time, which shows that
-        better delivery-time estimates do not by themselves give fewer late orders.
+  \item A leakage-safe, time-split comparison of three model families against two baselines: test MAE
+        31\% below the median predictor, level with the platform's de-padded estimate.
+  \item Real-time features (rider availability, restaurant history and three others) that lower the
+        cross-validated MAE by a further 0.33 minutes.
+  \item A ranking of delay drivers, an analysis of where the model fails, and a leakage audit of the
+        information that does not exist at ordering.
+  \item A promise test at equal mean promised time: better estimates alone do not give fewer late
+        orders.
 \end{itemize}

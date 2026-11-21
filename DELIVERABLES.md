@@ -10,6 +10,15 @@ Sources: `requirements_rubric/DSAI5101_Project_Info.pdf` and the three rubric PD
 - [x] Project proposal (5%), submitted 28 Sep 2026: `proposal/DSAI5101_ProjectProposal.pdf`. **Approved, 90/100**
 - [x] Feedback mapped to actions: [ALIGNMENT.md §2](ALIGNMENT.md) (FB1–FB4). FB3 is fixed in code. FB1, FB2 and FB4 are carried by the report rows below
 
+## Tonight: Sat 21 Nov (before Sunday's talk)
+- [x] Deck: move the Houston bag-wait slide out of the main talk into the appendix (now **B24**);
+      references renumbered, speaker notes updated, `presentation/slides.pdf` re-exported. Lynn's section is
+      now slides 11–17
+- [x] Repo: `lynn60107070/dsai5101-delivery-eta` is **public** (21 Nov)
+- [ ] Report: compile the updated `report/*.tex` on Overleaf; check the body still ends on page 6
+- [ ] Q&A: everyone reads `presentation/qa_prep.md` §9 (the five hardest questions)
+- [ ] Commit and push the report, figure, deck and Q&A changes
+
 ## 1. Presentation & Q&A: 10% · **Sun 22 Nov** · 10 min talk + 10–15 min Q&A (instructor + classmates, who get bonus marks for questions)
 
 | Deliverable | Rubric row (marks) | Owner | Due |

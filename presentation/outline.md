@@ -158,7 +158,7 @@ slide 6 (EDA, all days) and slide 10's drivers (CV). Figures: 300-dpi PNGs in `f
   how many riders are free: when more than three orders wait per free rider, the median delivery takes
   36 minutes instead of 26. Add that and each restaurant's track record, and our error drops another
   0.3 minutes."*
-- `figures/results/delay_drivers`: distance +3.10 ≫ time +0.86 ≈ district +0.83 > prep +0.67 > load +0.19
+- `figures/results/delay_drivers`: distance +3.10 ≫ time +0.85 ≈ district +0.84 > prep +0.68 > load +0.20
 - Extension (CV only, test untouched): riders + restaurant history + recent district delays + restaurant
   queue, CV MAE 6.25 → 5.92 (CI −0.34 to −0.32), R² 0.51 → 0.57; restaurant history −0.24, riders −0.05,
   prep bias (Sumaiya) −0.03, the rest −0.01. **Beats the app's de-padded promise on the validation days: overall 5.92 vs 6.24, better in

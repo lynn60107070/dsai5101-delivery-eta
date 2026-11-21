@@ -10,37 +10,23 @@
 
 \textbf{Answer to the research question.} Using only information known when an order is placed,
 gradient boosting predicts delivery time with an MAE of 6.49 minutes on unseen days: 31\% better than
-a median predictor, which meets our 20\% target. It is 3.1 minutes closer than the platform's promise,
-but that gap is the promise's padding: with its average padding removed, the promise is as accurate as
-our model (6.48 vs 6.49), and with the padding removed per distance band slightly better (6.36). Our
-model is still more accurate on trips under 1~km and over 3~km (37\% of orders), the platform on
-medium trips and at the lunch peak. Base order-time data therefore reach the platform's own level, not
-beyond it. The
-three model families end within 0.3 minutes of each other, so the limit is the information available
-at ordering, not the choice of model. The leakage audit confirms this: adding the after-order dispatch,
-acceptance and pickup times lowers the cross-validated MAE from 6.25 to 4.53 minutes ($R^2$ 0.51 to 0.72),
-almost all of it from the pickup time, which no order-time model can know. Neither stage of the
-delivery dominates: getting the food picked up and riding it to the customer each take a median 13.1
-minutes, and both run about 2.7 minutes longer at meal peaks. Distance drives delivery time far more than anything else,
-followed by time of day, district and preparation time. Our proposal expected recent district load to
-be a top driver; it was the weakest. Information the platform has in real time helps: each restaurant's
-past delivery times and the number of orders waiting per available rider lower the cross-validated MAE
-from 6.25 to 5.92 minutes on the validation days, more accurate than the platform's de-padded promise
-overall, level on medium trips and behind only at the lunch peak. They help simple and complex models
-alike, yet close only a fifth of the gap to a model that sees after-order times. The business criterion was not met: at the same average promised
-time, our 80th-percentile promises are late slightly more often than the platform's. Better estimates
-are therefore not automatically better promises, since the platform can still react after an order is
-placed.
+a median predictor, which meets our 20\% target. With its padding removed, the platform's promise is as
+accurate as our model or slightly better (6.36--6.48), so base order-time data reach the platform's own
+level, not beyond it. The three model families end within about 0.3 minutes of each other, so the limit
+is the information available at ordering, not the choice of model. Distance drives delivery time far
+more than anything else; recent district load, which our proposal expected to be a top driver, was the
+weakest. Information the platform has in real time lowers the cross-validated MAE from 6.25 to 5.92
+minutes, yet closes only a fifth of the gap to a model that sees after-order times. The business
+criterion was not met: at the same average promised time, our 80th-percentile promises are late slightly
+more often than the platform's, which can still react after an order is placed and whose promise shaped
+the outcomes we score.
 
 \textbf{Limitations.} The data cover eight days, with a single weekend day for training, so weekend
-effects could not be modelled; weekends run 1--3.5 minutes slower in the afternoon, and the Sunday test
-day was indeed harder than the Monday (MAE 6.77 vs 6.17). The same weekday a week apart is almost
-identical, so we see no drift within the week, but eight days cannot show longer-term drift. Weather and
-traffic are not in the dataset, rider availability can only be approximated from past deliveries, and
-coordinates are shifted for privacy, so distances are approximate. The split follows the dataset's day
-field, which is the local arrival date: 140 late-evening orders carry the next day's date, and 16 test
-orders were placed before the last training order. The extra features were evaluated on
-the validation folds only, to keep the test days scored once. All results come from one platform in one city, over
+effects could not be modelled; the Sunday test day was indeed harder than the Monday (MAE 6.77 vs 6.17),
+and eight days cannot show longer-term drift. Weather and traffic are not in the dataset, rider
+availability can only be approximated from past deliveries, and coordinates are shifted for privacy, so
+distances are approximate. The split follows the dataset's day field, the local arrival date, so 16 test
+orders were placed before the last training order. All results come from one platform in one city, over
 one week.
 
 \textbf{Ethics.} Errors are not spread evenly: test MAE ranges from 4.4 to 9.0 minutes across districts,
@@ -49,8 +35,7 @@ risk between groups: shorter promises put pressure on couriers to ride faster, w
 shift the cost of uncertainty to customers. A deployed system should report errors by district and be
 judged on courier workload as well as late rate.
 
-\textbf{Future work.} (1) Freeze the extended feature set and confirm its cross-validated gain on new,
-unseen days, then add recent delays in the district and order size. (2) Combine the estimate with post-order updates, which is
+\textbf{Future work.} (1) Confirm the extended features' cross-validated gain on new, unseen days, then
+add weather and order size. (2) Combine the estimate with post-order updates, which is
 where the platform's advantage appears to come from. (3) Before deployment, test on several weeks to
-measure drift, retrain on a schedule, and monitor input distributions (distance, load, missing
-preparation estimates) for change.
+measure drift, retrain on a schedule, and monitor input distributions for change.

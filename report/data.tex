@@ -50,31 +50,21 @@ them loses no order.
 
 \textbf{Hidden missing values.} The file has no empty cells, but a timestamp of 0 means ``not recorded'':
 one order has no arrival time (dropped, since it has no target) and 9{,}874 accepted orders have no prep
-estimate (7{,}439 of them in the modelling table). A second missing code hides in the prep column:
+estimate. A second missing code hides in the prep column:
 13.8\% of the modelling orders have an ``estimate'' less than 5 minutes after the order, and 74\% of these
 equal, to the second, the moment the order entered the dispatch system, so they are system defaults, not
 forecasts. Flagging them is safe: the default is written within seconds of the order and before any
 dispatch (none equals the dispatch time). Both codes are set to missing (82{,}800 modelling orders),
 filled with the training median inside each model, and kept as two flags, because these orders are about
-2--5 minutes slower than orders with a real estimate at the same distance (shown in the distance figure
-below).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{delivery_time_by_prebook}
-\caption{Pre-booked orders follow the slot the customer picked, not the delivery (all days, before
-cleaning), and hold almost every delivery over 180 minutes, so they are excluded.}
-\label{fig:prebook}
-\end{figure}
+2--5 minutes slower than orders with a real estimate at the same distance (Fig.~\ref{fig:distance}).
 
 \textbf{Outliers.} Following the usual outlier triage (error, rare but real, or a different population),
-pre-booked orders are a different population (Fig.~\ref{fig:prebook}): their clock runs to a slot the
+pre-booked orders are a different population (Fig.~\ref{fig:prebook} in the appendix): their clock runs to a slot the
 customer chose (median 80 minutes against 28), and they hold 4{,}073 of the 4{,}097 deliveries over three
 hours. Mixing them into training raises the boosting model's validation MAE on normal orders from 6.28
 to 6.76 minutes, even keeping only those under three hours, so they are excluded. The IQR and $z$-score
-rules would flag 8{,}097 and 3{,}879 ordinary long deliveries on this skewed target, so we keep them; only
-24 normal orders take over 180 minutes (99.9\% take under 86), and we remove those as implausible (7 of
-them on the test days).
+rules would flag thousands of ordinary long deliveries on this skewed target, so we keep them; only
+24 normal orders take over 180 minutes (99.9\% take under 86), and we remove those as implausible.
 
 \textbf{Encoding.} Districts are one-hot encoded; restaurant ID is left out because 1{,}229 of its
 4{,}962 levels have fewer than 10 orders (see the Methodology).
@@ -84,10 +74,8 @@ the acceptance flag and the dispatch, acceptance and pickup times are all writte
 out of every model and used only to measure what they would add (Section~\ref{sec:leakage}). Every step
 that learns from data, such as the median used for imputation, is fitted on the training folds alone.
 
-\textbf{What we did not find.} There are no duplicate rows (each accepted order appears once), no
-timestamp-order violations in seven checks (placed, dispatched, accepted, picked up, arrived, and no
-estimate before the order), no coordinates outside the city's area and no constant columns. These rules
-therefore cover every problem the audit found.
+\textbf{What we did not find.} No timestamp-order violations in seven checks, no coordinates outside
+the city's area and no constant columns.
 
 \subsection{Exploratory findings that shaped the modelling}
 All findings below use the training days only, so the test days stay unseen.
@@ -105,8 +93,8 @@ and the two missing-estimate flags.}
 to 3~km, where 93\% of orders fall (30\% under 1~km, 63\% at 1--3~km, 7\% beyond), and about 5.2 per
 kilometre beyond (Spearman $\rho = 0.55$;
 Fig.~\ref{fig:distance}). The spread grows too: the 20th--80th percentile gap widens from 13 to 24
-minutes. We checked for a Simpson reversal by repeating this within each district: the slope stays
-positive in all 23, between 4.9 and 7.7 minutes per kilometre. Distance explains about two-thirds of the
+minutes. Within each district the slope stays positive (4.9 to 7.7 minutes per kilometre), so there
+is no Simpson reversal. Distance explains about two-thirds of the
 variance between district medians, but not all of it: districts 18 and 6 are still 6.2 and 5.5 minutes
 faster than the typical order of the same distance. This is why the model uses both distance and
 district.
@@ -117,23 +105,12 @@ only ones above the overall median, and became the lunch and dinner peak flags.
 
 \textbf{Load matters less than it looks.} Recent district load correlates with delivery time
 ($\rho = 0.30$) mostly because big districts and meal peaks are busy and slow; within the same district
-and hour it is only 0.09. We measure load relative to the district's usual level, so big districts do
-not look busy just for being big, and expect it to be a weak driver.
+and hour it is only 0.09. We therefore measure it relative to the district's usual level, and expect it
+to be a weak driver.
 
 \textbf{The promise is padded.} 35\% of promises sit at a 30-minute minimum, and the median order
-arrives 8.3 minutes early, yet 14.7\% arrive late (Fig.~\ref{fig:promise_padding}). The number of
+arrives 8.3 minutes early, yet 14.7\% arrive late (Fig.~\ref{fig:promise_padding} in the appendix). The number of
 orders arriving late more than halves at exactly eight minutes late (798 orders in the 15~seconds
 before, 336 in the 15~seconds after), at every promise level, which suggests an operational rule
 applied after ordering. Because the promise is padded, beating it on MAE says little about it as a
 promise; the Results also compare promises at the same average length.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{promise_padding}
-\caption{Actual minus promised delivery time (training days): most orders arrive early, and arrivals
-drop sharply at +8 minutes, so promises are also compared at equal average length.}
-\label{fig:promise_padding}
-\end{figure}
-
-\textbf{Two smaller decisions.} The log target removes most of the skew (0.89 to $-0.31$) and the
-weekend sits on both sides of the split; the Methodology explains why neither is used.

@@ -1,34 +1,62 @@
 % Supplementary tables and figures (not counted in the 6-page limit: the guidelines exclude appendices).
-% Moved here from the main sections on 16 Nov; every one is referenced from the main text.
+% Moved here from the main sections on 16 Nov (and 21 Nov, to fit 6 pages); every one is referenced from the
+% main text.
 \section{Supplementary results}
 \label{app:supplementary}
 These tables and figures support the main text; each is referred to from the section that discusses it.
 
-\input{tables/benchmark}
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{delivery_time_by_prebook}
+\caption{Pre-booked orders follow the slot the customer picked, not the delivery (all days, before
+cleaning), and hold almost every delivery over 180 minutes, so they are excluded.}
+\label{fig:prebook}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{promise_padding}
+\caption{Actual minus promised delivery time (training days): most orders arrive early, and arrivals
+drop sharply at +8 minutes, so promises are also compared at equal average length.}
+\label{fig:promise_padding}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{leakage_audit}
+\caption{Cross-validated MAE of the gradient-boosting model when after-order times are added (training
+days). The pickup time alone gives almost all of the gain, but it is not known when we predict.}
+\label{fig:leakage}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{final_test_gap}
+\caption{Late-rate gap (our q80 promises minus the platform's, percentage points) as both are shifted to
+the same mean promised time; below 0 means we are late less often. Dotted line: the platform's actual
+mean promise. Test days.}
+\label{fig:promise_gap}
+\end{figure}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{hgb_complexity_curve}
 \caption{Training vs cross-validation MAE for gradient boosting as the number of leaves per tree grows
-(other settings at their defaults; bars: spread over the four folds). Validation error is lowest around
-16 leaves; at 511 leaves training error is 2.45 minutes but validation error 6.63, a clear sign of
-overfitting.}
+(other settings fixed: 300 trees, learning rate 0.1, min.\ leaf 5; bars: spread over the four folds).
+Validation error is lowest around 16 leaves; at 511 leaves training error is 2.45 minutes but validation
+error 6.63, a clear sign of overfitting. The final model (Table~\ref{tab:models}) uses 76 leaves with a
+lower learning rate, larger leaves and strong L2, which hold this overfitting back.}
 \label{fig:complexity}
 \end{figure}
-
-\input{tables/elasticnet_effects}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{day_profiles}
 \caption{Median delivery time by hour for every day (left: weekdays in blue, Saturday and Sunday in black)
-and for the two Mondays a week apart (right). Shaded hours have under 2\% of orders.}
+and for the two Mondays a week apart (right). Shaded hours have under 2\% of orders. Includes the test
+days; drawn after the test run.}
 \label{fig:days}
 \end{figure}
-
-\input{tables/extension_models}
-
-\input{tables/extension_vs_platform}
 
 \begin{figure}[!htbp]
 \centering
@@ -46,3 +74,17 @@ training days): the average prediction for \num{5000} training orders when one i
 and the rest are kept. Distance is shown up to its 99th percentile.}
 \label{fig:pd}
 \end{figure}
+
+\input{tables/depadded_test}
+
+\input{tables/extension_cv}
+
+\input{tables/promise_test_test}
+
+\input{tables/benchmark}
+
+\input{tables/elasticnet_effects}
+
+\input{tables/extension_models}
+
+\input{tables/extension_vs_platform}

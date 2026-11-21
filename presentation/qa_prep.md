@@ -37,7 +37,7 @@ orders (22,181) are a different population: their time follows the slot the cust
 hold 4,073 of the 4,097 deliveries over 3 h. 24 more implausible durations removed → 546,340 orders.
 
 **Why not just drop rows with a missing prep estimate?**
-They are not missing at random: those orders are longer trips, and still 2–4 min slower at the same
+They are not missing at random: those orders are longer trips, and still 2–5 min slower at the same
 distance. Dropping them would bias the model, so we impute (inside the pipeline) and add a flag.
 
 **What is the "prep default" thing?**
@@ -58,8 +58,10 @@ No. All settings were frozen first, then `final.py` scored all five models on th
 
 **Why did you drop the weekend feature?**
 Only one training day (Sat 22) is a weekend and the first three CV folds have none, so its effect can't
-be learned or validated. With it, Elastic-Net's Saturday-fold error jumped from 6.8 to 18.0 min. We state
-weekend as a limitation instead.
+be learned or validated. The only fold that could test it trains on just 14 "weekend" rows (Sunday orders
+that arrived after midnight). That's also why Elastic-Net's Saturday-fold error jumped from 6.8 to 18.0
+min: scaling a near-constant column blew up the linear model. That jump is a symptom, not the reason. We
+state weekend as a limitation instead; its cost is the Sunday under-prediction (2.1 min).
 
 **How is time of day encoded?**
 Sine and cosine of the minute of the day, so 23:59 and 00:00 are neighbours (proposal feedback 3), plus
@@ -103,7 +105,7 @@ unbiased estimate. That's why we also compare promises fairly in the promise tes
 
 **What drives long deliveries?**
 Grouped permutation importance (CV): distance +3.10 min MAE when shuffled, far ahead of time of day
-(+0.86), district (+0.83), prep estimate (+0.67) and load (+0.19). The proposal was right on distance and
+(+0.85), district (+0.84), prep estimate (+0.68) and load (+0.20). The proposal was right on distance and
 peaks, wrong on load.
 
 **Where does the model do worst?**
@@ -111,8 +113,8 @@ Long trips (over 7 km: MAE 14.4), the lunch peak (11:00: 7.2), some districts (4
 Sunday test day (6.77 vs 6.17 on Monday).
 
 **Does the model generalise?**
-Every model is about 0.2 min worse on test than in CV, with the same ranking, so no sign of overfitting
-to the validation folds.
+Monday (6.17) sits inside the CV fold range (5.99–6.44); Sunday (6.77) is the outlier, because training
+had one weekend day. The model ranking is the same on test and CV.
 
 ## 5. Promise test [Lynn]
 
@@ -147,7 +149,7 @@ Depends on how fair you are to the app. Against the promise as shown we're 3.1 m
 9.62), but that's its padding. Take off its average padding (8.2 min, measured on the training days
 only) and it ties with us: 6.48 vs 6.49, CI −0.01 to +0.04. Take off each distance band's own padding
 (fairer to the app) and it's slightly better, 6.36. Even then we're better under 1 km (5.61 vs 5.86) and
-over 3 km (8.73 vs 9.94), 37% of orders; the app is better on 1–3 km trips (63%) and at lunch (6.68 vs
+over 3 km (8.73 vs 9.94), 38% of orders; the app is better on 1–3 km trips (63%) and at lunch (6.68 vs
 7.22). With the real-time features (riders, restaurant history), our model beats the app's own estimate
 on the validation days: 5.92 vs 6.24, better in 5 of 7 segments, level on medium trips, but still not at lunch. Padded vs padded is
 the promise test: we win only for shorter promises (average below ~37 min); at the app's own average it
@@ -175,8 +177,8 @@ No: it sits at the median of the 634 Sunday 11:xx orders 3–5 km away (actual 4
 prediction 45.2). In that group we're off by 8.4 min on average and the app by 11.0. Our 80th-percentile
 promise for it would have been about 53 min before the +2.7 shift, longer than the app's 51: at the
 lunch peak our model is more cautious, which fits the promise-test result. Honest note: the de-padded
-promise for this order (51 − 8.2 = 42.8) was even closer than ours to the actual 43, which is the tie on
-slide 9 in one order.
+promise for this order (51 − 8.2 = 42.8) was even closer than ours to the actual 43, which is the tie on the
+Results slide in one order.
 
 **Then what is your model useful for?**
 An estimate as good as the platform's own from public order-time data alone, built and checked openly;
@@ -187,8 +189,8 @@ for promises that are then updated after dispatch (future work).
 
 **Do weekends behave differently? Do you need a weekday feature?**
 Same daily shape (hourly medians correlate at 0.92), but weekends run 1–3.5 min slower from noon to
-18:00. With one weekend day in training we can't learn or validate that (the `is_weekend` flag blew up
-fold 4), so it stays a limitation; the Sunday test day was our hardest (6.77, predicted 2.1 min too
+18:00. With one weekend day in training we can't learn or validate that (fold 4 trains on only 14
+"weekend" rows), so it stays a limitation; the Sunday test day was our hardest (6.77, predicted 2.1 min too
 short). With more weeks, a day-of-week feature would be the first thing to add. (B14)
 
 **Is the pattern drifting over time?**
@@ -285,8 +287,9 @@ days are never re-scored: their predictions were written once.
 "we didn't test that, but we'd expect…" is a good answer. Never guess a number: say where it is.
 
 **Two test days, one of them a Sunday: is that enough to trust the result?**
-It's 139,787 orders, so the intervals are tight (±0.03 min). Every model was ~0.2 min worse on test than
-in CV with the same ranking, so nothing broke. What two days can't show is drift over weeks or
+It's 139,787 orders, but they're two days, so the real uncertainty is day to day, not order to order
+(see the first question in section 9). Monday (6.17) sits inside the CV fold range (5.99–6.44) and
+Sunday (6.77) is the outlier, with the same model ranking, so nothing broke. What two days can't show is drift over weeks or
 seasons; that's a stated limitation, and deployment would need monitoring and retraining.
 
 **Your extended model was never tested on the test days. How do you know it's not overfit?**
@@ -346,8 +349,8 @@ not created by mixing districts.
 
 **Permutation importance is unreliable with correlated features.**
 That's why we shuffle related features *as groups* (all time features together, etc.). We also checked the
-interaction: time and load shuffled together cost 1.43 min vs 1.05 separately. And two other methods,
-Elastic-Net effects and partial dependence, give the same ranking.
+interaction: time and load shuffled together cost 1.44 min vs 1.05 separately. And two other methods,
+Elastic-Net effects and partial dependence, give a consistent picture (distance first, load weak).
 
 **Why is load weak, when busy obviously means slow?**
 Raw load mostly measures district size and hour: within the same district and hour the correlation is
@@ -379,8 +382,7 @@ min), so some areas get worse estimates. We'd judge any deployment on rider work
 
 **Why not just use the app's promise as an input, like Uber corrects its routing ETA?**
 It would probably win, but it changes the question from "what can be predicted from the order itself?" to
-"how do we adjust Meituan's number?", and the model would partly learn Meituan's padding rule. Our proposal
-feedback asked us not to model the platform's delay, so we kept it out.
+"how do we adjust Meituan's number?", and the model would partly learn Meituan's padding rule. It's a design choice: see §9 Q2.
 
 **What surprised you most?**
 The 8-minute cliff: late arrivals more than halve exactly 8 minutes after the promise, at every promise
@@ -390,3 +392,62 @@ test.
 **If you had another week?**
 Confirm the extended model on fresh days, add a day-of-week feature with more weekends, and try combining
 our estimate with the app's after-order updates.
+
+## 9. The five hardest questions from the report review (21 Nov) [everyone should know these]
+
+From a mock harsh-instructor review of the 21 Nov report. These target its weakest points, so expect them.
+
+**1. "Your intervals are ±0.03 on 140k orders. Are those orders independent? What's the real uncertainty?"**
+No, they aren't independent: orders share days, districts, hours, couriers and restaurants. The bootstrap
+resamples orders, so it only shows order-level noise on those days (the report now says so). The honest
+view is per day:
+- Boosting beats Random Forest on 5 of 6 held-out days (CV: −0.09, −0.09, −0.05, −0.04).
+- It ties on Sunday (0.00) and wins on Monday (−0.10).
+- Day-to-day variation (Sunday 6.77 vs Monday 6.17) is far bigger than any model gap.
+
+So the claim is: boosting ≈ Random Forest, and both clearly beat the median, by 30% on Sunday and 33% on Monday.
+
+**2. "The promise is shown at checkout. Why isn't it an input, when the platform's prep estimate is?"**
+It's a choice, not leakage. We kept the promise out so our estimate stays independent of it and can be
+compared with it. Feeding it in would mostly copy the platform's own internal estimate, which defeats
+the question of what public order-time data can do. Combining the two would probably beat both on MAE,
+and that's fair future work.
+
+**3. "Why did you drop the weekend flag? A jump from 6.8 to 18 minutes looks like a bug."**
+Admit it: the jump was a symptom, not the reason.
+- In the fold that validates on Saturday, the training days hold only 14 "weekend" rows (Sunday orders
+  that arrived after midnight).
+- Scaling that near-constant column blew up the linear model.
+- The real reason is that there's one weekend day in training and only one fold that could test it.
+- The cost shows on Sunday: predicted 2.1 min too short, MAE 6.77.
+- With more weeks, a day-of-week feature is the first thing to add.
+
+**4. "Your q80 promise loses to the platform. Is that a fair test?"**
+Not fully, and the report says so. The actual delivery times were produced by a dispatcher working to
+the platform's own promise; the cliff at exactly +8 min late shows it acting after the order. So any
+other promise is judged on the platform's turf. Unshifted, our q80 model also covers only 76.6% of test
+orders, not 80%, mostly because Sunday ran slow. With average promises under about 37 minutes, our
+model is late less often at the 0-minute threshold.
+
+**5. "The extension was designed after the test run and scored on the folds you tuned on. How much of the
+0.33 is real?"**
+- Every extension feature uses only deliveries finished before the order.
+- The hyperparameters stayed frozen, and re-tuning picked the same settings.
+- Elastic-Net, Random Forest and boosting all gain the same (−0.33, −0.31, −0.33), so it's the
+  information in the features, not extra model capacity.
+- We deliberately didn't re-score the test days.
+
+The honest claim: "better on validation days, to be confirmed on new days", which is future work (1).
+
+**"Is the prep estimate really known when the order is placed?"**
+The file doesn't timestamp it, so we assume it is (the report says so). The placeholder defaults are
+written within seconds of the order and none equals the dispatch time. If real estimates were set later,
+prep's +0.68 importance would be optimistic.
+
+**"Your target is skewed. Did you try a log transform?"**
+Yes. On CV the raw target beat the log one (Elastic-Net 6.59 vs 6.73), and since we report MAE, which
+targets the median, the skew matters less.
+
+**"Why 6.24 on the drivers slide but 6.25 everywhere else?"**
+6.24 is the average of the four fold MAEs; 6.25 is pooled over all CV orders. Same model, two ways of
+averaging.

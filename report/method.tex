@@ -7,7 +7,7 @@
 \section{Methodology}
 
 The pipeline has six steps, implemented in Python with pandas~\cite{mckinney2010pandas},
-NumPy~\cite{harris2020numpy} and scikit-learn. All code, a fixed seed (42) and pinned library versions
+NumPy~\cite{harris2020numpy}, scikit-learn and Matplotlib~\cite{hunter2007matplotlib}. All code, a fixed seed (42) and pinned library versions
 are in the repository, and one command (\texttt{python -m experiments.reproduce}) runs the tests, rebuilds
 every result, table and figure, and re-executes every notebook.
 
@@ -16,8 +16,7 @@ every result, table and figure, and re-executes every notebook.
 the moment the order is placed? The model uses:
 \begin{itemize}
   \item \emph{Distance}: Haversine distance between restaurant and customer. A Manhattan distance gave
-        the same cross-validated MAE (difference $-0.002$ min, 95\% CI $[-0.007, +0.003]$), so we kept
-        the simpler one.
+        the same cross-validated MAE, so we kept the simpler one.
   \item \emph{Time of day}: sine and cosine of the minute of the day, so that 23:59 and 00:00 are
         neighbours, plus flags for the lunch (11:00) and dinner (17:00--19:59) peaks found in the EDA.
   \item \emph{Preparation}: the platform's estimated meal-ready time, with a flag when it is missing or
@@ -26,8 +25,7 @@ the moment the order is placed? The model uses:
         that district's usual 15-minute count over the previous 24 hours. It counts only strictly earlier
         orders (pre-bookings included, at the time they were booked), and is flagged as missing for the
         first 24 hours of data, which have no full day of history. Of four load definitions compared in
-        cross-validation, this relative one was best (against the raw count: Elastic-Net $-0.021$,
-        boosting $-0.009$ minutes).
+        cross-validation, this relative one was best.
   \item \emph{District}: one-hot encoded (23 levels).
 \end{itemize}
 In total the model uses ten engineered numeric features plus the district, 33 inputs after one-hot
@@ -35,11 +33,10 @@ encoding; none is a raw column used as it is.
 Three candidates were excluded. The courier is assigned after ordering (leakage). Restaurant identity
 has 4{,}962 levels, so the extension uses the restaurant's past delivery and pickup times instead. The
 weekend flag was dropped because the training days contain one weekend day and the first three
-validation folds none, so its effect cannot be learned or validated; with it, Elastic-Net's error on the
-Saturday fold rose from 6.8 to 18.0 minutes. After the test run, an extension adds 13 real-time features
-(rider availability, restaurant history, recent district delays, the restaurant's pickup queue and its
-prep-estimate bias), each computed only from deliveries completed before the order, for 23 features and
-46 inputs in total; it is evaluated on the validation folds only (Section~\ref{sec:extension}).
+validation folds none, so its effect cannot be learned or validated: the only fold that could test it
+trains on 14 ``weekend'' rows (Sunday orders arriving after midnight). The cost is the Sunday
+under-prediction in Section~\ref{sec:fails}. After the test run, an extension adds 13 real-time features
+(Section~\ref{sec:extension}).
 
 \textbf{Step 2: preprocessing inside the model.} Median imputation, scaling (Elastic-Net only) and
 one-hot encoding are part of each model's scikit-learn pipeline~\cite{pedregosa2011scikit}, so they are
@@ -55,11 +52,11 @@ Step~6.
 
 \textbf{Step 4: three model families}, from interpretable to flexible: Elastic-Net linear regression
 (effects readable in minutes), Random Forest~\cite{breiman2001random} and histogram gradient
-boosting~\cite{friedman2001greedy}. Table~\ref{tab:models} lists their final settings. A raw target
+boosting~\cite{friedman2001greedy,ke2017lightgbm}. Table~\ref{tab:models} lists their final settings. A raw target
 beat a log-transformed one in cross-validation (Elastic-Net MAE 6.59 vs 6.73), so all models predict
 minutes directly. Since we report MAE, the boosting search included the absolute-error loss, and the
-best setting used it. LightGBM with the same settings gave the same cross-validated MAE (6.247 vs 6.251),
-so we kept scikit-learn's implementation, which installs on every platform without extra libraries.
+best setting used it. LightGBM gave the same cross-validated MAE (6.247 vs 6.251),
+so we kept scikit-learn's.
 
 \begin{table}[t]
 \centering
@@ -86,14 +83,14 @@ final test. Within development we use forward-chaining cross-validation: four fo
 all earlier days and validated on the next one (fit on 17--18, validate on 19; \ldots; fit on 17--21,
 validate on 22). This mirrors deployment, where the model only ever sees the past. Hyperparameters were
 chosen by random search on these folds (Table~\ref{tab:models}); the slower tree models were tuned on a
-random sample of rows and then refitted on all of them. Fig.~\ref{fig:complexity} (appendix) shows why tuning
-matters: as trees grow, training error keeps falling while validation error rises. All settings were
+random sample of rows and then refitted on all of them. All settings were
 frozen before the test days were scored, once, with every model refitted on all six development days.
 \textbf{Step 6: metrics and comparisons.}
 \begin{itemize}
   \item \emph{Accuracy}: MAE in minutes (primary, easy to explain to operations), RMSE and $R^2$.
   \item \emph{Significance}: paired bootstrap 95\% intervals (2{,}000 resamples of test orders) for every
-        difference in MAE, so that small gaps are not over-read.
+        difference in MAE, so that small gaps are not over-read. They resample orders, so they reflect
+        order-level noise on these days, not day-to-day variation; we also report results per day.
   \item \emph{Drivers}: grouped permutation importance~\cite{breiman2001random} on the validation folds,
         shuffling related features together (distance, time of day, district, preparation, load) and
         measuring the increase in MAE.

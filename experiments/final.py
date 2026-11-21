@@ -98,7 +98,9 @@ def main_results_latex(table: pd.DataFrame, eval_name: str) -> str:
     lines = [r"\begin{table*}[t]", r"\centering",
              r"\caption{Delivery-time prediction on the " + ("test days (23--24 Oct)" if eval_name == "test" else
                                                              "forward-chaining CV folds (17--22 Oct)") +
-             r". $\Delta$MAE in minutes with 95\% paired bootstrap intervals; negative = lower error.}",
+             r". $\Delta$MAE in minutes with 95\% paired bootstrap intervals; negative = lower error."
+             r" Late $>$5 min: arrival more than 5 minutes after the promise (platform) or after the"
+             r" model's estimate (other rows).}",
              r"\label{tab:main_results" + ("" if eval_name == "test" else "_cv") + "}",
              r"\begin{tabular}{lrrrrll}", r"\toprule",
              r"Model & MAE & RMSE & $R^2$ & Late $>$5 min & $\Delta$MAE vs median & $\Delta$MAE vs promise \\",
