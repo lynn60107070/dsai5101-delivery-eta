@@ -1,0 +1,1 @@
+Houston didn't make the bags faster, it changed the wait. Since we started talking, about 500 people in one city were given a promise. We can make that number more accurate. What we learned is that a good promise needs more than an accurate number. Thank you.

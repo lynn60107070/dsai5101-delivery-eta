@@ -1,0 +1,1 @@
+On the test days, error ranges from 4.4 to 9 minutes across the 23 districts. The same model is about twice as wrong in some districts as in others, which is the ethics point on slide 13. The figure shown is the cross-validation version.

@@ -1,0 +1,74 @@
+{
+  "primary_language": "en",
+  "canvas": "ppt169",
+  "audience": "DSAI 5101 instructor grading against the Part A rubric, plus master's classmates who know ML basics but not this dataset or delivery platforms",
+  "communication_intent": "Explain how accurately delivery time can be predicted at order time and what drives long deliveries, then persuade that a better estimate is not automatically a better promise; follow one real order (#85188) through the whole talk",
+  "audience_outcome": "The audience can state the research question, trust the leakage-free time-split evaluation, remember MAE 6.5 min (3.1 closer than the app) and distance as the main driver, and understand why the app still makes better promises",
+  "core_message": "At ordering, delivery time can be predicted to about 6.5 minutes and distance drives it, but a good promise needs more than an accurate number, and every minute cut from a promise lands on a rider",
+  "delivery_context": "Primary: presenter-led 10-minute live class talk by three speakers plus 5-minute Q&A on Sun 22 Nov; the deck is imported into Canva and edited there. Secondary: backup slides to point at during Q&A",
+  "artifact_afterlife": "Editable in Canva by three teammates; exported to PDF and PPTX, slides.pdf committed to the repo",
+  "content_divergence": "",
+  "delivery_purpose": "balanced",
+  "page_count": "26 (14 main slides + 12 Q&A backup slides, as in the outline)",
+  "mode": "custom",
+  "mode_behavior": "Story arc over the outline's five sections: Houston hook and question, meet order #85188, data and EDA, method, results, then the promise twist and the rider. Titles state the finding, not the topic. Each section opens with the reference's '01 ——' numbered kicker, and the order card returns on slides 3, 5, 6, 8, 9, 10, 11 with the one number that slide adds. Backup slides answer Q&A plainly.",
+  "visual_style": "custom",
+  "visual_style_behavior": "Reference-sheet look: near-white field with large soft navy-to-ice gradient discs bleeding off one corner; generous rounded cards (about 16 px radius) with very soft shadows; icons inside pale rounded tiles; navy titles with the key word in electric blue; one big KPI tile per results slide (e.g. '6.49 min MAE'); 'Insight' callout cards with a short blue underline. Figures sit on white rounded cards with comfortable padding. Plenty of white space, one message per slide.",
+  "color": {
+    "name": "Reference blues",
+    "palette": {
+      "background": "#FFFFFF",
+      "secondary_bg": "#E9F2FA",
+      "primary": "#102A43",
+      "accent": "#2E6EB8",
+      "secondary_accent": "#A7C7E7",
+      "body_text": "#1F2937"
+    }
+  },
+  "icons": "tabler-outline",
+  "typography": {
+    "name": "Inter (Canva-safe stand-in for SF Pro Display) + Inter",
+    "heading": {
+      "css": "sans-serif",
+      "primary": "Inter",
+      "sample_primary": ""
+    },
+    "body": {
+      "css": "sans-serif",
+      "primary": "Inter",
+      "sample_primary": ""
+    },
+    "body_size": 24,
+    "sizes": {
+      "title": 42,
+      "subtitle": 32,
+      "annotation": 18
+    },
+    "note": "",
+    "body_size_unit": "px"
+  },
+  "image_usage": [
+    "provided",
+    "ai"
+  ],
+  "image_notes": "Provided: the 15 project figures (300-dpi PNGs from figures/) are the evidence on every data slide; never cropped, never redrawn, so numbers match the report. Their orange (#EB6834) means 'the app/platform' and blue means 'our model'; that meaning stays fixed deck-wide. AI (decorative only, matching the reference sheet): a cover hero of a phone showing a delivery map with a floating 'Estimated arrival' card, a soft blue-tinted city skyline photo inside a large circular crop for the problem slide, and pale map-street textures for section backgrounds. If no image backend is available, these can be drawn as native vector shapes (map lines, pins, phone frame) instead. Proposed hero pages: P01 cover, P02 problem.",
+  "image_strategy": {
+    "name": "Soft blue product imagery",
+    "rendering": "custom",
+    "visual": "Clean product-style renders and photos washed in the deck's navy and ice blues: a phone with a delivery map, a city skyline, faint street-map textures",
+    "mood": "Calm, modern, trustworthy, like a delivery app's own launch page",
+    "behavior": "Smooth soft-lit 3D-ish product render for the phone, monochrome blue-tinted photography for the skyline, and very light line-art maps at low contrast so text sits on top. No harsh shadows, no saturated colors outside the blues, white space kept around every subject."
+  },
+  "image_ai_path": "auto",
+  "proactive_speaker_notes": true,
+  "proactive_custom_animations": false,
+  "proactive_narration_audio": false,
+  "generation_mode": "continuous",
+  "refine_spec": false,
+  "design_spec_depth": "brief",
+  "stage": "final",
+  "status": "confirmed",
+  "stage1_sha256": "1f7c6965f256d117cd3e5178967fdecb5bf83a565e268ce7b4fe7e0ccb7b75c9",
+  "selection_sha256": "bfd2a68fd7f5d5685799c2b00eceacf5759307fa58fefc6a85c2a0dbfa5b75cd",
+  "confirmed_at": "2026-11-15T15:04:04"
+}

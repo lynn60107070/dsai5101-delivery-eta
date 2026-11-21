@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF" />
+  <circle id="ice-disc" data-pptx-role="decoration" cx="1200" cy="640" r="260" fill="#E9F2FA" />
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="52" height="30" rx="15" fill="#E9F2FA" />
+    <text x="90" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B6</text>
+    <text x="132" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1100 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Haversine vs Manhattan: <tspan fill="#2E6EB8">no real difference</tspan></text>
+  </g>
+
+  <g id="kpi-haversine" data-pptx-bounds="64 200 360 180">
+    <rect x="64" y="200" width="360" height="176" rx="16" fill="#E9F2FA" />
+    
+  <g transform="translate(88, 224) scale(1.33333)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+    <path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4" />
+    <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />
+  </g>
+    <text x="132" y="248" font-size="18" fill="#5B6B7F">Haversine (straight line)</text>
+    <text x="88" y="334" font-size="64" font-weight="bold" fill="#2E6EB8">6.282</text>
+  </g>
+
+  <g id="kpi-manhattan" data-pptx-bounds="448 200 360 180">
+    <rect x="448" y="200" width="360" height="176" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+    
+  <g transform="translate(472, 224) scale(1.33333)" fill="none" stroke="#5B6B7F" stroke-width="2">
+    <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+    <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />
+  </g>
+    <text x="516" y="248" font-size="18" fill="#5B6B7F">Manhattan (street grid)</text>
+    <text x="472" y="334" font-size="64" font-weight="bold" fill="#102A43">6.284</text>
+  </g>
+
+  <g id="ci" data-pptx-bounds="64 408 744 120">
+    <text font-size="24" fill="#1F2937" x="64" y="440">CV MAE in minutes, boosting on all training data.</text><text font-size="24" fill="#1F2937" x="64" y="474"><tspan>Difference <tspan font-weight="bold" fill="#102A43">−0.002 min</tspan>, 95% CI −0.007 to +0.003:</tspan></text><text font-size="24" fill="#1F2937" x="64" y="508">the interval includes 0.</text></g>
+
+  <g id="decision" data-pptx-bounds="64 552 744 80">
+    <rect x="64" y="552" width="6" height="72" rx="3" fill="#2E6EB8" />
+    <text x="88" y="582" font-size="18" font-weight="bold" fill="#2E6EB8">DECISION</text>
+    <text x="88" y="614" font-size="24" fill="#102A43">Keep Haversine: simpler, and the default</text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">20</text>
+  </g>
+</svg>

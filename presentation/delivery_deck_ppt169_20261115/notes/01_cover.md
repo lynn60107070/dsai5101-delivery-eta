@@ -1,0 +1,1 @@
+Our project is predicting food delivery time and its key delay drivers. The question underneath it is simple: can we predict how long your food will take the moment you press order? We used Meituan's data from the INFORMS 2024 challenge.

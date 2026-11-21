@@ -1,0 +1,1 @@
+Our order was 3.2 kilometres away. Every kilometre adds about seven minutes, in every district, so a friend ordering the same dish from one kilometre away would get it about fifteen minutes sooner. The spread also grows with distance, which is why a promise needs a higher percentile than the average. Distance is our core feature.

@@ -1,0 +1,466 @@
+{
+  "schema": "ppt-master.svg-quality-report.v1",
+  "stage": "early",
+  "target": "C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115",
+  "source_fingerprint": {
+    "algorithm": "sha256",
+    "digest": "6e2527accb6b43e20a24cb14e6a8f946db03ec1f4f40e1fac8b74a80d4c59a32",
+    "file_count": 5,
+    "files": [
+      {
+        "file": "01_cover.svg",
+        "sha256": "1be689cd39a44651bcaf2b33d93af9a8738f0fcda7edb94483b67d92f2c99b15"
+      },
+      {
+        "file": "02_same_wait.svg",
+        "sha256": "0f7175c378259270ada60b7d2230b829b061081c66ed912f503be62263909930"
+      },
+      {
+        "file": "03_meet_order.svg",
+        "sha256": "baecb9e60f73ca6b81b59f7090b29307a0ba0b3f334d045c74a34042f694bca1"
+      },
+      {
+        "file": "04_cleaning.svg",
+        "sha256": "ae4b17ff0a3aaf02e69b6d99e20f7030d6e0159bf803b182bc324f9d506cb8e1"
+      },
+      {
+        "file": "05_distance.svg",
+        "sha256": "39c935db7c4e204e08f92bd5e91d0d8653db322937e9a4dae24768b93b4b7fac"
+      }
+    ]
+  },
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "warnings": 5,
+    "errors": 0
+  },
+  "issue_types": {},
+  "categories": {
+    "blocking": {
+      "count": 0,
+      "issues": []
+    },
+    "introduced": {
+      "count": 6,
+      "issues": [
+        {
+          "file": "01_cover.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01_cover.svg",
+          "message": "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+        },
+        {
+          "file": "02_same_wait.svg",
+          "message": "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+        },
+        {
+          "file": "03_meet_order.svg",
+          "message": "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+        },
+        {
+          "file": "04_cleaning.svg",
+          "message": "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+        },
+        {
+          "file": "05_distance.svg",
+          "message": "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+        }
+      ]
+    },
+    "inherited": {
+      "count": 0,
+      "issues": []
+    },
+    "source-import": {
+      "count": 0,
+      "summary": {
+        "warning_count": 0,
+        "by_code": {}
+      }
+    }
+  },
+  "drift": {
+    "colors": {
+      "#F4F8FC": [
+        "01_cover.svg"
+      ]
+    },
+    "fonts": {},
+    "sizes": {}
+  },
+  "carrier_receipt": {
+    "scope": "informational-not-a-quota",
+    "pages": 5,
+    "totals": {
+      "text_elements": 62,
+      "image_placements": 3,
+      "icons": 12,
+      "svg_geometry_elements": 55,
+      "preset_shapes": 0,
+      "page_frame_elements": 6,
+      "marker_uses": 0,
+      "inline_emphasis_runs": 13,
+      "gradient_uses": 6,
+      "filter_uses": 4,
+      "text_effects": 0
+    },
+    "pages_with": {
+      "images": 3,
+      "icons": 5,
+      "presets": 0,
+      "charts": 0,
+      "tables": 0,
+      "formulas": 0,
+      "inline_emphasis_runs": 4,
+      "gradient_uses": 5,
+      "filter_uses": 3,
+      "text_effects": 0
+    },
+    "relationship_pages": 14,
+    "geometry_elements": {
+      "circle": 12,
+      "ellipse": 1,
+      "line": 14,
+      "path": 0,
+      "polygon": 0,
+      "polyline": 1,
+      "rect": 27
+    },
+    "preset_names": {},
+    "native_objects": {
+      "chart": 0,
+      "formula_block": 0,
+      "formula_inline": 0,
+      "other": 0,
+      "table": 0
+    },
+    "image_page_max_frame_share_range": [
+      0.2273,
+      0.3308
+    ]
+  },
+  "project_issues": {
+    "template": [],
+    "animation": [],
+    "illustration": [],
+    "communication_trace": [],
+    "pptx_structure": []
+  },
+  "files": [
+    {
+      "file": "01_cover.svg",
+      "path": "C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115\\svg_output\\01_cover.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 7,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 4,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 2,
+            "filter_uses": 2,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 8,
+              "circle": 3,
+              "ellipse": 0,
+              "line": 8,
+              "polyline": 1,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 2,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Inter, sans-serif"
+        ],
+        "text_elements": 7,
+        "tspan_elements": 3,
+        "contextual_values": {
+          "colors": [
+            "#F4F8FC"
+          ]
+        }
+      },
+      "passed": true,
+      "source_sha256": "1be689cd39a44651bcaf2b33d93af9a8738f0fcda7edb94483b67d92f2c99b15"
+    },
+    {
+      "file": "02_same_wait.svg",
+      "path": "C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115\\svg_output\\02_same_wait.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 12,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 2,
+          "effects": {
+            "inline_emphasis_runs": 4,
+            "gradient_uses": 1,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 5,
+              "circle": 3,
+              "ellipse": 1,
+              "line": 1,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 1,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Inter, sans-serif"
+        ],
+        "text_elements": 12,
+        "tspan_elements": 9
+      },
+      "passed": true,
+      "source_sha256": "0f7175c378259270ada60b7d2230b829b061081c66ed912f503be62263909930"
+    },
+    {
+      "file": "03_meet_order.svg",
+      "path": "C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115\\svg_output\\03_meet_order.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 15,
+          "images": {
+            "placements": 1,
+            "files": [
+              "order_timeline.png"
+            ],
+            "max_frame_share": 0.3308
+          },
+          "icons": 3,
+          "effects": {
+            "inline_emphasis_runs": 2,
+            "gradient_uses": 1,
+            "filter_uses": 1,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 5,
+              "circle": 1,
+              "ellipse": 0,
+              "line": 2,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 1,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Inter, sans-serif"
+        ],
+        "text_elements": 15,
+        "tspan_elements": 4
+      },
+      "passed": true,
+      "source_sha256": "baecb9e60f73ca6b81b59f7090b29307a0ba0b3f334d045c74a34042f694bca1"
+    },
+    {
+      "file": "04_cleaning.svg",
+      "path": "C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115\\svg_output\\04_cleaning.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 15,
+          "images": {
+            "placements": 1,
+            "files": [
+              "cleaning_funnel.png"
+            ],
+            "max_frame_share": 0.2454
+          },
+          "icons": 1,
+          "effects": {
+            "inline_emphasis_runs": 4,
+            "gradient_uses": 1,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 3,
+              "circle": 4,
+              "ellipse": 0,
+              "line": 2,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 1,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Inter, sans-serif"
+        ],
+        "text_elements": 15,
+        "tspan_elements": 9
+      },
+      "passed": true,
+      "source_sha256": "ae4b17ff0a3aaf02e69b6d99e20f7030d6e0159bf803b182bc324f9d506cb8e1"
+    },
+    {
+      "file": "05_distance.svg",
+      "path": "C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115\\svg_output\\05_distance.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 13,
+          "images": {
+            "placements": 1,
+            "files": [
+              "delivery_vs_distance.png"
+            ],
+            "max_frame_share": 0.2273
+          },
+          "icons": 2,
+          "effects": {
+            "inline_emphasis_runs": 3,
+            "gradient_uses": 1,
+            "filter_uses": 1,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 6,
+              "circle": 1,
+              "ellipse": 0,
+              "line": 1,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 1,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Inter, sans-serif"
+        ],
+        "text_elements": 13,
+        "tspan_elements": 6
+      },
+      "passed": true,
+      "source_sha256": "39c935db7c4e204e08f92bd5e91d0d8653db322937e9a4dae24768b93b4b7fac"
+    }
+  ]
+}

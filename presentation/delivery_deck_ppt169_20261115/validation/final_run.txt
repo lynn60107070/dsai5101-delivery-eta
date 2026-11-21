@@ -1,0 +1,152 @@
+
+[SCAN] Checking 26 SVG file(s)...
+
+[WARN] 01_cover.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 02_same_wait.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 03_meet_order.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 04_cleaning.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 05_distance.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 06_peaks.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 07_models.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (9 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): features-used:font-size None -> '18'; text[46]:font-size '18' -> None; g[47]:font-size '18' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 08_time_split.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 09_accuracy.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 10_drivers.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+   [WARN] <text> (x=816, y=440; text='Pickup and road each…') exceeds <g id="stages"> data-pptx-bounds on the vertical axis: content (816.0, 419.6)-(1205.4, 516.4), container (816.0, 412.0)-(1216.0, 512.0), overflow horizontal 0.0%, vertical 4.4% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text
+   [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="order-ticket"> x=904.0, y=270.0..296.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+
+[WARN] 11_errors.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 12_promise.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 13_meaning.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+   [WARN] <text> (x=676, y=484; text='Error is uneven acro…') exceeds <g id="card-ethics"> data-pptx-bounds on the horizontal axis: content (676.0, 463.6)-(1227.9, 526.4), container (652.0, 372.0)-(1216.0, 544.0), overflow horizontal 2.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈14.5 px per mixed char at 24px incl. headroom; ≈38 chars fit in 564 px
+
+[WARN] 14_closing.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 15_b1_cleaning_table.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 16_b2_leakage.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 17_b3_tuning.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (6 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): complexity-note:fill None -> '#1F2937'; complexity-note:font-size None -> '24'; text[40]:fill '#1F2937' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 18_b4_error_by_district.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+   [WARN] <text> (x=64, y=142; text='Error ranges from 4.…') exceeds <g id="title"> data-pptx-bounds on the horizontal axis: content (64.0, 106.3)-(1215.6, 156.7), container (64.0, 96.0)-(1164.0, 160.0), overflow horizontal 4.7%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈28.1 px per Latin char at 42px incl. headroom; ≈39 chars fit in 1100 px
+
+[WARN] 19_b5_weekend.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 20_b6_distance_metric.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 21_b7_stages_by_area.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 22_b8_promise_padding.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 23_b9_three_words.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 24_b10_padding_cost.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 25_b11_scorecard.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+[WARN] 26_b12_typical_order.svg - Passed (with warnings)
+   viewBox: 0 0 1280 720
+   [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+
+================================================================================
+[SUMMARY] Check Summary
+================================================================================
+
+Total files: 26
+  [OK] Fully passed: 0 (0%)
+  [WARN] With warnings: 26 (100%)
+  [ERROR] With errors: 0 (0%)
+
+Provenance categories:
+  blocking: 0          hard findings; gate also requires exit 0
+  introduced: 33       advisory; new or changed
+  inherited: 0         informational; prototype-identical
+  source-import: 0     informational; source-conversion loss
+
+[CARRIERS] Actual-use receipt (informational; not a quota)
+  Pages: 26 | text: 382 | images: 17 | icons: 47
+  Geometry: SVG elements 214 | native presets 0 | page-frame elements 22 | marker uses 0
+  Effects: inline emphasis 81 (pages 25) | gradients 15 (pages 14) | filters 9 (pages 8) | text effects 0 (pages 0)
+  Native objects: charts 0 | tables 4 | formulas 0
+  Presets: (none)
+  Relationship pages: 14 (§IX names order / link / parent / membership) | pages carrying a preset or connector: 0
+  Largest image-frame share on image pages: 6.5%–34.7%
+
+Contextual values beyond spec_lock anchors (informational):
+  Colors:
+    #F4F8FC  (1 file)
+Note: contextual page paint, gradient/effect colors, and export-safe typefaces are allowed.
+      Add a spec_lock row only when a value becomes a recurring named semantic role.
+
+[TIP] Common fixes:
+  1. XML well-formedness: write typography as raw Unicode (—, ©, →, NBSP); escape XML reserved chars as &amp; &lt; &gt; &quot; &apos; — never use HTML named entities like &nbsp; &mdash; &copy;
+  2. viewBox issues: root viewBox is the canvas authority (see references/canvas-formats.md)
+  3. Paint recommendation: generated SVG prefers uppercase #RRGGBB plus channel-specific opacity; compatible alternatives remain non-blocking
+  4. foreignObject: Use <text> + <tspan> for manual line breaks
+  5. Font issues: use PPT-safe exported typefaces (e.g. Arial / Consolas, with the CJK face of the deck language)
+
+[REPORT] JSON quality report exported: ..\validation\svg_quality_report.json

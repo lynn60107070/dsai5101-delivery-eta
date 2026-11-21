@@ -1,0 +1,1 @@
+And our customer ordered at the slowest hour of the day. Half the city had the same idea: the median delivery at 11:00 is 33.5 minutes, against 27.8 overall. Surprisingly, how busy the area is barely matters once you compare the same district and hour. So we added lunch and dinner peak flags, and a cyclical time of day so that 23:59 sits next to midnight.

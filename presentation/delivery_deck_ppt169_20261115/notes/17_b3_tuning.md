@@ -1,0 +1,1 @@
+These are the final settings and the search budget for each model, chosen by random search on cross-validated error, and pinball loss for the 80th-percentile model. The slower tree models were tuned on a sample of rows and then refitted on all of them. Bigger trees overfit: 511 leaves gives training error 2.45 against validation 6.63.

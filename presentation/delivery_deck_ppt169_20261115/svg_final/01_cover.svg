@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="cover">
+  <defs>
+    <linearGradient id="heroDisc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2E6EB8" />
+      <stop offset="100%" stop-color="#102A43" />
+    </linearGradient>
+    <linearGradient id="appTile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2E6EB8" />
+      <stop offset="100%" stop-color="#102A43" />
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-20%" width="130%" height="150%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#102A43" flood-opacity="0.12" />
+    </filter>
+  </defs>
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF" />
+  <circle id="ice-disc" data-pptx-role="decoration" cx="1250" cy="40" r="300" fill="#E9F2FA" />
+  <circle id="hero-disc" data-pptx-role="decoration" cx="1120" cy="420" r="330" fill="url(#heroDisc)" />
+
+  <g id="app-mark" data-pptx-bounds="64 64 80 80">
+    <rect x="64" y="64" width="80" height="80" rx="20" fill="url(#appTile)" />
+    
+  <g transform="translate(80, 80) scale(2)" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <path d="M16 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M5 16v1a2 2 0 0 0 4 0v-5h-3a3 3 0 0 0 -3 3v1h10a6 6 0 0 1 5 -4v-5a2 2 0 0 0 -2 -2h-1" />
+    <path d="M6 9l3 0" />
+  </g>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 176 660 216" font-weight="bold">
+    <text font-size="72" fill="#102A43" x="64" y="240">Predicting Food</text><text font-size="72" fill="#2E6EB8" x="64" y="320">Delivery Time</text><text x="64" y="376" font-size="42" fill="#102A43">and Its Key Delay Drivers</text>
+  </g>
+
+  <g id="subtitle" data-pptx-bounds="64 400 660 96">
+    <text font-size="24" fill="#5B6B7F" x="64" y="432">Can we predict delivery time the moment</text><text font-size="24" fill="#5B6B7F" x="64" y="466">you order?</text><rect x="64" y="482" width="64" height="4" rx="2" fill="#2E6EB8" />
+  </g>
+
+  <g id="team" data-pptx-bounds="64 520 660 80" font-size="18" fill="#1F2937">
+    <text x="64" y="546">Lynn Younes (60107070) · Sumaiya Rizwan (60102626)</text><text x="64" y="574">Mahmoud Abdelaziz (60328910)</text></g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 650 660 36">
+    <text x="64" y="676" font-size="14" fill="#5B6B7F">DSAI 5101 · Principles of DS &amp; ML · 22 Nov 2026 · Meituan INFORMS TSL 2024 data</text>
+  </g>
+
+  <g id="phone-hero" data-pptx-bounds="740 90 500 560">
+    <rect x="900" y="100" width="280" height="540" rx="40" fill="#102A43" filter="url(#softShadow)" />
+    <rect x="912" y="112" width="256" height="516" rx="30" fill="#F4F8FC" />
+    <g stroke="#D5E2F0" stroke-width="6" stroke-linecap="round">
+      <line x1="912" y1="200" x2="1168" y2="170" />
+      <line x1="912" y1="330" x2="1168" y2="300" />
+      <line x1="912" y1="470" x2="1168" y2="440" />
+      <line x1="960" y1="112" x2="1000" y2="628" />
+      <line x1="1090" y1="112" x2="1120" y2="628" />
+    </g>
+    <g stroke="#E9F2FA" stroke-width="3" stroke-linecap="round">
+      <line x1="912" y1="265" x2="1168" y2="235" />
+      <line x1="912" y1="400" x2="1168" y2="370" />
+      <line x1="1030" y1="112" x2="1060" y2="628" />
+    </g>
+    <polyline points="1128,598 1122,452 1050,460 1042,330 1110,322 1102,232" fill="none" stroke="#2E6EB8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="1128" cy="598" r="9" fill="#FFFFFF" stroke="#2E6EB8" stroke-width="4" />
+    
+  <g transform="translate(1082, 186) scale(1.66667)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+    <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />
+  </g>
+    <rect x="1000" y="124" width="80" height="8" rx="4" fill="#102A43" />
+    <rect x="740" y="470" width="300" height="112" rx="16" fill="#FFFFFF" filter="url(#softShadow)" />
+    <rect x="760" y="494" width="64" height="64" rx="14" fill="#E9F2FA" />
+    
+  <g transform="translate(772, 506) scale(1.66667)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+    <path d="M12 7v5l3 3" />
+  </g>
+    <text x="844" y="516" font-size="18" fill="#5B6B7F">Estimated arrival</text>
+    <text x="844" y="556" font-size="32" font-weight="bold" fill="#102A43">51 min</text>
+    
+  <g transform="translate(976, 530) scale(1.83333)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M16 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M5 16v1a2 2 0 0 0 4 0v-5h-3a3 3 0 0 0 -3 3v1h10a6 6 0 0 1 5 -4v-5a2 2 0 0 0 -2 -2h-1" />
+    <path d="M6 9l3 0" />
+  </g>
+  </g>
+</svg>

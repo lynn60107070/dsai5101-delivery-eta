@@ -1,0 +1,30 @@
+LYNN · SPEAKER NOTES · slides 12-18 (Methods & Evaluation, Results & Insights)
+Target ~3:00. [Brackets] = what to point at on the slide, not spoken.
+
+SLIDE 12 · Our Approach · ~25 s · 62 words
+So how do we predict it? Two baselines to beat: guess the typical time for everyone, and the app's own promise. Then three models, from simple to complex. [Elastic-Net line] Elastic-Net is one weighted line, so we can read every effect in minutes. [trees] Random Forest averages many trees, so it's robust. [orange bar shrinking] Gradient boosting adds trees one by one, each fixing the last one's mistakes.
+   (If asked: Settings and tuning: B6.)
+
+SLIDE 13 · Inside the models · ~30 s · 79 words
+All three get the same inputs. [table] Each one comes from something we saw in the data: distance, time of day, the prep estimate with a flag for placeholders, how busy the district is compared to normal, and the district. Ten numbers plus the district: 33 inputs. [chips] Left out on purpose: a weekend flag, since we only have one weekend day, and anything after you order, like the rider. [pipeline] And the pipeline is refitted on every fold, so nothing leaks.
+   (If asked: Feature tables: B20, B21 · real rows: B22 · Elastic-Net in minutes: B14.)
+
+SLIDE 14 · Tested like real life · ~25 s · 72 words
+We test it like real life: it only learns from the past. [folds building] Train on earlier days, check on the next one, four times. [lock] The last two days, including your pizza, stayed locked and were scored once, at the end. Error is in minutes, the mean absolute error. And tuning mattered: very big trees were off by 2.5 minutes on days they'd seen, but 6.6 on new ones, so we kept them smaller.
+   (If asked: Weekend flag broke fold 4: 6.8 → 18.0 (B7) · complexity curve: B6.)
+
+SLIDE 15 · Results · ~35 s · 83 words
+[bars growing] Both baselines miss by about nine and a half minutes. All three models land near six and a half; boosting is best at 6.49, on 140 thousand orders it had never seen. That's 31 percent better than guessing. The models are within 0.3 of each other, so the limit is the information, not the model. [orange bar shrinks] The app's promise looks worse, but that's padding: take off its usual 8 minutes and it's 6.48, level with us. [pizza card] Your pizza: app 51, us 45, actual 43.
+   (If asked: Boosting vs RF −0.05 [−0.06, −0.04] · vs median −2.97 · scorecard: B2 · pizza is typical: B3.)
+
+SLIDE 16 · Distance drives delivery time most · ~25 s · 59 words
+So what makes a delivery slow? [table shuffles] We scramble one input and see how much worse the model gets. [meter] Scramble distance, and the error jumps from 6.25 to 9.35. [bars] Then time of day, district and prep. How busy the district is barely matters, so our proposal was wrong there. Your pizza fits: 12 minutes to pickup, 31 on the road.
+   (If asked: Permutation importance on the CV folds · stages by district: B5.)
+
+SLIDE 17 · Key Insights · ~15 s · 43 words
+So three things: distance, too few free riders, and the restaurant itself. Add what the app knows live and we reach 5.92, ahead of the app's 6.24. Better on short and long trips, dinner and Saturday, tied in the middle, behind at lunch.
+   (If asked: By segment: B16.)
+
+SLIDE 18 · From base to extended · ~25 s · 60 words
+[bars rising] Step by step: free riders, which you asked us to check, a small gain. The restaurant's track record, the biggest. Recent delays and late kitchens, a bit more. [dashed line] We end below the app. Two honest notes: every model gains the same, so it's the information, not the model. And this is on validation days, built after our one test run.
+   (If asked: Feature by feature: B15 · features: B21 · then hand over to the next slide (where it struggles).)

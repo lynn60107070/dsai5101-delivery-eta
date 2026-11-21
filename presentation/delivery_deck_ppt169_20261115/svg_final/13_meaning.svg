@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <defs>
+    <linearGradient id="cornerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E9F2FA" />
+      <stop offset="100%" stop-color="#A7C7E7" />
+    </linearGradient>
+  </defs>
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF" />
+  <circle id="corner-disc" data-pptx-role="decoration" cx="1280" cy="0" r="190" fill="url(#cornerGrad)" />
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <text x="64" y="76" font-size="20" font-weight="bold" fill="#102A43">05</text>
+    <line x1="100" y1="69" x2="164" y2="69" stroke="#A7C7E7" stroke-width="2" />
+    <text x="180" y="76" font-size="20" fill="#5B6B7F">Conclusion</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">What it means, and <tspan fill="#2E6EB8">what it can't tell us</tspan></text>
+  </g>
+
+  <g id="card-answer" data-pptx-bounds="64 184 564 172">
+    <rect x="64" y="184" width="564" height="168" rx="16" fill="#102A43" />
+    <rect x="88" y="208" width="52" height="52" rx="12" fill="#2E6EB8" />
+    
+  <g transform="translate(100, 220) scale(1.16667)" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+    <path d="M12 7a5 5 0 1 0 5 5" />
+    <path d="M13 3.055a9 9 0 1 0 7.941 7.945" />
+    <path d="M15 6v3h3l3 -3h-3v-3l-3 3" />
+    <path d="M15 9l-3 3" />
+  </g>
+    <text x="156" y="242" font-size="18" font-weight="bold" fill="#A7C7E7">ANSWER</text>
+    <text font-size="24" fill="#FFFFFF" x="88" y="296">At ordering, delivery time can be predicted</text><text font-size="24" fill="#FFFFFF" x="88" y="330"><tspan>to <tspan font-weight="bold">~6.5 min</tspan>; <tspan font-weight="bold">distance</tspan> is the main driver</tspan></text></g>
+
+  <g id="card-ceiling" data-pptx-bounds="652 184 564 172">
+    <rect x="652" y="184" width="564" height="168" rx="16" fill="#E9F2FA" />
+    <rect x="676" y="208" width="52" height="52" rx="12" fill="#FFFFFF" />
+    
+  <g transform="translate(688, 220) scale(1.16667)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6" />
+    <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+    <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+  </g>
+    <text x="744" y="242" font-size="18" font-weight="bold" fill="#2E6EB8">THE CEILING IS MISSING INFORMATION</text>
+    <text font-size="24" fill="#102A43" x="676" y="296">With after-order times: MAE <tspan font-weight="bold">6.25 → 4.53</tspan>,</text><text font-size="24" fill="#102A43" x="676" y="330"><tspan>R² <tspan font-weight="bold">0.51 → 0.72</tspan> (so R² 0.49 isn't weak)</tspan></text></g>
+
+  <g id="card-limits" data-pptx-bounds="64 372 564 172">
+    <rect x="64" y="372" width="564" height="168" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+    <rect x="88" y="396" width="52" height="52" rx="12" fill="#E9F2FA" />
+    
+  <g transform="translate(100, 408) scale(1.16667)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M12 9v4" />
+    <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" />
+    <path d="M12 16h.01" />
+  </g>
+    <text x="156" y="430" font-size="18" font-weight="bold" fill="#5B6B7F">LIMITATIONS</text>
+    <text font-size="24" fill="#1F2937" x="88" y="484">8 days with one weekend day;</text><text font-size="24" fill="#1F2937" x="88" y="518">no weather, traffic or courier data</text></g>
+
+  <g id="card-ethics" data-pptx-bounds="652 372 564 172">
+    <rect x="652" y="372" width="564" height="168" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+    <rect x="676" y="396" width="52" height="52" rx="12" fill="#E9F2FA" />
+    
+  <g transform="translate(688, 408) scale(1.16667)" fill="none" stroke="#EB6834" stroke-width="2">
+    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+  </g>
+    <text x="744" y="430" font-size="18" font-weight="bold" fill="#5B6B7F">ETHICS</text>
+    <text font-size="24" fill="#1F2937" x="676" y="484">Error is uneven across districts (4.4–9.0);</text><text font-size="24" fill="#1F2937" x="676" y="518"><tspan>every minute cut <tspan font-weight="bold" fill="#102A43">lands on a rider</tspan></tspan></text></g>
+
+  <g id="next-steps" data-pptx-bounds="64 564 1152 92">
+    <rect x="64" y="564" width="1152" height="88" rx="16" fill="#E9F2FA" />
+    
+  <g transform="translate(88, 592) scale(1.33333)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+    <path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4" />
+    <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />
+  </g>
+    <text x="136" y="600" font-size="18" font-weight="bold" fill="#2E6EB8">NEXT</text>
+    <text x="136" y="632" font-size="24" fill="#102A43">Update the estimate after dispatch · add restaurant history features</text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time</text>
+    <text x="1216" y="696" text-anchor="end">13</text>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+No,Filename,Width,Height,AspectRatio,PixelAspectRatio,SourceDisplayRatio,RatioSource,Format,HasTransparentPixels,UsageCount,DisplayRatioVariants,AssetKind,SvgRenderable,PptxNativeSupported,SizeKB,Category
+1,cleaning_funnel.png,1371,838,1.64,1.64,,native,PNG,False,1,,bitmap,True,True,124.0,Wide landscape
+2,delay_drivers.png,1797,1027,1.75,1.75,,native,PNG,False,1,,bitmap,True,True,118.8,Wide landscape
+3,delivery_by_hour.png,995,959,1.04,1.04,,native,PNG,False,1,,bitmap,True,True,88.9,Near square
+4,delivery_vs_distance.png,1053,820,1.28,1.28,,native,PNG,False,1,,bitmap,True,True,85.6,Standard landscape
+5,errors_by_area.png,1823,1302,1.40,1.40,,native,PNG,False,1,,bitmap,True,True,117.0,Standard landscape
+6,errors_by_distance.png,1815,1025,1.77,1.77,,native,PNG,False,1,,bitmap,True,True,88.4,Wide landscape
+7,errors_by_hour.png,1799,1074,1.68,1.68,,native,PNG,False,1,,bitmap,True,True,127.4,Wide landscape
+8,final_test_gap.png,687,532,1.29,1.29,,native,PNG,False,1,,bitmap,True,True,62.1,Standard landscape
+9,hgb_complexity_curve.png,1659,1119,1.48,1.48,,native,PNG,False,1,,bitmap,True,True,151.6,Standard landscape
+10,leakage_audit.png,1471,705,2.09,2.09,,native,PNG,False,1,,bitmap,True,True,61.4,Ultra-wide
+11,order_timeline.png,1173,700,1.68,1.68,,native,PNG,False,1,,bitmap,True,True,84.0,Wide landscape
+12,promise_padding.png,1102,797,1.38,1.38,,native,PNG,False,1,,bitmap,True,True,64.3,Standard landscape
+13,stages_by_area.png,1605,1120,1.43,1.43,,native,PNG,False,1,,bitmap,True,True,152.1,Standard landscape
+14,test_mae.png,2794,1159,2.41,2.41,,native,PNG,False,1,,bitmap,True,True,140.3,Ultra-wide
+15,time_split.png,2247,1094,2.05,2.05,,native,PNG,False,1,,bitmap,True,True,116.9,Ultra-wide

@@ -1,0 +1,20 @@
+{
+  "stage": "stage1",
+  "lang": "en",
+  "primary_language": "en",
+  "recommend": { "canvas": "ppt169" },
+  "audience": { "value": "DSAI 5101 instructor grading against the Part A rubric, plus master's classmates who know ML basics but not this dataset or delivery platforms" },
+  "communication_intent": { "value": "Explain how accurately delivery time can be predicted at order time and what drives long deliveries, then persuade that a better estimate is not automatically a better promise; follow one real order (#85188) through the whole talk" },
+  "audience_outcome": { "value": "The audience can state the research question, trust the leakage-free time-split evaluation, remember MAE 6.5 min (3.1 closer than the app) and distance as the main driver, and understand why the app still makes better promises" },
+  "core_message": { "value": "At ordering, delivery time can be predicted to about 6.5 minutes and distance drives it, but a good promise needs more than an accurate number, and every minute cut from a promise lands on a rider" },
+  "delivery_context": { "value": "Primary: presenter-led 10-minute live class talk by three speakers plus 5-minute Q&A on Sun 22 Nov; the deck is imported into Canva and edited there. Secondary: backup slides to point at during Q&A" },
+  "artifact_afterlife": { "value": "Editable in Canva by three teammates; exported to PDF and PPTX, slides.pdf committed to the repo" },
+  "content_divergence": { "value": "" },
+  "template_options": {
+    "schema_version": 1,
+    "phase": "template",
+    "lang": "en",
+    "explicit_workspace_roots": [],
+    "default_mode": "free_design"
+  }
+}

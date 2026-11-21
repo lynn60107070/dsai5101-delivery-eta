@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="52" height="30" rx="15" fill="#E9F2FA"/>
+    <text x="90" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B9</text>
+    <text x="132" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Delivery time, promise, <tspan fill="#2E6EB8">delay</tspan></text>
+  </g>
+
+  <g id="three-words" data-pptx-bounds="64 176 1152 240" data-pptx-replace-with="table" data-pptx-fallback-sha256="8915781e7b449fea2517edb19c3b75e63236eb15b8b48eb1a60a7d9f1708f3bc">
+    <metadata type="application/json">
+      {
+        "schema": "ppt-master.semantic-table.v2",
+        "name": "three-words",
+        "x": 64,
+        "y": 176,
+        "width": 1152,
+        "height": 240,
+        "strict_grid": true,
+        "column_widths": [
+          280,
+          632,
+          240
+        ],
+        "row_heights": [
+          48,
+          64,
+          64,
+          64
+        ],
+        "style": {
+          "font_family": "Inter",
+          "font_size": 24,
+          "header_font_size": 18,
+          "header_fill": "#102A43",
+          "header_text": "#FFFFFF",
+          "body_fill": "#FFFFFF",
+          "body_text": "#1F2937",
+          "band_row": false,
+          "padding": {
+            "left": 16,
+            "right": 16,
+            "top": 4,
+            "bottom": 4
+          },
+          "valign": "middle"
+        },
+        "defaults": {
+          "cell": {
+            "borders": {
+              "left": {
+                "style": "none"
+              },
+              "right": {
+                "style": "none"
+              },
+              "top": {
+                "style": "none"
+              },
+              "bottom": {
+                "style": "none"
+              }
+            }
+          }
+        },
+        "columns": [
+          {
+            "text": "Term",
+            "bold": true,
+            "align": "l"
+          },
+          {
+            "text": "What it is",
+            "bold": true,
+            "align": "l"
+          },
+          {
+            "text": "Order #85188",
+            "bold": true,
+            "align": "r"
+          }
+        ],
+        "rows": [
+          [
+            {
+              "text": "Delivery time",
+              "bold": true,
+              "color": "#2E6EB8"
+            },
+            "Order → arrival: what we predict",
+            {
+              "text": "43 min",
+              "align": "r",
+              "bold": true,
+              "color": "#102A43"
+            }
+          ],
+          [
+            {
+              "text": "Promise",
+              "bold": true,
+              "color": "#EB6834",
+              "fill": "#E9F2FA"
+            },
+            {
+              "text": "Time shown at checkout: a padded commitment",
+              "fill": "#E9F2FA"
+            },
+            {
+              "text": "51 min",
+              "align": "r",
+              "bold": true,
+              "color": "#102A43",
+              "fill": "#E9F2FA"
+            }
+          ],
+          [
+            {
+              "text": "Delay",
+              "bold": true,
+              "color": "#102A43"
+            },
+            "Delivery time − promise: describes the data",
+            {
+              "text": "−8 min",
+              "align": "r",
+              "bold": true,
+              "color": "#102A43"
+            }
+          ]
+        ]
+      }
+    </metadata>
+    <rect x="64" y="176" width="1152" height="48" fill="#102A43"/>
+    <rect x="64" y="288" width="1152" height="64" fill="#E9F2FA"/>
+    <g font-size="18" font-weight="bold" fill="#FFFFFF">
+      <text x="80" y="206">Term</text>
+      <text x="360" y="206">What it is</text>
+      <text x="1200" y="206" text-anchor="end">Order #85188</text>
+    </g>
+    <g font-size="24" fill="#1F2937">
+      <g>
+        <text x="80" y="264" font-weight="bold" fill="#2E6EB8">Delivery time</text>
+        <text x="360" y="264">Order → arrival: what we predict</text>
+        <text x="1200" y="264" text-anchor="end" font-weight="bold" fill="#102A43">43 min</text>
+      </g>
+      <g>
+        <text x="80" y="328" font-weight="bold" fill="#EB6834">Promise</text>
+        <text x="360" y="328">Time shown at checkout: a padded commitment</text>
+        <text x="1200" y="328" text-anchor="end" font-weight="bold" fill="#102A43">51 min</text>
+      </g>
+      <g>
+        <text x="80" y="392" font-weight="bold" fill="#102A43">Delay</text>
+        <text x="360" y="392">Delivery time − promise: describes the data</text>
+        <text x="1200" y="392" text-anchor="end" font-weight="bold" fill="#102A43">−8 min</text>
+      </g>
+    </g>
+  </g>
+
+  <g id="estimate-card" data-pptx-bounds="64 448 560 180">
+    <rect x="64" y="448" width="560" height="176" rx="16" fill="#E9F2FA"/>
+    <use data-icon="tabler-outline/target-arrow" x="88" y="472" width="32" height="32" fill="#2E6EB8" stroke-width="2"/>
+    <text x="132" y="496" font-size="18" font-weight="bold" fill="#2E6EB8">OUR ESTIMATE</text>
+    <text x="88" y="548" font-size="24" fill="#102A43">Aims at the <tspan font-weight="bold">middle</tspan>: "when will<tspan x="88" dy="34">it most likely arrive?" (MAE 6.49)</tspan></text>
+  </g>
+
+  <g id="promise-card" data-pptx-bounds="656 448 560 180">
+    <rect x="656" y="448" width="560" height="176" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <use data-icon="tabler-outline/clock" x="680" y="472" width="32" height="32" fill="#EB6834" stroke-width="2"/>
+    <text x="724" y="496" font-size="18" font-weight="bold" fill="#5B6B7F">OUR PROMISE</text>
+    <text x="680" y="548" font-size="24" fill="#102A43">Aims at the <tspan font-weight="bold">80th percentile</tspan>: the<tspan x="680" dy="34">only one compared with the app's</tspan></text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">23</text>
+  </g>
+</svg>

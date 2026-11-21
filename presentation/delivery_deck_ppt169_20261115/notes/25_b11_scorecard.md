@@ -1,0 +1,1 @@
+Did we beat the app? On accuracy, yes: 6.49 against 9.62. We also explain why. For shorter promises, below about 37 minutes, we come out ahead. But for promises at the app's own length, we are late more often: 6.1 against 5.0 percent more than five minutes late.

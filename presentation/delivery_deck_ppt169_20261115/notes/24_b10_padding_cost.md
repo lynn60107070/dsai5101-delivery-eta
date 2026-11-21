@@ -1,0 +1,1 @@
+Arriving early sounds good, but a padded promise isn't free. Long promises lose orders, customers plan around a wrong time, trust wears off once people learn the number is padded, and operations still need the real time. And the same buffer for every order is too much at one kilometre and too little at seven.

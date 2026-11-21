@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="52" height="30" rx="15" fill="#E9F2FA"/>
+    <text x="90" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B3</text>
+    <text x="132" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Final settings and <tspan fill="#2E6EB8">tuning budget</tspan></text>
+  </g>
+
+  <g id="model-settings" data-pptx-bounds="64 176 1152 252" data-pptx-replace-with="table" data-pptx-fallback-sha256="acb94b74eda2ea5baf28f7446d2a21ab1fce472da687644d17132510756f52c2">
+    <metadata type="application/json">
+      {
+        "schema": "ppt-master.semantic-table.v2",
+        "name": "model-settings",
+        "x": 64,
+        "y": 176,
+        "width": 1152,
+        "height": 252,
+        "strict_grid": true,
+        "column_widths": [
+          210,
+          730,
+          212
+        ],
+        "row_heights": [
+          44,
+          52,
+          52,
+          52,
+          52
+        ],
+        "style": {
+          "font_family": "Inter",
+          "font_size": 16,
+          "header_fill": "#102A43",
+          "header_text": "#FFFFFF",
+          "body_fill": "#FFFFFF",
+          "body_text": "#1F2937",
+          "band_row": false,
+          "padding": {
+            "left": 16,
+            "right": 16,
+            "top": 4,
+            "bottom": 4
+          },
+          "valign": "middle"
+        },
+        "defaults": {
+          "cell": {
+            "borders": {
+              "left": {
+                "style": "none"
+              },
+              "right": {
+                "style": "none"
+              },
+              "top": {
+                "style": "none"
+              },
+              "bottom": {
+                "style": "none"
+              }
+            }
+          }
+        },
+        "columns": [
+          {
+            "text": "Model",
+            "bold": true,
+            "align": "l"
+          },
+          {
+            "text": "Final settings",
+            "bold": true,
+            "align": "l"
+          },
+          {
+            "text": "Search",
+            "bold": true,
+            "align": "l"
+          }
+        ],
+        "rows": [
+          [
+            {
+              "text": "Elastic-Net",
+              "bold": true,
+              "color": "#102A43"
+            },
+            "α = 0.002, L1 ratio 0.66",
+            "30 tries, all rows"
+          ],
+          [
+            {
+              "text": "Random Forest",
+              "bold": true,
+              "color": "#102A43",
+              "fill": "#E9F2FA"
+            },
+            {
+              "text": "200 trees, min leaf 6, 31% of features per split, depth 20",
+              "fill": "#E9F2FA"
+            },
+            {
+              "text": "10 tries, 100k rows",
+              "fill": "#E9F2FA"
+            }
+          ],
+          [
+            {
+              "text": "Gradient boosting",
+              "bold": true,
+              "color": "#102A43"
+            },
+            "absolute-error loss, lr 0.038, 76 leaves, min leaf 70, L2 7.9, 800 iterations",
+            "20 tries, 150k rows"
+          ],
+          [
+            {
+              "text": "Boosting, q80",
+              "bold": true,
+              "color": "#102A43",
+              "fill": "#E9F2FA"
+            },
+            {
+              "text": "quantile loss (q = 0.8), lr 0.055, 29 leaves, min leaf 126, 200 iterations",
+              "fill": "#E9F2FA"
+            },
+            {
+              "text": "20 tries, 150k rows",
+              "fill": "#E9F2FA"
+            }
+          ]
+        ]
+      }
+    </metadata>
+    <rect x="64" y="176" width="1152" height="44" fill="#102A43"/>
+    <rect x="64" y="272" width="1152" height="52" fill="#E9F2FA"/>
+    <rect x="64" y="376" width="1152" height="52" fill="#E9F2FA"/>
+    <g font-size="16" font-weight="bold" fill="#FFFFFF">
+      <text x="80" y="204">Model</text>
+      <text x="290" y="204">Final settings</text>
+      <text x="1020" y="204">Search</text>
+    </g>
+    <g font-size="16" fill="#1F2937">
+      <g>
+        <text x="80" y="252" font-weight="bold" fill="#102A43">Elastic-Net</text>
+        <text x="290" y="252">α = 0.002, L1 ratio 0.66</text>
+        <text x="1020" y="252">30 tries, all rows</text>
+      </g>
+      <g>
+        <text x="80" y="304" font-weight="bold" fill="#102A43">Random Forest</text>
+        <text x="290" y="304">200 trees, min leaf 6, 31% of features per split, depth 20</text>
+        <text x="1020" y="304">10 tries, 100k rows</text>
+      </g>
+      <g>
+        <text x="80" y="356" font-weight="bold" fill="#102A43">Gradient boosting</text>
+        <text x="290" y="356">absolute-error loss, lr 0.038, 76 leaves, min leaf 70, L2 7.9, 800 iterations</text>
+        <text x="1020" y="356">20 tries, 150k rows</text>
+      </g>
+      <g>
+        <text x="80" y="408" font-weight="bold" fill="#102A43">Boosting, q80</text>
+        <text x="290" y="408">quantile loss (q = 0.8), lr 0.055, 29 leaves, min leaf 126, 200 iterations</text>
+        <text x="1020" y="408">20 tries, 150k rows</text>
+      </g>
+    </g>
+  </g>
+
+  <g id="complexity-figure" data-pptx-bounds="64 448 340 212">
+    <rect x="64" y="448" width="340" height="212" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <image href="../images/hgb_complexity_curve.png" x="76" y="460" width="316" height="188" preserveAspectRatio="xMidYMid meet"/>
+  </g>
+
+  <g id="complexity-note" data-pptx-bounds="436 448 780 212">
+    <text x="436" y="488" font-size="24" fill="#1F2937">Random search, scored by cross-validated MAE<tspan x="436" dy="34">(pinball loss for the q80 model).</tspan></text>
+    <text x="436" y="580" font-size="24" fill="#1F2937">Bigger trees overfit: <tspan font-weight="bold" fill="#102A43">511 leaves</tspan> → train 2.45<tspan x="436" dy="34">vs CV <tspan font-weight="bold" fill="#2E6EB8">6.63</tspan> min</tspan></text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup · Slower tree models tuned on a row sample, then refitted on all rows</text>
+    <text x="1216" y="696" text-anchor="end">17</text>
+  </g>
+</svg>

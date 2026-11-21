@@ -1,0 +1,1 @@
+Pickup and road each take a median of 13.1 minutes, and both run about 2.7 minutes slower at meal peaks. This figure breaks the two stages down by district.

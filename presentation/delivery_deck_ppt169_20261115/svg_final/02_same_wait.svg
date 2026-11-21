@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <defs>
+    <linearGradient id="heroDisc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2E6EB8" />
+      <stop offset="100%" stop-color="#102A43" />
+    </linearGradient>
+  </defs>
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF" />
+  <circle id="ice-disc" data-pptx-role="decoration" cx="1290" cy="720" r="250" fill="#E9F2FA" />
+
+  <g id="kicker" data-pptx-bounds="64 52 300 32">
+    <text x="64" y="76" font-size="20" font-weight="bold" fill="#102A43">01</text>
+    <line x1="100" y1="69" x2="164" y2="69" stroke="#A7C7E7" stroke-width="2" />
+    <text x="180" y="76" font-size="20" fill="#5B6B7F">Problem</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 690 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Same wait, <tspan fill="#2E6EB8">different feeling</tspan></text>
+  </g>
+
+  <g id="houston" data-pptx-bounds="64 180 640 124">
+    <text font-size="24" fill="#1F2937" x="64" y="216">Houston airport cut baggage complaints</text><text font-size="24" fill="#1F2937" x="64" y="252">without making a single bag faster:</text><text font-size="24" fill="#1F2937" x="64" y="288"><tspan>it changed how the wait <tspan font-weight="bold" fill="#102A43">felt</tspan>.</tspan></text></g>
+
+  <g id="pace-chip" data-pptx-bounds="64 316 640 64">
+    <rect x="64" y="316" width="420" height="60" rx="30" fill="#E9F2FA" />
+    
+  <g transform="translate(84, 330) scale(1.33333)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+    <path d="M12 7v5l3 3" />
+  </g>
+    <text x="128" y="354" font-size="24" fill="#102A43"><tspan font-weight="bold">~50 orders a minute</tspan>, in one city</text>
+  </g>
+
+  <g id="users" data-pptx-bounds="64 396 640 64">
+    <text font-size="18" fill="#5B6B7F" x="64" y="420">Who uses the answer: the platform's operations team</text><text font-size="18" fill="#5B6B7F" x="64" y="446">(how long to promise, how many couriers to plan)</text></g>
+
+  <g id="question" data-pptx-bounds="64 476 640 180">
+    <rect x="64" y="476" width="640" height="176" rx="16" fill="#E9F2FA" />
+    <rect x="64" y="476" width="6" height="176" rx="3" fill="#2E6EB8" />
+    <text x="96" y="512" font-size="18" font-weight="bold" fill="#2E6EB8">RESEARCH QUESTION</text>
+    <text font-size="24" fill="#102A43" x="96" y="550">Using only information available when an</text><text font-size="24" fill="#102A43" x="96" y="584">order is placed, how accurately can we predict</text><text font-size="24" fill="#102A43" x="96" y="618"><tspan><tspan font-weight="bold">delivery time</tspan>, and what drives long deliveries?</tspan></text></g>
+
+  <g id="baggage-disc" data-pptx-bounds="760 120 470 480">
+    <circle cx="1000" cy="360" r="230" fill="url(#heroDisc)" />
+    <circle cx="1000" cy="360" r="170" fill="none" stroke="#A7C7E7" stroke-width="2" stroke-dasharray="4,4" />
+    <ellipse cx="1000" cy="440" rx="150" ry="38" fill="none" stroke="#E9F2FA" stroke-width="10" />
+    
+  <g transform="translate(910, 250) scale(7.5)" fill="none" stroke="#FFFFFF" stroke-width="1.5">
+    <path d="M6 8a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -10" />
+    <path d="M9 6v-1a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1" />
+    <path d="M6 10h12" />
+    <path d="M6 16h12" />
+    <path d="M9 20v1" />
+    <path d="M15 20v1" />
+  </g>
+    <rect x="780" y="520" width="240" height="72" rx="16" fill="#FFFFFF" />
+    <text x="900" y="550" font-size="18" fill="#5B6B7F" text-anchor="middle">Bags: same speed</text>
+    <text x="900" y="578" font-size="18" font-weight="bold" fill="#102A43" text-anchor="middle">Complaints: almost gone</text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 670 1152 32" font-size="14" fill="#5B6B7F">
+    <text x="64" y="692">DSAI 5101 · Predicting food delivery time</text>
+    <text x="1216" y="692" text-anchor="end">2</text>
+  </g>
+</svg>

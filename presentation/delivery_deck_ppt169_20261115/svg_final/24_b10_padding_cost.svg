@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF" />
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="60" height="30" rx="15" fill="#E9F2FA" />
+    <text x="94" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B10</text>
+    <text x="140" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Why a padded promise <tspan fill="#EB6834">isn't free</tspan></text>
+  </g>
+
+  <g id="cost-orders" data-pptx-bounds="64 184 270 220">
+    <rect x="64" y="184" width="270" height="216" rx="16" fill="#E9F2FA" />
+    <rect x="88" y="208" width="56" height="56" rx="14" fill="#FFFFFF" />
+    
+  <g transform="translate(100, 220) scale(1.33333)" fill="none" stroke="#EB6834" stroke-width="2">
+    <path d="M18 6l-12 12" />
+    <path d="M6 6l12 12" />
+  </g>
+    <text x="88" y="310" font-size="24" font-weight="bold" fill="#102A43">Lost orders</text>
+    <text font-size="18" fill="#5B6B7F" x="88" y="342">a long promise puts</text><text font-size="18" fill="#5B6B7F" x="88" y="366">people off ordering</text></g>
+
+  <g id="cost-planning" data-pptx-bounds="358 184 270 220">
+    <rect x="358" y="184" width="270" height="216" rx="16" fill="#E9F2FA" />
+    <rect x="382" y="208" width="56" height="56" rx="14" fill="#FFFFFF" />
+    
+  <g transform="translate(394, 220) scale(1.33333)" fill="none" stroke="#EB6834" stroke-width="2">
+    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12" />
+    <path d="M16 3v4" />
+    <path d="M8 3v4" />
+    <path d="M4 11h16" />
+    <path d="M11 15h1" />
+    <path d="M12 15v3" />
+  </g>
+    <text x="382" y="310" font-size="24" font-weight="bold" fill="#102A43">Bad planning</text>
+    <text font-size="18" fill="#5B6B7F" x="382" y="342">customers plan</text><text font-size="18" fill="#5B6B7F" x="382" y="366">around a wrong time</text></g>
+
+  <g id="cost-trust" data-pptx-bounds="652 184 270 220">
+    <rect x="652" y="184" width="270" height="216" rx="16" fill="#E9F2FA" />
+    <rect x="676" y="208" width="56" height="56" rx="14" fill="#FFFFFF" />
+    
+  <g transform="translate(688, 220) scale(1.33333)" fill="none" stroke="#EB6834" stroke-width="2">
+    <path d="M12 9v4" />
+    <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" />
+    <path d="M12 16h.01" />
+  </g>
+    <text x="676" y="310" font-size="24" font-weight="bold" fill="#102A43">Trust wears off</text>
+    <text font-size="18" fill="#5B6B7F" x="676" y="342">people learn the</text><text font-size="18" fill="#5B6B7F" x="676" y="366">number is padded</text></g>
+
+  <g id="cost-ops" data-pptx-bounds="946 184 270 220">
+    <rect x="946" y="184" width="270" height="216" rx="16" fill="#E9F2FA" />
+    <rect x="970" y="208" width="56" height="56" rx="14" fill="#FFFFFF" />
+    
+  <g transform="translate(982, 220) scale(1.33333)" fill="none" stroke="#EB6834" stroke-width="2">
+    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" />
+    <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+  </g>
+    <text x="970" y="310" font-size="24" font-weight="bold" fill="#102A43">Operations</text>
+    <text font-size="18" fill="#5B6B7F" x="970" y="342">courier planning</text><text font-size="18" fill="#5B6B7F" x="970" y="366">needs the real time</text></g>
+
+  <g id="buffer-contrast" data-pptx-bounds="64 432 1152 200">
+    <rect x="64" y="432" width="1152" height="196" rx="16" fill="#102A43" />
+    <text x="96" y="478" font-size="18" font-weight="bold" fill="#A7C7E7">SAME BUFFER FOR EVERY ORDER</text>
+    <g id="buffer-short">
+      <text x="96" y="548" font-size="64" font-weight="bold" fill="#FFFFFF">1 km</text>
+      <text x="96" y="592" font-size="24" fill="#A7C7E7">too much padding</text>
+    </g>
+    <line x1="640" y1="500" x2="640" y2="600" stroke="#2E6EB8" stroke-width="2" />
+    <g id="buffer-long">
+      <text x="680" y="548" font-size="64" font-weight="bold" fill="#FFFFFF">7 km</text>
+      <text x="680" y="592" font-size="24" fill="#A7C7E7">too little padding</text>
+    </g>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">24</text>
+  </g>
+</svg>

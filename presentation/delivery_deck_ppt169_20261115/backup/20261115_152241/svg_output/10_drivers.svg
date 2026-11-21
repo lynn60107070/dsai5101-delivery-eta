@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <defs>
+    <linearGradient id="cornerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E9F2FA"/>
+      <stop offset="100%" stop-color="#A7C7E7"/>
+    </linearGradient>
+    <filter id="softShadow" x="-15%" y="-20%" width="130%" height="150%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#102A43" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+  <circle id="corner-disc" data-pptx-role="decoration" cx="1280" cy="0" r="190" fill="url(#cornerGrad)"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <text x="64" y="76" font-size="20" font-weight="bold" fill="#102A43">04</text>
+    <line x1="100" y1="69" x2="164" y2="69" stroke="#A7C7E7" stroke-width="2"/>
+    <text x="180" y="76" font-size="20" fill="#5B6B7F">Results &amp; Insights</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 112" font-size="42" font-weight="bold" fill="#102A43">
+    <text x="64" y="138"><tspan fill="#2E6EB8">Distance</tspan> drives delivery time;<tspan x="64" dy="52">how busy the area is barely matters</tspan></text>
+  </g>
+
+  <g id="drivers-figure" data-pptx-bounds="64 228 720 444">
+    <rect x="64" y="228" width="720" height="396" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <image href="../images/delay_drivers.png" x="80" y="244" width="688" height="364" preserveAspectRatio="xMidYMid meet"/>
+    <text x="64" y="652" font-size="18" fill="#5B6B7F">Distance +3.10 ≫ time +0.86 ≈ district +0.83 &gt; prep +0.67 &gt; load +0.19 min</text>
+  </g>
+
+  <g id="order-ticket" data-pptx-bounds="816 228 400 164">
+    <rect x="816" y="228" width="400" height="160" rx="16" fill="#FFFFFF" filter="url(#softShadow)"/>
+    <rect x="836" y="248" width="52" height="52" rx="12" fill="#E9F2FA"/>
+    <use data-icon="tabler-outline/receipt" x="848" y="260" width="28" height="28" fill="#2E6EB8" stroke-width="2"/>
+    <text x="904" y="270" font-size="18" fill="#5B6B7F">Why #85188 took 43 min</text>
+    <text x="904" y="296" font-size="18" fill="#5B6B7F">mostly distance, then lunchtime</text>
+    <g id="ticket-pickup">
+      <text x="836" y="364" font-size="32" font-weight="bold" fill="#102A43">12.5<tspan font-size="18" font-weight="normal" fill="#5B6B7F"> to pickup</tspan></text>
+    </g>
+    <g id="ticket-road">
+      <text x="1030" y="364" font-size="32" font-weight="bold" fill="#2E6EB8">31<tspan font-size="18" font-weight="normal" fill="#5B6B7F"> on the road</tspan></text>
+    </g>
+  </g>
+
+  <g id="stages" data-pptx-bounds="816 412 400 100">
+    <text x="816" y="440" font-size="24" fill="#1F2937">Pickup and road each take a<tspan x="816" dy="34">median <tspan font-weight="bold" fill="#102A43">13.1 min</tspan>; both ~2.7 min</tspan><tspan x="816" dy="34">slower at peaks</tspan></text>
+  </g>
+
+  <g id="insight" data-pptx-bounds="816 540 400 120">
+    <rect x="816" y="540" width="400" height="116" rx="16" fill="#E9F2FA"/>
+    <use data-icon="tabler-outline/bulb" x="836" y="560" width="32" height="32" fill="#2E6EB8" stroke-width="2"/>
+    <text x="880" y="582" font-size="18" font-weight="bold" fill="#2E6EB8">Our proposal was</text>
+    <text x="836" y="614" font-size="24" fill="#102A43"><tspan font-weight="bold">right</tspan> on distance and peaks,<tspan x="836" dy="30"><tspan font-weight="bold">wrong</tspan> on load</tspan></text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Driver effects from cross-validation</text>
+    <text x="1216" y="696" text-anchor="end">10</text>
+  </g>
+</svg>

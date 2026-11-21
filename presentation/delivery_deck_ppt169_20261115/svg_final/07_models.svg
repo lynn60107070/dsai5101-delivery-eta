@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <defs>
+    <linearGradient id="cornerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E9F2FA" />
+      <stop offset="100%" stop-color="#A7C7E7" />
+    </linearGradient>
+  </defs>
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF" />
+  <circle id="corner-disc" data-pptx-role="decoration" cx="1280" cy="0" r="190" fill="url(#cornerGrad)" />
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <text x="64" y="76" font-size="20" font-weight="bold" fill="#102A43">03</text>
+    <line x1="100" y1="69" x2="164" y2="69" stroke="#A7C7E7" stroke-width="2" />
+    <text x="180" y="76" font-size="20" fill="#5B6B7F">Methods &amp; Evaluation</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 112" font-size="42" font-weight="bold" fill="#102A43">
+    <text x="64" y="138">Two baselines, three models,</text><text x="64" y="190" fill="#2E6EB8">order-time information only</text></g>
+
+  <g id="baselines" data-pptx-bounds="64 228 360 236">
+    <rect x="64" y="228" width="360" height="236" rx="16" fill="#E9F2FA" />
+    <text x="88" y="262" font-size="18" font-weight="bold" fill="#5B6B7F">BASELINES</text>
+    <g id="base-median">
+      <rect x="88" y="280" width="312" height="76" rx="12" fill="#FFFFFF" />
+      <text x="108" y="314" font-size="24" font-weight="bold" fill="#102A43">Median guess</text>
+      <text x="108" y="340" font-size="18" fill="#5B6B7F">same answer for every order</text>
+    </g>
+    <g id="base-promise">
+      <rect x="88" y="368" width="312" height="76" rx="12" fill="#FFFFFF" />
+      <text x="108" y="402" font-size="24" font-weight="bold" fill="#EB6834">App's promise</text>
+      <text x="108" y="428" font-size="18" fill="#5B6B7F">the platform's own number</text>
+    </g>
+  </g>
+
+  <g id="models" data-pptx-bounds="448 228 768 236">
+    <rect x="448" y="228" width="768" height="236" rx="16" fill="#102A43" />
+    <text x="472" y="262" font-size="18" font-weight="bold" fill="#A7C7E7">MODELS · tuned by random search on the CV folds</text>
+    <g id="model-en">
+      <rect x="472" y="280" width="232" height="164" rx="12" fill="#FFFFFF" />
+      
+  <g transform="translate(492, 300) scale(1.5)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M7 20l10 0" />
+    <path d="M6 6l6 -1l6 1" />
+    <path d="M12 3l0 17" />
+    <path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0" />
+    <path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0" />
+  </g>
+      <text x="492" y="374" font-size="24" font-weight="bold" fill="#102A43">Elastic-Net</text>
+      <text x="492" y="404" font-size="18" fill="#5B6B7F">readable</text>
+    </g>
+    <g id="model-rf">
+      <rect x="716" y="280" width="232" height="164" rx="12" fill="#FFFFFF" />
+      
+  <g transform="translate(736, 300) scale(1.5)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6" />
+    <path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10" />
+    <path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14" />
+    <path d="M4 20h14" />
+  </g>
+      <text x="736" y="374" font-size="24" font-weight="bold" fill="#102A43">Random Forest</text>
+      <text x="736" y="404" font-size="18" fill="#5B6B7F">robust</text>
+    </g>
+    <g id="model-gb">
+      <rect x="960" y="280" width="232" height="164" rx="12" fill="#FFFFFF" />
+      
+  <g transform="translate(980, 300) scale(1.5)" fill="none" stroke="#2E6EB8" stroke-width="2">
+    <path d="M3 17l6 -6l4 4l8 -8" />
+    <path d="M14 7l7 0l0 7" />
+  </g>
+      <text x="980" y="374" font-size="24" font-weight="bold" fill="#102A43">Boosting</text>
+      <text font-size="18" fill="#5B6B7F" x="980" y="404">strongest on tabular</text><text font-size="18" fill="#5B6B7F" x="980" y="428">data</text></g>
+  </g>
+
+  <g id="features-used" data-pptx-bounds="64 488 720 92">
+    <text x="64" y="512" font-size="18" font-weight="bold" fill="#2E6EB8">USED · known when the order is placed</text>
+    <g font-size="18" fill="#102A43">
+      <rect x="64" y="528" width="112" height="40" rx="20" fill="#E9F2FA" />
+      <text x="120" y="554" text-anchor="middle">distance</text>
+      <rect x="186" y="528" width="160" height="40" rx="20" fill="#E9F2FA" />
+      <text x="266" y="554" text-anchor="middle">prep estimate</text>
+      <rect x="356" y="528" width="128" height="40" rx="20" fill="#E9F2FA" />
+      <text x="420" y="554" text-anchor="middle">time of day</text>
+      <rect x="494" y="528" width="140" height="40" rx="20" fill="#E9F2FA" />
+      <text x="564" y="554" text-anchor="middle">district load</text>
+      <rect x="644" y="528" width="100" height="40" rx="20" fill="#E9F2FA" />
+      <text x="694" y="554" text-anchor="middle">district</text>
+    </g>
+  </g>
+
+  <g id="features-never" data-pptx-bounds="808 488 408 92">
+    <text x="808" y="512" font-size="18" font-weight="bold" fill="#5B6B7F">NEVER · happens after ordering</text>
+    <g font-size="18" fill="#5B6B7F">
+      <rect x="808" y="528" width="112" height="40" rx="20" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+      <text x="864" y="554" text-anchor="middle">courier</text>
+      <rect x="930" y="528" width="120" height="40" rx="20" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+      <text x="990" y="554" text-anchor="middle">dispatch</text>
+      <rect x="1060" y="528" width="112" height="40" rx="20" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+      <text x="1116" y="554" text-anchor="middle">pickup</text>
+    </g>
+  </g>
+
+  <g id="insight" data-pptx-bounds="64 596 1152 64">
+    <rect x="64" y="596" width="1152" height="60" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5" />
+    
+  <g transform="translate(84, 610) scale(1.33333)" fill="none" stroke="#EB6834" stroke-width="2">
+    <path d="M12 9v4" />
+    <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" />
+    <path d="M12 16h.01" />
+  </g>
+    <text x="132" y="634" font-size="24" fill="#102A43">The app's promise: <tspan font-weight="bold">padded, and still late 15% of the time.</tspan></text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time</text>
+    <text x="1216" y="696" text-anchor="end">7</text>
+  </g>
+</svg>

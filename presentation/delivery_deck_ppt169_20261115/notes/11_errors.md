@@ -1,0 +1,1 @@
+Lunch is our hardest hour, and long trips are hard too. Under one kilometre we're off by 5.6 minutes, over seven kilometres by 14.4. At 11:00 the error is 7.2 against 6.5 overall. For orders like ours, we're off by 8.4 minutes, not 6.5. Still better than the app's 11. Sunday is a little harder than Monday, and districts range from 4.4 to 9 minutes.

@@ -1,0 +1,1 @@
+If the model were allowed to know dispatch and pickup times, its error would drop from 6.25 to 4.53 minutes and R squared would rise from 0.51 to 0.72. That information doesn't exist at ordering, so missing information is the ceiling, and R squared 0.49 is not a weak model.

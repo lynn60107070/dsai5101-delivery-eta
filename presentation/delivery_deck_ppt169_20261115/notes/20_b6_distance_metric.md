@@ -1,0 +1,1 @@
+Straight-line and street-grid distance give the same cross-validated error, 6.282 against 6.284 minutes. The difference is minus 0.002 minutes with a confidence interval that includes zero, so we kept Haversine, the simpler default.

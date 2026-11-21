@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="60" height="30" rx="15" fill="#E9F2FA"/>
+    <text x="94" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B10</text>
+    <text x="140" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Why a padded promise <tspan fill="#EB6834">isn't free</tspan></text>
+  </g>
+
+  <g id="cost-orders" data-pptx-bounds="64 184 270 220">
+    <rect x="64" y="184" width="270" height="216" rx="16" fill="#E9F2FA"/>
+    <rect x="88" y="208" width="56" height="56" rx="14" fill="#FFFFFF"/>
+    <use data-icon="tabler-outline/x" x="100" y="220" width="32" height="32" fill="#EB6834" stroke-width="2"/>
+    <text x="88" y="310" font-size="24" font-weight="bold" fill="#102A43">Lost orders</text>
+    <text x="88" y="342" font-size="18" fill="#5B6B7F">a long promise puts<tspan x="88" dy="24">people off ordering</tspan></text>
+  </g>
+
+  <g id="cost-planning" data-pptx-bounds="358 184 270 220">
+    <rect x="358" y="184" width="270" height="216" rx="16" fill="#E9F2FA"/>
+    <rect x="382" y="208" width="56" height="56" rx="14" fill="#FFFFFF"/>
+    <use data-icon="tabler-outline/calendar" x="394" y="220" width="32" height="32" fill="#EB6834" stroke-width="2"/>
+    <text x="382" y="310" font-size="24" font-weight="bold" fill="#102A43">Bad planning</text>
+    <text x="382" y="342" font-size="18" fill="#5B6B7F">customers plan<tspan x="382" dy="24">around a wrong time</tspan></text>
+  </g>
+
+  <g id="cost-trust" data-pptx-bounds="652 184 270 220">
+    <rect x="652" y="184" width="270" height="216" rx="16" fill="#E9F2FA"/>
+    <rect x="676" y="208" width="56" height="56" rx="14" fill="#FFFFFF"/>
+    <use data-icon="tabler-outline/alert-triangle" x="688" y="220" width="32" height="32" fill="#EB6834" stroke-width="2"/>
+    <text x="676" y="310" font-size="24" font-weight="bold" fill="#102A43">Trust wears off</text>
+    <text x="676" y="342" font-size="18" fill="#5B6B7F">people learn the<tspan x="676" dy="24">number is padded</tspan></text>
+  </g>
+
+  <g id="cost-ops" data-pptx-bounds="946 184 270 220">
+    <rect x="946" y="184" width="270" height="216" rx="16" fill="#E9F2FA"/>
+    <rect x="970" y="208" width="56" height="56" rx="14" fill="#FFFFFF"/>
+    <use data-icon="tabler-outline/settings" x="982" y="220" width="32" height="32" fill="#EB6834" stroke-width="2"/>
+    <text x="970" y="310" font-size="24" font-weight="bold" fill="#102A43">Operations</text>
+    <text x="970" y="342" font-size="18" fill="#5B6B7F">courier planning<tspan x="970" dy="24">needs the real time</tspan></text>
+  </g>
+
+  <g id="buffer-contrast" data-pptx-bounds="64 432 1152 200">
+    <rect x="64" y="432" width="1152" height="196" rx="16" fill="#102A43"/>
+    <text x="96" y="478" font-size="18" font-weight="bold" fill="#A7C7E7">SAME BUFFER FOR EVERY ORDER</text>
+    <g id="buffer-short">
+      <text x="96" y="548" font-size="64" font-weight="bold" fill="#FFFFFF">1 km</text>
+      <text x="96" y="592" font-size="24" fill="#A7C7E7">too much padding</text>
+    </g>
+    <line x1="640" y1="500" x2="640" y2="600" stroke="#2E6EB8" stroke-width="2"/>
+    <g id="buffer-long">
+      <text x="680" y="548" font-size="64" font-weight="bold" fill="#FFFFFF">7 km</text>
+      <text x="680" y="592" font-size="24" fill="#A7C7E7">too little padding</text>
+    </g>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">24</text>
+  </g>
+</svg>

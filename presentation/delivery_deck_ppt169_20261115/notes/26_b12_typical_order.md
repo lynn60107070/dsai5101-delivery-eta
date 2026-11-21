@@ -1,0 +1,1 @@
+Our order isn't cherry-picked. Among the 634 Sunday orders placed at 11 o'clock and three to five kilometres away, the medians are 45.3 actual, 52.2 promised and 45.2 predicted, close to our order's 43, 51 and 45. In that group we're off by 8.4 minutes on average and the app by 11, and 26 percent arrived after the promise.

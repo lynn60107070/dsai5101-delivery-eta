@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="52" height="30" rx="15" fill="#E9F2FA"/>
+    <text x="90" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B8</text>
+    <text x="132" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1100 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43"><tspan fill="#EB6834">35%</tspan> of promises sit at the 30-min minimum</text>
+  </g>
+
+  <g id="padding-figure" data-pptx-bounds="64 176 680 484">
+    <rect x="64" y="176" width="680" height="484" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <image href="../images/promise_padding.png" x="80" y="192" width="648" height="452" preserveAspectRatio="xMidYMid meet"/>
+  </g>
+
+  <g id="kpi-floor" data-pptx-bounds="776 176 440 160">
+    <rect x="776" y="176" width="440" height="156" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <text x="800" y="212" font-size="18" fill="#5B6B7F">Promises exactly at 30 min</text>
+    <text x="800" y="290" font-size="64" font-weight="bold" fill="#EB6834">35%</text>
+    <text x="800" y="320" font-size="18" fill="#5B6B7F">the app never promises under 30</text>
+  </g>
+
+  <g id="cliff" data-pptx-bounds="776 356 440 180">
+    <rect x="776" y="356" width="440" height="176" rx="16" fill="#E9F2FA"/>
+    <text x="800" y="392" font-size="18" font-weight="bold" fill="#2E6EB8">THE 8-MINUTE CLIFF</text>
+    <text x="800" y="432" font-size="24" fill="#102A43">Late orders more than halve<tspan x="800" dy="34">at exactly 8 min late:</tspan><tspan x="800" dy="34">someone starts rushing</tspan></text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">22</text>
+  </g>
+</svg>

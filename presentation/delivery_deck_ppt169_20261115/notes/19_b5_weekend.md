@@ -1,0 +1,1 @@
+We dropped the weekend flag because training had only one weekend day, and none in the first three folds. On the Saturday fold, Elastic-Net's error jumped from 6.8 to 18 minutes. Weekend stays an EDA finding and a stated limitation.

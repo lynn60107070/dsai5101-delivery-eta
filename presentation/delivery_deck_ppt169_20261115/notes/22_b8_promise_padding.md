@@ -1,0 +1,1 @@
+35 percent of promises sit exactly at the 30-minute minimum; the app never promises less. And late orders more than halve at exactly 8 minutes late, which suggests someone starts rushing once an order is about to be very late.

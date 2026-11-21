@@ -1,0 +1,326 @@
+
+=== 2026-11-15T11:59:00.595Z NOTE id=18333ec0862e ===
+Project initialized: profile=default; canvas=ppt169; path=C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115
+
+=== 2026-11-15T11:59:13.280Z PYTHON run=c003178d90a7 ===
+cwd: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/project_manager.py", "import-sources", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/outline.md", "eda/order_timeline.png", "eda/cleaning_funnel.png", "eda/delivery_vs_distance.png", "eda/delivery_by_hour.png", "eda/promise_padding.png", "eda/leakage_audit.png", "eda/stages_by_area.png", "results/time_split.png", "results/hgb_complexity_curve.png", "results/test_mae.png", "results/delay_drivers.png", "results/errors_by_distance.png", "results/errors_by_hour.png", "results/errors_by_area.png", "promise/final_test_gap.png"]
+stdout:
+  [OK] Imported sources into: C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115
+=== 2026-11-15T11:59:14.284Z END run=c003178d90a7 elapsed_ms=1000 output_lines=36 retained=1 omitted=35 ===
+
+=== 2026-11-15T11:59:30.349Z PYTHON run=0bd71d50484a ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/confirm_ui/server.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--daemon"]
+stderr:
+  [14:59:30] [ERROR] confirm_ui: invalid Stage 1 recommendations: [Errno 2] No such file or directory: 'C:\\Users\\lynny\\OneDrive\\Desktop\\uni\\masters\\year1\\fall26\\DSAI5101_PrinciplesOfDSML\\dsml_project\\presentation\\delivery_deck_ppt169_20261115\\confirm_ui\\recommendations.stage1.json'
+=== 2026-11-15T11:59:30.515Z END run=0bd71d50484a elapsed_ms=172 output_lines=1 retained=1 omitted=0 ===
+
+=== 2026-11-15T11:59:36.280Z PYTHON run=d0dd75998458 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/confirm_ui/server.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--daemon"]
+stderr:
+  [14:59:37] [INFO] confirm_ui: log: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\confirm_ui\server.log
+  [14:59:39] [INFO] confirm_ui: started confirm UI in background: http://127.0.0.1:5050 (pid=22656)
+  [14:59:40] [INFO] confirm_ui: browser launch request accepted by OS: http://127.0.0.1:5050
+=== 2026-11-15T11:59:40.042Z END run=d0dd75998458 elapsed_ms=3750 output_lines=3 retained=3 omitted=0 ===
+
+=== 2026-11-15T11:59:49.959Z PYTHON run=cb9cfb9cc573 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/confirm_ui/server.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--wait-only", "--wait-stage", "stage1"]
+stderr:
+  [14:59:50] [INFO] confirm_ui: waiting for browser confirmation stage=stage1...
+  [15:00:54] [INFO] confirm_ui: confirmation stage=stage1 received: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\confirm_ui\result.json
+  [15:00:54] [INFO] confirm_ui: [NEXT] Stage 1 is intermediate: install the selected roots (if any), author fresh Stage 2, then wait for final confirmation.
+=== 2026-11-15T12:00:54.893Z END run=cb9cfb9cc573 elapsed_ms=64938 output_lines=3 retained=3 omitted=0 ===
+
+=== 2026-11-15T12:01:18.732Z PYTHON run=21c3b101c88f ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/analyze_images.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115/images"]
+stdout:
+  [REPORT] Image analysis CSV: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\analysis\image_analysis.csv
+=== 2026-11-15T12:01:18.971Z END run=21c3b101c88f elapsed_ms=234 output_lines=45 retained=1 omitted=44 ===
+
+=== 2026-11-15T12:02:29.636Z PYTHON run=e47865b601d2 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/confirm_ui/server.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--wait-only"]
+stderr:
+  [15:02:29] [INFO] confirm_ui: waiting for browser confirmation stage=final...
+  [15:04:04] [INFO] confirm_ui: confirmation stage=final received: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\confirm_ui\result.json
+=== 2026-11-15T12:04:04.469Z END run=e47865b601d2 elapsed_ms=94844 output_lines=2 retained=2 omitted=0 ===
+
+=== 2026-11-15T12:04:09.396Z PYTHON run=50990117a090 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\figures
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/confirm_ui/server.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--shutdown"]
+stderr:
+  [15:04:09] [INFO] confirm_ui: no confirm server running — nothing to stop
+=== 2026-11-15T12:04:09.399Z END run=50990117a090 elapsed_ms=0 output_lines=1 retained=1 omitted=0 ===
+
+=== 2026-11-15T12:06:22.674Z PYTHON run=baa09726bc99 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/icon_sync.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "tabler-outline/moped", "tabler-outline/clock", "tabler-outline/map-pin", "tabler-outline/route", "tabler-outline/chart-bar", "tabler-outline/database", "tabler-outline/calendar", "tabler-outline/settings", "tabler-outline/target-arrow", "tabler-outline/receipt", "tabler-outline/user", "tabler-outline/bulb", "tabler-outline/alert-triangle", "tabler-outline/check", "tabler-outline/x", "tabler-outline/trending-up", "tabler-outline/scale", "tabler-outline/filter", "tabler-outline/lock", "tabler-outline/help-circle", "tabler-outline/brand-github", "tabler-outline/luggage", "tabler-outline/cloud-rain", "tabler-outline/building-skyscraper"]
+stderr:
+  [OK] 24 icon(s) in C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\icons:
+       + tabler-outline/moped
+       + tabler-outline/clock
+       + tabler-outline/map-pin
+       + tabler-outline/route
+       + tabler-outline/chart-bar
+       + tabler-outline/database
+       + tabler-outline/calendar
+       + tabler-outline/settings
+stderr-tail:
+       + tabler-outline/brand-github
+       + tabler-outline/luggage
+       + tabler-outline/cloud-rain
+       + tabler-outline/building-skyscraper
+=== 2026-11-15T12:06:22.723Z END run=baa09726bc99 elapsed_ms=47 output_lines=25 retained=13 omitted=12 ===
+
+=== 2026-11-15T12:06:47.719Z PYTHON run=523303ef829b ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/project_manager.py", "validate", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-15T12:06:48.710Z END run=523303ef829b elapsed_ms=983 output_lines=5 retained=2 omitted=3 ===
+
+=== 2026-11-15T12:07:13.039Z PYTHON run=b2ac2bbdce2f ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/project_manager.py", "validate", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-15T12:07:13.967Z END run=b2ac2bbdce2f elapsed_ms=938 output_lines=5 retained=2 omitted=3 ===
+
+=== 2026-11-15T12:07:48.672Z PYTHON run=1dc2a4f653ca ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/text_measure.py", "calibrate", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--outline"]
+=== 2026-11-15T12:07:49.172Z END run=1dc2a4f653ca elapsed_ms=500 output_lines=18 retained=0 omitted=18 ===
+
+=== 2026-11-15T12:07:49.572Z PYTHON run=b5cf376e15b9 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_editor/server.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--live", "--daemon"]
+stderr:
+  [15:07:50] [INFO] svg_editor: started live preview in background: http://127.0.0.1:6060 (pid=47276)
+  [15:07:50] [INFO] svg_editor: log: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\live_preview\server.log
+  [15:07:50] [INFO] svg_editor: browser launch request accepted by OS: http://127.0.0.1:6060
+=== 2026-11-15T12:07:50.697Z END run=b5cf376e15b9 elapsed_ms=1125 output_lines=3 retained=3 omitted=0 ===
+
+=== 2026-11-15T12:11:43.045Z PYTHON run=ba3865895622 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_quality_checker.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--canonical-authoring", "--stage", "early", "--json"]
+stdout:
+  [WARN] 01_cover.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 02_same_wait.svg - Passed (with warnings)
+  [ERROR] 03_meet_order.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=888, y=606; text='8 days · 23 district…') exceeds the root viewBox on the horizontal axis: content (888.0, 590.7)-(1315.5, 612.3), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 2.8%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈11.0 px per mixed char at 18px without headroom; ≈116 chars fit in 1280 px
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [ERROR] 04_cleaning.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=800, y=290; text='Repeat offers of the…') exceeds <g id="steps"> data-pptx-bounds on the horizontal axis: content (800.0, 274.7)-(1263.4, 296.3), container (736.0, 232.0)-(1216.0, 532.0), overflow horizontal 9.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈11.9 px per Latin char at 18px incl. headroom; ≈40 chars fit in 480 px
+     [ERROR] <text> (x=800, y=390; text='A different populati…') exceeds <g id="steps"> data-pptx-bounds on the horizontal axis: content (800.0, 374.7)-(1263.3, 420.3), container (736.0, 232.0)-(1216.0, 532.0), overflow horizontal 9.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈10.3 px per Latin char at 18px incl. headroom; ≈46 chars fit in 480 px
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+     [WARN] <text> (x=800, y=584; text='Default prep estimat…') exceeds <g id="flag-note"> data-pptx-bounds on the horizontal axis: content (800.0, 568.7)-(1226.0, 616.3), container (736.0, 548.0)-(1216.0, 636.0), overflow horizontal 2.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈11.5 px per Latin char at 18px incl. headroom; ≈41 chars fit in 480 px
+  [WARN] 05_distance.svg - Passed (with warnings)
+     viewBox: 0 0 1280 720
+  [SUMMARY] Check Summary
+  Total files: 5
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 3 (60%)
+    [ERROR] With errors: 2 (40%)
+  Provenance categories:
+    blocking: 3          hard findings; gate also requires exit 0
+    introduced: 9        advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 5 | text: 62 | images: 3 | icons: 12
+    Geometry: SVG elements 55 | native presets 0 | page-frame elements 6 | marker uses 0
+  [REPORT] JSON quality report exported: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\validation\svg_quality_early_report.json
+=== 2026-11-15T12:11:45.184Z END run=ba3865895622 elapsed_ms=2140 output_lines=58 retained=30 omitted=28 ===
+
+=== 2026-11-15T12:12:53.083Z PYTHON run=b82e207e24e9 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_quality_checker.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--canonical-authoring", "--stage", "early", "--json"]
+stdout:
+  [WARN] 01_cover.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 02_same_wait.svg - Passed (with warnings)
+  [SUMMARY] Check Summary
+  Total files: 5
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 5 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 6        advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 5 | text: 62 | images: 3 | icons: 12
+    Geometry: SVG elements 55 | native presets 0 | page-frame elements 6 | marker uses 0
+  [REPORT] JSON quality report exported: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\validation\svg_quality_early_report.json
+=== 2026-11-15T12:12:54.760Z END run=b82e207e24e9 elapsed_ms=1672 output_lines=49 retained=18 omitted=31 ===
+
+=== 2026-11-15T12:20:04.588Z PYTHON run=4798d82ea114 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/stamp_native_fallbacks.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115/svg_output", "--write"]
+stderr:
+  Error: 15_b1_cleaning_table.svg: invalid SVG XML: not well-formed (invalid token): line 44, column 27
+=== 2026-11-15T12:20:04.666Z END run=4798d82ea114 elapsed_ms=77 output_lines=27 retained=1 omitted=26 ===
+
+=== 2026-11-15T12:20:04.916Z PYTHON run=f5c80abf0f8f ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_quality_checker.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [WARN] 01_cover.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 02_same_wait.svg - Passed (with warnings)
+  [ERROR] 14_closing.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=64, y=240; text='A good promise needs…') exceeds <g id="takeaway"> data-pptx-bounds on the horizontal and vertical axis: content (64.0, 185.6)-(793.0, 414.4), container (64.0, 168.0)-(754.0, 408.0), overflow horizontal 5.7%, vertical 2.7% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈42.9 px per Latin char at 64px incl. headroom; ≈16 chars fit in 690 px
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [ERROR] 15_b1_cleaning_table.svg - Failed
+     [ERROR] Invalid XML: not well-formed (invalid token): line 44, column 27 — SVG must be well-formed XML. Use raw Unicode for typography (—, ©, →, NBSP); escape XML reserved chars as &amp; &lt; &gt; &quot; &apos; (see references/shared-standards-core.md §1).
+  [WARN] 16_b2_leakage.svg - Passed (with warnings)
+     viewBox: 0 0 1280 720
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 17_b3_tuning.svg - Passed (with warnings)
+  [SUMMARY] Check Summary
+  Total files: 26
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 24 (92%)
+    [ERROR] With errors: 2 (7%)
+  Provenance categories:
+    blocking: 2          hard findings; gate also requires exit 0
+    introduced: 36       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 25 | text: 352 | images: 17 | icons: 47
+    Geometry: SVG elements 208 | native presets 0 | page-frame elements 22 | marker uses 0
+  [REPORT] JSON quality report exported: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\validation\svg_quality_report.json
+=== 2026-11-15T12:20:07.601Z END run=f5c80abf0f8f elapsed_ms=2688 output_lines=125 retained=28 omitted=97 ===
+
+=== 2026-11-15T12:20:22.915Z PYTHON run=2ea655f4968e ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/stamp_native_fallbacks.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115/svg_output", "--write"]
+=== 2026-11-15T12:20:22.962Z END run=2ea655f4968e elapsed_ms=47 output_lines=27 retained=0 omitted=27 ===
+
+=== 2026-11-15T12:20:23.262Z PYTHON run=6b723b72771e ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_quality_checker.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [WARN] 01_cover.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 02_same_wait.svg - Passed (with warnings)
+  [SUMMARY] Check Summary
+  Total files: 26
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 26 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 40       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 26 | text: 382 | images: 17 | icons: 47
+    Geometry: SVG elements 214 | native presets 0 | page-frame elements 22 | marker uses 0
+  [REPORT] JSON quality report exported: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\validation\svg_quality_report.json
+=== 2026-11-15T12:20:25.806Z END run=6b723b72771e elapsed_ms=2530 output_lines=125 retained=18 omitted=107 ===
+
+=== 2026-11-15T12:22:03.476Z PYTHON run=30954f4a23c2 ===
+cwd: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/stamp_native_fallbacks.py", "../svg_output", "--write"]
+=== 2026-11-15T12:22:03.519Z END run=30954f4a23c2 elapsed_ms=47 output_lines=27 retained=0 omitted=27 ===
+
+=== 2026-11-15T12:22:03.792Z PYTHON run=7cad6de7a977 ===
+cwd: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_quality_checker.py", "..", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [WARN] 01_cover.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 02_same_wait.svg - Passed (with warnings)
+  [SUMMARY] Check Summary
+  Total files: 26
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 26 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 40       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 26 | text: 382 | images: 17 | icons: 47
+    Geometry: SVG elements 214 | native presets 0 | page-frame elements 22 | marker uses 0
+  [REPORT] JSON quality report exported: ..\validation\svg_quality_report.json
+=== 2026-11-15T12:22:06.610Z END run=7cad6de7a977 elapsed_ms=2828 output_lines=125 retained=18 omitted=107 ===
+
+=== 2026-11-15T12:22:16.532Z PYTHON run=a7b1870ad7b6 ===
+cwd: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/stamp_native_fallbacks.py", "../svg_output", "--write"]
+=== 2026-11-15T12:22:16.642Z END run=a7b1870ad7b6 elapsed_ms=110 output_lines=27 retained=0 omitted=27 ===
+
+=== 2026-11-15T12:22:16.874Z PYTHON run=aa772d4f1c03 ===
+cwd: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_quality_checker.py", "..", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [WARN] 01_cover.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): title:fill None -> '#102A43'; text[18]:fill '#102A43' -> None; text[20]:fill '#102A43' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Inter): Inter, sans-serif
+  [WARN] 02_same_wait.svg - Passed (with warnings)
+  [SUMMARY] Check Summary
+  Total files: 26
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 26 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 33       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 26 | text: 382 | images: 17 | icons: 47
+    Geometry: SVG elements 214 | native presets 0 | page-frame elements 22 | marker uses 0
+  [REPORT] JSON quality report exported: ..\validation\svg_quality_report.json
+=== 2026-11-15T12:22:19.245Z END run=aa772d4f1c03 elapsed_ms=2359 output_lines=118 retained=18 omitted=100 ===
+
+=== 2026-11-15T12:22:30.577Z PYTHON run=6482c61fe3f2 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/total_md_split.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115"]
+stdout:
+  [OK] SVG files and notes have one-to-one correspondence
+  [Done] Successfully generated 26/26 file(s)
+  [Done] Notes splitting complete
+=== 2026-11-15T12:22:30.593Z END run=6482c61fe3f2 elapsed_ms=16 output_lines=35 retained=3 omitted=32 ===
+
+=== 2026-11-15T12:22:32.075Z PYTHON run=d9b41fa981eb ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/finalize_svg.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115"]
+stdout:
+  [OK] 01_cover.svg (4 icons)
+  [OK] Done!
+=== 2026-11-15T12:22:37.997Z END run=d9b41fa981eb elapsed_ms=5922 output_lines=32 retained=2 omitted=30 ===
+
+=== 2026-11-15T12:22:39.747Z PYTHON run=322b09156194 ===
+cwd: c:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\svg_output
+argv: ["C:\\Users\\lynny\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", "C:/Users/lynny/.claude/plugins/cache/ppt-master/ppt-master/3af3e8ef774c-32c1cf49/ppt-master/scripts/svg_to_pptx.py", "C:/Users/lynny/OneDrive/Desktop/uni/masters/year1/fall26/DSAI5101_PrinciplesOfDSML/dsml_project/presentation/delivery_deck_ppt169_20261115", "--native-charts-and-tables"]
+stderr:
+  Warning: --native-charts-and-tables replaces shape-based SVG fallbacks with PowerPoint Chart/Table objects. The native objects may normalize styling or omit SVG details that are not represented by marker metadata; use the default shape-based export when exact fallback artwork is required.
+stdout:
+  [Done] Saved: C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\exports\delivery_deck_20261115_152241_native_charts_tables.pptx
+    [POSTFLIGHT] status=passed-with-warnings quality_gate=passed slides=26 warning_categories=2
+    [POSTFLIGHT][WARNING] quality_introduced_warnings=33
+    [POSTFLIGHT][WARNING] unsafe_exported_font_faces=1
+    [PPTX] C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\exports\delivery_deck_20261115_152241_native_charts_tables.pptx
+    [REPORT] C:\Users\lynny\OneDrive\Desktop\uni\masters\year1\fall26\DSAI5101_PrinciplesOfDSML\dsml_project\presentation\delivery_deck_ppt169_20261115\validation\delivery_deck_20261115_152241_native_charts_tables.report.json
+=== 2026-11-15T12:22:47.056Z END run=322b09156194 elapsed_ms=7297 output_lines=120 retained=7 omitted=113 ===

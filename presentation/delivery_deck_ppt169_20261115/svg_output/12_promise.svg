@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <defs>
+    <linearGradient id="cornerGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E9F2FA"/>
+      <stop offset="100%" stop-color="#A7C7E7"/>
+    </linearGradient>
+  </defs>
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+  <circle id="corner-disc" data-pptx-role="decoration" cx="1280" cy="0" r="190" fill="url(#cornerGrad)"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <text x="64" y="76" font-size="20" font-weight="bold" fill="#102A43">04</text>
+    <line x1="100" y1="69" x2="164" y2="69" stroke="#A7C7E7" stroke-width="2"/>
+    <text x="180" y="76" font-size="20" fill="#5B6B7F">Results &amp; Insights</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 112" font-size="42" font-weight="bold" fill="#102A43">
+    <text x="64" y="138">Same average promise:<tspan x="64" dy="52">the app is <tspan fill="#EB6834">still late less often</tspan></tspan></text>
+  </g>
+
+  <g id="gap-figure" data-pptx-bounds="64 228 500 430">
+    <rect x="64" y="228" width="500" height="430" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <image href="../images/final_test_gap.png" x="80" y="244" width="468" height="398" preserveAspectRatio="xMidYMid meet"/>
+  </g>
+
+  <g id="kpi-app" data-pptx-bounds="596 228 300 150">
+    <rect x="596" y="228" width="300" height="150" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <text x="620" y="264" font-size="18" fill="#5B6B7F">App · &gt;5 min late</text>
+    <text x="620" y="344" font-size="64" font-weight="bold" fill="#EB6834">5.0%</text>
+  </g>
+
+  <g id="kpi-ours" data-pptx-bounds="916 228 300 150">
+    <rect x="916" y="228" width="300" height="150" rx="16" fill="#E9F2FA"/>
+    <text x="940" y="264" font-size="18" fill="#5B6B7F">Ours · &gt;5 min late</text>
+    <text x="940" y="344" font-size="64" font-weight="bold" fill="#2E6EB8">6.1%</text>
+  </g>
+
+  <g id="how" data-pptx-bounds="596 396 620 64">
+    <text x="596" y="420" font-size="18" fill="#5B6B7F">Boosting at the 80th percentile (pinball loss), shifted +2.7 min<tspan x="596" dy="26">so both promise <tspan font-weight="bold" fill="#102A43">38.2 min</tspan> on average</tspan></text>
+  </g>
+
+  <g id="cliff-inset" data-pptx-bounds="596 476 620 116">
+    <rect x="596" y="476" width="620" height="112" rx="12" fill="#E9F2FA"/>
+    <image href="../images/promise_padding.png" x="604" y="484" width="134" height="96" preserveAspectRatio="xMidYMid meet"/>
+    <text x="756" y="512" font-size="18" font-weight="bold" fill="#102A43">The 8-minute cliff</text>
+    <text x="756" y="540" font-size="18" fill="#1F2937">Late orders more than halve at exactly<tspan x="756" dy="24">8 min late: someone starts rushing</tspan></text>
+  </g>
+
+  <g id="takeaway" data-pptx-bounds="596 604 620 56">
+    <rect x="596" y="604" width="6" height="52" rx="3" fill="#2E6EB8"/>
+    <text x="618" y="628" font-size="24" font-weight="bold" fill="#102A43">Better estimates ≠ better promises</text>
+    <text x="618" y="654" font-size="18" fill="#5B6B7F">Except for shorter promises.</text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Promise test on test days (23–24 Oct)</text>
+    <text x="1216" y="696" text-anchor="end">12</text>
+  </g>
+</svg>

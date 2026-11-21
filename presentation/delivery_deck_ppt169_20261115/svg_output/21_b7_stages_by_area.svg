@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="52" height="30" rx="15" fill="#E9F2FA"/>
+    <text x="90" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B7</text>
+    <text x="132" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Pickup and road time <tspan fill="#2E6EB8">by district</tspan></text>
+  </g>
+
+  <g id="stages-figure" data-pptx-bounds="64 176 740 484">
+    <rect x="64" y="176" width="740" height="484" rx="16" fill="#FFFFFF" stroke="#D5E2F0" stroke-width="1.5"/>
+    <image href="../images/stages_by_area.png" x="80" y="192" width="708" height="452" preserveAspectRatio="xMidYMid meet"/>
+  </g>
+
+  <g id="kpi-stages" data-pptx-bounds="836 176 380 160">
+    <rect x="836" y="176" width="380" height="156" rx="16" fill="#E9F2FA"/>
+    <text x="860" y="212" font-size="18" fill="#5B6B7F">Median, each stage</text>
+    <text x="860" y="290" font-size="64" font-weight="bold" fill="#2E6EB8">13.1</text>
+    <text x="860" y="320" font-size="18" fill="#5B6B7F">minutes to pickup, and on the road</text>
+  </g>
+
+  <g id="stages-note" data-pptx-bounds="836 356 380 140">
+    <use data-icon="tabler-outline/clock" x="836" y="364" width="32" height="32" fill="#2E6EB8" stroke-width="2"/>
+    <text x="884" y="388" font-size="24" fill="#1F2937">Both stages run<tspan x="884" dy="34"><tspan font-weight="bold" fill="#102A43">~2.7 min slower</tspan></tspan><tspan x="884" dy="34">at meal peaks</tspan></text>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">21</text>
+  </g>
+</svg>

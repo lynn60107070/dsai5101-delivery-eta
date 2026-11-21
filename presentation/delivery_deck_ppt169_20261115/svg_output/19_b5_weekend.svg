@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, sans-serif" data-pptx-page-role="content">
+  <rect id="bg" x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+  <circle id="ice-disc" data-pptx-role="decoration" cx="1200" cy="640" r="260" fill="#E9F2FA"/>
+
+  <g id="kicker" data-pptx-bounds="64 52 420 32">
+    <rect x="64" y="52" width="52" height="30" rx="15" fill="#E9F2FA"/>
+    <text x="90" y="74" font-size="18" font-weight="bold" fill="#2E6EB8" text-anchor="middle">B5</text>
+    <text x="132" y="74" font-size="20" fill="#5B6B7F">Backup · Q&amp;A</text>
+  </g>
+
+  <g id="title" data-pptx-bounds="64 96 1000 64">
+    <text x="64" y="142" font-size="42" font-weight="bold" fill="#102A43">Why we dropped the <tspan fill="#2E6EB8">weekend flag</tspan></text>
+  </g>
+
+  <g id="kpi-blowup" data-pptx-bounds="64 200 540 220">
+    <text x="64" y="236" font-size="18" fill="#5B6B7F">Elastic-Net MAE on the Saturday fold (fold 4)</text>
+    <text x="64" y="330" font-size="64" font-weight="bold" fill="#102A43">6.8 <tspan fill="#2E6EB8">→</tspan> <tspan fill="#EB6834">18.0</tspan></text>
+    <text x="64" y="380" font-size="24" fill="#1F2937">minutes, once the flag was added</text>
+  </g>
+
+  <g id="reasons" data-pptx-bounds="660 200 556 300">
+    <g id="reason-1">
+      <use data-icon="tabler-outline/calendar" x="660" y="208" width="36" height="36" fill="#2E6EB8" stroke-width="2"/>
+      <text x="712" y="234" font-size="24" fill="#1F2937">Only <tspan font-weight="bold" fill="#102A43">one weekend day</tspan> in training,<tspan x="712" dy="34">none in CV folds 1–3</tspan></text>
+    </g>
+    <g id="reason-2">
+      <use data-icon="tabler-outline/alert-triangle" x="660" y="318" width="36" height="36" fill="#2E6EB8" stroke-width="2"/>
+      <text x="712" y="344" font-size="24" fill="#1F2937">Scaling blew up on the Saturday<tspan x="712" dy="34">fold: a flag seen once can't be learned</tspan></text>
+    </g>
+    <g id="reason-3">
+      <use data-icon="tabler-outline/check" x="660" y="428" width="36" height="36" fill="#2E6EB8" stroke-width="2"/>
+      <text x="712" y="454" font-size="24" fill="#1F2937">Weekend stays an <tspan font-weight="bold" fill="#102A43">EDA finding</tspan><tspan x="712" dy="34">and a stated limitation</tspan></text>
+    </g>
+  </g>
+
+  <g id="footer" data-pptx-role="footer" data-pptx-bounds="64 676 1152 28" font-size="14" fill="#5B6B7F">
+    <text x="64" y="696">DSAI 5101 · Predicting food delivery time · Backup</text>
+    <text x="1216" y="696" text-anchor="end">19</text>
+  </g>
+</svg>
