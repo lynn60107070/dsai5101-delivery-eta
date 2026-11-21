@@ -118,7 +118,7 @@ def write_tables(rows: dict, segments: dict) -> None:
     lines = [r"\begin{table}[t]", r"\centering",
              r"\caption{Extension (CV only): gradient boosting with extra order-time features, all computed from "
              r"deliveries finished before each order. $\Delta$ = MAE difference against the base features on the "
-             r"same orders, with paired bootstrap 95\% intervals. The test days were not used.}",
+             r"same orders, with paired bootstrap 95\% intervals. Lunch: CV MAE at the 11:00 peak. The test days were not used.}",
              r"\label{tab:extension}", r"\small",
              r"\begin{tabular}{@{}p{0.42\columnwidth}ccc@{}}", r"\toprule",
              r"Features & CV MAE & $\Delta$ vs base & Lunch \\", r"\midrule",
@@ -299,7 +299,7 @@ def write_ladder_tables(ladder: dict, effects: dict) -> None:
              r"Input & Base & Extended \\", r"\midrule"]
     for col, label in EFFECTS:
         base, ext = effects["base"].get(col), effects["all"].get(col)
-        cell = lambda v: "--" if v is None else f"{v:+.2f}"
+        cell = lambda v: "--" if v is None else ("0.00" if round(v, 2) == 0 else f"{v:+.2f}")
         lines.append(f"{label} & {cell(base)} & {cell(ext)} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     (REPO_ROOT / "report" / "tables" / "elasticnet_effects.tex").write_text("\n".join(lines) + "\n", encoding="utf8")

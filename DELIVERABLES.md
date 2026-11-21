@@ -17,7 +17,7 @@ Sources: `requirements_rubric/DSAI5101_Project_Info.pdf` and the three rubric PD
 - [x] Repo: `lynn60107070/dsai5101-delivery-eta` is **public** (21 Nov)
 - [ ] Report: compile the updated `report/*.tex` on Overleaf; check the body still ends on page 6
 - [ ] Q&A: everyone reads `presentation/qa_prep.md` §9 (the five hardest questions)
-- [ ] Commit and push the report, figure, deck and Q&A changes
+- [x] Commit and push the report, figure, deck and Q&A changes (`84ac16f`, 21 Nov)
 
 ## 1. Presentation & Q&A: 10% · **Sun 22 Nov** · 10 min talk + 10–15 min Q&A (instructor + classmates, who get bonus marks for questions)
 

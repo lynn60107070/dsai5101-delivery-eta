@@ -197,12 +197,12 @@ def depadded_table(d: dict) -> None:
              r"a paired bootstrap 95\% interval. Segment rows use the per-band padding.}", r"\label{tab:depadded}",
              r"\small",
              r"\begin{tabular}{@{}lrccc@{}}", r"\toprule",
-             r"Orders & $n$ & Ours & Promise $-$ padding & $\Delta$ \\", r"\midrule",
+             r"Orders & $n$ & Ours & De-padded & $\Delta$ \\", r"\midrule",
              f"All test orders & \\num{{{t['ours']['n']}}} & {t['ours']['mae']:.2f} & "
              f"{t['depadded_promise']['mae']:.2f} & {t['ours_minus_depadded']['diff']:+.2f} [{lo:+.2f}, {hi:+.2f}] \\\\"]
     s = d["test_by_distance_band"]
     lo, hi = s["ours_minus_depadded"]["ci95"]
-    lines.append(f"All, padding per distance band & \\num{{{t['ours']['n']}}} & {t['ours']['mae']:.2f} & "
+    lines.append(f"All, per-band padding &\\num{{{t['ours']['n']}}} & {t['ours']['mae']:.2f} & "
                  f"{s['depadded_promise_mae']:.2f} & {s['ours_minus_depadded']['diff']:+.2f} [{lo:+.2f}, {hi:+.2f}] \\\\")
     lines.append(r"\midrule")
     for name, s in d["test_segments"].items():
