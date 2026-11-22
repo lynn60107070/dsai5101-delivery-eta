@@ -345,6 +345,12 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 /* page number inside each slide (so it also prints) */
 .pgnum { position: absolute; right: 64px; bottom: 34px; z-index: 5; font: 700 20px var(--font); color: var(--muted); letter-spacing: .04em; }
 .pgnum b { color: var(--blue); }
+/* "More: B2 · B3" next to the page number: click to open that backup; "back to slide N" on the backup returns */
+.pgnum .refs { font: 600 16px var(--font); color: var(--muted); margin-right: 22px; letter-spacing: .02em; }
+.pgnum .refs a, .pgnum .ret { color: var(--blue); cursor: pointer; text-decoration: none; padding: 1px 7px; margin-left: 5px; border: 1.5px solid currentColor; border-radius: 6px; }
+.pgnum .refs a:hover, .pgnum .ret:hover { background: var(--blue); color: #fff; }
+.pgnum .ret { font: 600 16px var(--font); margin: 0 18px 0 0; display: none; }
+.pgnum .ret.on { display: inline; }
 #thanks .pgnum { right: auto; left: 120px; }
 
 /* closing slide: delivery notification drops in, pings, then bobs */
@@ -1330,7 +1336,7 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(46,110,184,.45)
 <section class="slide backup" data-title="What the extended model learned">
   <div class="content"><div class="sec">B14<span class="sec-name">Backup</span></div><h2>What the model <span class="accent">learned</span></h2>
     <div class="row" style="margin-top:40px;height:700px;gap:44px"><div class="fig" style="width:820px"><img src="../../figures/results/partial_dependence.png" alt="What the extended model learned"></div>
-    <div class="col" style="width:auto;flex:1"><div class="card ice"><p>Average prediction as one input changes: about <b class="strong">+24 min</b> from 0.2 to 4.9 km, +6 as orders per rider go 0.5 → 3, +4 across the day, +3 slow vs fast restaurants.</p></div><div class="card"><p class="small">Elastic-Net, in minutes: +6.1 per km · lunch +4.8 · dinner +3.6 · no real prep estimate +2.0–2.5 · twice the usual load only +1.1.</p></div></div></div></div>
+    <div class="col" style="width:auto;flex:1"><div class="card ice"><p><b class="strong">Partial dependence</b> (extended boosting model): average prediction as one input changes, the rest kept as they are. Steep = matters. About <b class="strong">+24 min</b> from 0.2 to 4.9 km, +6 as orders per rider go 0.5 → 3, +4 across the day, +3 slow vs fast restaurants.</p></div><div class="card"><p class="small"><b>Elastic-Net coefficients</b>, in minutes: +6.1 per km · lunch +4.8 · dinner +3.6 · no real prep estimate +2.0–2.5 · twice the usual load only +1.1.</p></div></div></div></div>
 </section>
 <section class="slide backup" data-title="Extension: features and models">
   <div class="content"><div class="sec">B15<span class="sec-name">Backup</span></div><h2>Extension, <span class="accent">feature by feature</span></h2>
@@ -1575,10 +1581,23 @@ class SlidePresentation {
   /* Page number in the bottom-right corner of every slide except the title and the backup index */
   addPageNumbers() {
     const n = this.nMain;
+    /* Backup slides that expand on each main slide (main slide number -> backup numbers) */
+    const REFS = { 3: [3, 1, 4], 4: [10], 5: [1, 11, 10, 24], 6: [18, 19], 7: [18, 19], 8: [9, 13], 9: [8, 14],
+      10: [21, 15], 11: [6, 2], 12: [20, 21, 22, 7, 14], 13: [6, 7, 8], 14: [2, 3, 16], 15: [14, 5],
+      16: [16, 15], 17: [15, 21, 16], 18: [12, 13, 8], 19: [11, 10, 2], 20: [4, 17, 12] };
     this.slides.forEach((s, i) => {
       if (i === 0 || i === n) return;
       const d = document.createElement('div'); d.className = 'pgnum';
-      d.innerHTML = i < n ? `<b>${i + 1}</b> / ${n}` : `<b>B${i - n}</b>`;
+      if (i < n) {
+        const refs = REFS[i + 1] || [];
+        d.innerHTML = (refs.length ? `<span class="refs">More: ${refs.map(b => `<a data-b="${b}">B${b}</a>`).join('')}</span>` : '') + `<b>${i + 1}</b> / ${n}`;
+        d.querySelectorAll('a[data-b]').forEach(a => a.addEventListener('click', e => {
+          e.stopPropagation(); this.returnTo = i; this.show(n + +a.dataset.b);
+        }));
+      } else {
+        d.innerHTML = `<a class="ret"></a><b>B${i - n}</b>`;
+        d.querySelector('.ret').addEventListener('click', e => { e.stopPropagation(); const r = this.returnTo; this.returnTo = null; if (r != null) this.show(r); });
+      }
       s.appendChild(d);
     });
   }
@@ -1707,6 +1726,9 @@ class SlidePresentation {
     this.countUp(this.slides[this.current]);
     this.slides[this.current].querySelectorAll(':scope > svg, .content > svg, .card > svg, .col > .card > svg').forEach(s => { try { s.setCurrentTime(0); } catch (e) {} });
     this.renderNotes();
+    if (this.current < this.nMain) { if (this.current !== this.returnTo) this.returnTo = null; }
+    const ret = this.slides[this.current].querySelector('.pgnum .ret');
+    if (ret) { ret.classList.toggle('on', this.returnTo != null); ret.textContent = this.returnTo != null ? `↩ back to slide ${this.returnTo + 1}` : ''; }
     document.getElementById('count').textContent = this.label(this.current);
     document.getElementById('progress').style.width = `${Math.min(this.current + 1, this.nMain) / this.nMain * 100}%`;
     history.replaceState(null, '', `#/${this.current + 1}`);
@@ -1728,13 +1750,26 @@ const editor = {
     this.targets().forEach(el => el.contentEditable = this.isActive ? 'true' : 'false');
     if (!this.isActive) this.save();
   },
+  /* Browser edits are tied to the file they were made on: if the file has changed since, they are set aside
+     (kept under key + '-old') instead of overwriting the newer slides */
+  sig() {
+    if (this._sig) return this._sig;
+    const s = [...this.targets()].map(el => el.innerHTML).join('\u0001');
+    let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+    return (this._sig = h + ':' + s.length);
+  },
   save() {
-    try { localStorage.setItem(this.key, JSON.stringify([...this.targets()].map(el => el.innerHTML))); } catch (e) {}
+    try { localStorage.setItem(this.key, JSON.stringify({ sig: this.sig(), html: [...this.targets()].map(el => el.innerHTML) })); } catch (e) {}
   },
   load() {
     try {
+      this.sig();  // fingerprint of the file as shipped, before any edits are applied
       const saved = JSON.parse(localStorage.getItem(this.key) || 'null');
-      if (saved) this.targets().forEach((el, i) => { if (saved[i] !== undefined) el.innerHTML = saved[i]; });
+      if (!saved) return;
+      if (Array.isArray(saved) || saved.sig !== this._sig) {
+        localStorage.setItem(this.key + '-old', JSON.stringify(saved)); localStorage.removeItem(this.key); return;
+      }
+      this.targets().forEach((el, i) => { if (saved.html[i] !== undefined) el.innerHTML = saved.html[i]; });
     } catch (e) {}
   },
   download() {

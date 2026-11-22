@@ -20,6 +20,18 @@ Delay is actual minus the platform's promise, so a delay model would partly be l
 padding rule. Delivery time is what the customer experiences, and it lets us compare our estimate with
 the promise fairly. Delay is used only to describe the data and to count late orders (proposal feedback 1).
 
+**Where does the app's promise come from? Did you calculate it?**
+It's in the dataset: Meituan's own estimated arrival time for each order. They don't publish how they
+compute it, so everything we say about the padding, like the 30-minute floor and the 8 minutes on
+average, we measured from the data.
+- Column `estimate_arrived_time`, converted to minutes after `platform_order_time` (`common/clean.py`).
+  Pizza: 11:13 → 12:04 = 51 min.
+- Baseline only, never a model input.
+- Measured by us: never under 30 (35% exactly 30), mean 37.8 vs actual 29.6, average padding 8.2 min
+  (training days), per distance band ~10 / 7 / 12–14 min, ~15% still late.
+- If pushed: the column is an estimate we treat as the time shown at checkout. That's the standard
+  reading for this dataset, but the data doesn't literally record what the customer's screen showed.
+
 **Why only order-time information?**
 The promise is shown at checkout, before a courier is assigned. Anything recorded later (courier,
 dispatch, pickup) would not exist at that moment, so using it would be leakage.
@@ -45,6 +57,16 @@ distance. Dropping them would bias the model, so we impute (inside the pipeline)
 so they are a system default, not a forecast. We treat them as missing and flag them. We checked they
 never equal the later dispatch time, so no leakage.
 
+**What does "busy ≠ slow" mean? (slide 9)**
+"Lunchtime is busy and slow, so it looks like the busyness causes the slowness. But if you compare two
+lunchtimes in the same area, one with more orders and one with fewer, the delivery times are about the
+same. Extra orders on their own don't slow things down. What actually slows things down is not enough
+riders."
+- All orders together: district order volume correlates 0.30 with delivery time.
+- Same district, same hour: only 0.09. The hour and the place did the work, not the order count.
+- That's why district load is weak (+0.20 importance; Elastic-Net +1.1 at twice the usual load).
+- What matters is supply: over 3 orders per free rider → 36 vs 26 min (slide 10).
+
 ## 3. Method [Lynn, Mahmoud]
 
 **Why a time split instead of a random split?**
@@ -62,6 +84,17 @@ be learned or validated. The only fold that could test it trains on just 14 "wee
 that arrived after midnight). That's also why Elastic-Net's Saturday-fold error jumped from 6.8 to 18.0
 min: scaling a near-constant column blew up the linear model. That jump is a symptom, not the reason. We
 state weekend as a limitation instead; its cost is the Sunday under-prediction (2.1 min).
+
+**Were all the features numeric?**
+"The model only sees numbers, but not everything started as one: there are continuous values like
+distance, 0/1 flags like lunch peak, and the district, which is a category, so we one-hot encoded it into
+23 on/off columns."
+- **Continuous (5)**: distance in km, time-of-day sine and cosine, prep estimate in minutes, district load.
+- **0/1 flags (5)**: lunch peak, dinner peak, prep missing, prep placeholder, load unknown (first 24 h).
+- **Categorical (1)**: district. It's stored as an ID, but district 16 isn't "bigger" than district 5, so
+  it's one-hot encoded into 23 columns.
+- 5 + 5 + 23 = **33 inputs** ("10 numbers + district"; B20, B22).
+- Restaurant ID was never an input: 4,962 levels, so the extension uses its track record instead.
 
 **How is time of day encoded?**
 Sine and cosine of the minute of the day, so 23:59 and 00:00 are neighbours (proposal feedback 3), plus
@@ -106,6 +139,17 @@ We have two baselines, and one is our own:
    - our estimate against the promise minus its padding (6.48, or 6.36 per distance band)
    - our 80th-percentile model against the promise at the same average length (the promise test)
 
+**Why didn't you remove padding from the median baseline too?**
+"The median baseline is the median of actual delivery times, so there's no padding in it to remove. It's
+the best constant for MAE, so shifting it either way only makes it worse. We de-pad the app's promise
+because it's deliberately set about 8 minutes above the real time. Padded against padded is the promise
+test."
+- Median = 27.8 min, from actual times on the training days.
+- Promise = padded on purpose (~8 min, never under 30), so its 9.62 is unfair without de-padding.
+- Subtracting 8.2 would predict 19.6 for every order, far worse than 9.46.
+- Unpadded vs unpadded: 6.49 vs 6.48 / 6.36 (the median's 9.46 is already unpadded). Padded vs padded:
+  our q80 vs the app at the same 38.2 average.
+
 **Was each step up in complexity worth it?**
 Measured on the test days, against the median baseline (9.46):
 - Median → Elastic-Net (6.80): −2.66 min. That's 90% of the total gain, from a few simple features.
@@ -148,6 +192,19 @@ Grouped permutation importance (CV): distance +3.10 min MAE when shuffled, far a
 (+0.85), district (+0.84), prep estimate (+0.68) and load (+0.20). The proposal was right on distance and
 peaks, wrong on load.
 
+**Is shuffling inputs standard practice for finding which matter most?**
+"Yes, it's permutation importance, the standard method from Breiman's Random Forest paper, built into
+scikit-learn. We ran it on the validation folds and shuffled related features as groups, because
+correlated inputs can hide each other. Elastic-Net effects and partial dependence gave the same ranking."
+- Shuffle a column so it carries no information, measure how much worse MAE gets.
+- Works for any model, in our metric (+3.10 min), on held-out folds, with no refitting.
+- Grouped: time of day = sin, cos and both peak flags together; district = all 23 columns. "One input at
+  a time" on the slide means one input group.
+- Not causal: it shows what the model relies on, so we cross-checked with Elastic-Net effects and
+  partial dependence (B14).
+- Why not impurity importance? Biased toward inputs with many distinct values, and trees only. SHAP?
+  Heavier to compute, and gives the same global ranking.
+
 **Where does the model do worst?**
 Long trips (over 7 km: MAE 14.4), the lunch peak (11:00: 7.2), some districts (4.4 to 9.0), and the
 Sunday test day (6.77 vs 6.17 on Monday).
@@ -161,6 +218,18 @@ had one weekend day. The model ranking is the same on test and CV.
 **How did you compare with the platform's promise fairly?**
 We shift our 80th-percentile predictions by a constant so both promise the same average time (38.2 min
 on test), then count orders arriving more than 0, 5 and 10 min late, with bootstrap intervals.
+
+**What do you mean, a better estimate isn't a better promise?**
+"Guessing the delivery time well isn't the same as keeping a promise. The app still wins on promises,
+because it can speed up late orders after you've ordered, and we can't."
+- **Estimate** = the most likely arrival time, judged on MAE. **Promise** = a time you commit to, judged
+  on how often you're late.
+- As an estimate we're level with the app (6.49 vs 6.48; extended 5.92 vs 6.24 on validation).
+- As a promise, at the same 38.2-min average, the app is late less often: 5.0% vs 6.1% of orders more
+  than 5 min late.
+- Why: the 8-minute cliff shows the platform rushing late orders after the order is placed. And a promise
+  needs the right buffer for each order, not just an accurate middle.
+- Analogy (slide 19): a forecast says it will probably rain; a promise says you'll stay dry.
 
 **So you lost to the platform?**
 At the same average promise, yes, slightly: 6.1% vs 5.0% of orders more than 5 min late. Our proposal
@@ -241,8 +310,25 @@ Eight days can't show longer drift, so deployment would need monitoring and retr
 We counted, for each order, the riders who finished a delivery in its district in the last 30 min and
 the orders still waiting, using only deliveries finished before the order (a unit test checks this).
 When more than three orders wait per free rider (19% of orders), the median delivery is 35.6 min vs 26.4.
-Riders are scarcest at 11:00 and 17–18:00, much more in some districts (B13). New orders alone (our load
+Riders are scarcest at 11:00 and 17–18:00, much more in some districts (slide 10). New orders alone (our load
 feature) barely matter; orders per free rider do.
+
+**What do you mean by free riders?**
+"For each order we count riders who just finished a delivery in that district, so they're free, and
+divide the waiting orders by them. Over 3 orders per free rider, deliveries take 36 minutes instead of 26.
+It only adds 0.05 to the model, because riders are scarce mostly at peak hours, which the model already
+knows."
+- What it is: 3 numbers per order (B21):
+  1. **Free riders**: distinct riders who finished a delivery in this district in the last 30 min
+     (`riders_30m`).
+  2. **Open orders**: district orders placed but not yet delivered, the queue they face (`open_orders`).
+  3. **Orders per free rider** = open ÷ free, the key one (`orders_per_rider`).
+- Example: 10 free riders and 40 waiting orders → 4 per rider → scarce, so the model predicts longer.
+- Over 3 per rider (19% of orders): median 35.6 vs 26.4 min.
+- Only −0.05: scarcity overlaps with hour and district, which the model already has.
+- It's an approximation: the data doesn't say who is idle, so we infer it from finished deliveries
+  (a stated limitation).
+- Not district load: load counts new orders and barely matters; free riders measure supply.
 
 **Did more features help?**
 Yes, on the validation folds: riders + each restaurant's past delivery and pickup times take CV MAE from
@@ -250,6 +336,28 @@ Yes, on the validation folds: riders + each restaurant's past delivery and picku
 6.24), in 5 of 7 segments and level on medium trips, not at lunch. Restaurant history gives most of it (−0.24), riders
 −0.05. We did **not** re-score the test days with them: they were designed after the single test run, and
 using the test set twice would make it training data. (B15)
+
+**What do you mean by the restaurant's track record?**
+"For each order, we look at that restaurant's earlier orders that had already been delivered when it was
+placed: their average delivery time and their average time to pickup. So the model knows if a restaurant
+is usually slow. It's the biggest gain in the extension, 0.24 minutes, and it only uses what the platform
+already knows live."
+- What it is: 4 numbers about this restaurant's earlier orders that had already been delivered
+  (`common/features.py`, `restaurant_history`):
+  1. **Average delivery time** of its past orders, order → arrival (`rest_hist_min`).
+  2. **Average time to pickup**, mostly how slow the kitchen is (`rest_pickup_hist`).
+  3. **How many past orders**, so the model knows how much to trust the averages (`rest_hist_n`).
+  4. **"No history yet" flag**, e.g. its first order in the data (`rest_hist_missing`).
+- Example: past orders took 40 min and waited 15 for pickup, over 120 orders → a slow restaurant, so the
+  model predicts longer.
+- "Helps the most": of the extension's 0.33-minute gain, it gives 0.24, about three quarters (riders
+  −0.05, recent delays −0.01, prep bias −0.03). Same −0.24 added alone (6.25 → 6.01, B15) or after
+  riders (6.20 → 5.96, slide 17).
+- Cumulative since 17 Oct, not a 30-minute window.
+- Only orders that had already arrived before this one was placed; a unit test checks it.
+- Why: 4,962 restaurants is too many to one-hot encode, and half the wait is before pickup.
+- Not the same as prep-estimate bias (how much later than its own prep estimate the restaurant usually
+  is; needs ≥ 5 earlier orders; only −0.03).
 
 **How does this compare with industry?**
 Ele.me's deployed model (KDD 2020) uses the same kinds of inputs we added (real-time supply–demand,
@@ -479,6 +587,17 @@ model is late less often at the 0-minute threshold.
 
 The honest claim: "better on validation days, to be confirmed on new days", which is future work (1).
 
+**"Why not just run the extended model on the test days and compare?"**
+"We could run it, but those features were designed after our one test run, partly because of what the
+test showed, like losing at lunch. Scoring them on the same days would make the test set part of the
+design, so the number would be optimistic. That's why we report it on validation days, where all three
+models gain the same 0.3, and confirming it on fresh days is our first next step."
+- Technically it works: the features only use deliveries finished before each order.
+- But the test days already shaped the extension ("recent delays" exists because the app beat us at lunch).
+- A second look would cost us "frozen settings, one test run, recorded in the manifest" (Lec 7).
+- Legitimate version: score it on new days. If ever run on 23–24 Oct, label it a post-hoc second look,
+  not a test result.
+
 **"Is the prep estimate really known when the order is placed?"**
 The file doesn't timestamp it, so we assume it is (the report says so). The placeholder defaults are
 written within seconds of the order and none equals the dispatch time. If real estimates were set later,
@@ -488,6 +607,13 @@ prep's +0.68 importance would be optimistic.
 Yes. On CV the raw target beat the log one (Elastic-Net 6.59 vs 6.73), and since we report MAE, which
 targets the median, the skew matters less.
 
-**"Why 6.24 on the drivers slide but 6.25 everywhere else?"**
-6.24 is the average of the four fold MAEs; 6.25 is pooled over all CV orders. Same model, two ways of
-averaging.
+**"Why 6.24 on the drivers slide but 6.25 everywhere else? Which model is it, and is it test?"**
+"It's our gradient boosting model's error on the validation folds, averaged over the four folds.
+Shuffling distance raises it to 9.34. We measured the drivers on validation so the test days stayed
+untouched until the one final run."
+- **Validation, not test**: the 4 folds, 17–22 Oct. The test number is 6.49 (23–24 Oct), only on slide 14.
+- Base model (33 inputs); each group shuffled 5 times on each fold.
+- 6.24 is the mean of the four fold MAEs; 6.25 is pooled over all CV orders. Same model, two ways of
+  averaging.
+- Slide 16's "app's 6.24" is a different number: the app's promise de-padded per distance band, on the
+  validation days. Same value by coincidence.

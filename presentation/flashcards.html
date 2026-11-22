@@ -1,0 +1,393 @@
+<title>Delivery ETA Flashcards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one order-ticket card centred on a cool dispatch-board ground; deck chips above, controls below, full list underneath. */
+:root{
+  --bg:#e9edf1; --card:#ffffff; --ink:#18212b; --muted:#5a6675; --line:#d3dae2;
+  --accent:#c9661a; --accent-soft:#fbeadb; --good:#2c8754; --again:#b8433a; --chip:#f4f6f8;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#10161c; --card:#19222b; --ink:#e5eaef; --muted:#97a3b0; --line:#2b3642;
+  --accent:#ee9550; --accent-soft:#3a2818; --good:#5cc08a; --again:#ea7b70; --chip:#212c37; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#10161c; --card:#19222b; --ink:#e5eaef; --muted:#97a3b0; --line:#2b3642;
+  --accent:#ee9550; --accent-soft:#3a2818; --good:#5cc08a; --again:#ea7b70; --chip:#212c37; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font:15px/1.55 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); padding-block:28px 60px}
+.wrap{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:18px}
+header{display:flex; flex-direction:column; gap:6px}
+h1{font:700 clamp(26px,5vw,34px)/1.1 var(--display); margin:0; letter-spacing:-.01em; text-wrap:balance}
+.sub{color:var(--muted); margin:0; max-width:62ch}
+.label{font:500 11px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{font:500 13px/1 var(--body); padding:8px 11px; border-radius:999px; border:1px solid var(--line);
+  background:var(--chip); color:var(--ink); cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--card); border-color:var(--ink)}
+.chip .n{font-family:var(--mono); font-size:11px; opacity:.65; margin-left:4px}
+.chip:focus-visible, button:focus-visible, .card:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.bar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; justify-content:space-between}
+.progress{flex:1 1 220px; display:flex; flex-direction:column; gap:6px; min-width:0}
+.track{height:6px; border-radius:3px; background:var(--line); overflow:hidden; display:flex}
+.track i{display:block; height:100%}
+.track .g{background:var(--good)} .track .a{background:var(--again)}
+.stats{font:400 12px/1 var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
+.toggles{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font:500 13px/1 var(--body); padding:8px 11px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer}
+.tbtn[aria-pressed="true"]{border-color:var(--accent); color:var(--accent); background:var(--accent-soft)}
+
+/* the ticket */
+.card{position:relative; background:var(--card); border:1px solid var(--line); border-radius:14px; min-height:330px;
+  padding:22px 24px 20px; display:flex; flex-direction:column; gap:14px; cursor:pointer;
+  box-shadow:0 1px 0 var(--line), 0 14px 30px -22px rgba(0,0,0,.35); transition:transform .16s ease}
+.card.turn{transform:rotateX(88deg)}
+.card::before, .card::after{content:""; position:absolute; top:58px; width:16px; height:16px; border-radius:50%; background:var(--bg); border:1px solid var(--line)}
+.card::before{left:-9px} .card::after{right:-9px}
+.tickhead{display:flex; justify-content:space-between; gap:10px; align-items:center; padding-bottom:12px; border-bottom:1px dashed var(--line)}
+.who{font:500 11px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; padding:5px 8px; border-radius:5px; background:var(--accent-soft); color:var(--accent); white-space:nowrap}
+.q{font:600 clamp(19px,3.6vw,24px)/1.3 var(--display); margin:0; text-wrap:balance}
+.back .q{font-size:15px; font-weight:500; color:var(--muted); font-family:var(--body)}
+.ans{font-size:15.5px; min-width:0}
+.ans p{margin:0 0 8px} .ans ul{margin:0 0 8px; padding-left:20px} .ans li{margin-bottom:3px}
+.ans b{font-weight:600}
+.ans .say{border-left:3px solid var(--accent); padding:2px 0 2px 12px; margin:0 0 10px}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:.95em}
+.refs{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:auto; padding-top:10px; border-top:1px dashed var(--line)}
+.ref{font:500 12px/1 var(--mono); padding:6px 9px; border-radius:6px; border:1px solid var(--accent); color:var(--accent)}
+.hint{margin-top:auto; font:400 12px/1 var(--mono); color:var(--muted)}
+.mark{position:absolute; top:-10px; right:18px; font:500 11px/1 var(--mono); padding:4px 7px; border-radius:5px; color:var(--card)}
+.mark.got{background:var(--good)} .mark.again{background:var(--again)}
+
+.controls{display:grid; grid-template-columns:auto 1fr 1fr auto; gap:8px}
+.controls button{font:600 14px/1 var(--body); padding:13px 14px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer}
+.controls .again{border-color:var(--again); color:var(--again)}
+.controls .got{border-color:var(--good); color:var(--good)}
+.keys{font:400 12px/1.5 var(--mono); color:var(--muted); text-align:center}
+.empty{padding:40px 10px; text-align:center; color:var(--muted)}
+
+/* list view */
+.list{display:flex; flex-direction:column; gap:10px}
+.item{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:flex; flex-direction:column; gap:8px}
+.item .q{font-size:17px}
+.item .meta{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+@media (max-width:520px){ .controls{grid-template-columns:1fr 1fr} .card{padding:18px 18px 16px} }
+@media (prefers-reduced-motion:reduce){ .card{transition:none} }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="label">DSAI 5101 · Q&amp;A prep · 22 Nov</span>
+    <h1>Delivery ETA Flashcards</h1>
+    <p class="sub">Every Q&amp;A answer, the key numbers, your slides 11–17, and which backup slide to jump to. Tap a card to flip it, then mark it.</p>
+  </header>
+
+  <div class="chips" id="chips" role="group" aria-label="Decks"></div>
+
+  <div class="bar">
+    <div class="progress">
+      <div class="track" aria-hidden="true"><i class="g" id="tg"></i><i class="a" id="ta"></i></div>
+      <span class="stats" id="stats"></span>
+    </div>
+    <div class="toggles">
+      <button class="tbtn" id="shuffle" aria-pressed="false">Shuffle</button>
+      <button class="tbtn" id="onlyAgain" aria-pressed="false">Only "again"</button>
+      <button class="tbtn" id="listBtn" aria-pressed="false">List all</button>
+      <button class="tbtn" id="reset">Reset marks</button>
+    </div>
+  </div>
+
+  <div id="study">
+    <div class="card" id="card" tabindex="0" role="button" aria-label="Flashcard, press to flip"></div>
+  </div>
+  <div class="controls" id="controls">
+    <button id="prev" aria-label="Previous card">←</button>
+    <button class="again" id="againBtn">Again</button>
+    <button class="got" id="gotBtn">Got it</button>
+    <button id="next" aria-label="Next card">→</button>
+  </div>
+  <div class="keys" id="keys">Space flip · ← → move · 1 again · 2 got it</div>
+  <div class="list" id="list" hidden></div>
+</div>
+
+<script>
+/* ================= CARDS =================
+   d = deck, w = who leads, q = front, a = back (HTML), r = where to point (slides / backups) */
+const CARDS = [
+/* ---------- STORY ---------- */
+{d:"Story",w:"Anyone",q:"Give the 20-second story of the project.",a:`<p class="say">Using only what's known when an order is placed, gradient boosting predicts delivery time to within <b class="num">6.49</b> min, <b>31%</b> better than guessing the median, and as accurate as the app's own estimate once its padding is removed (<span class="num">6.36–6.48</span>).</p><p>Distance is the main driver. Free riders and each restaurant's track record come next; with them, validation error drops <span class="num">6.25 → 5.92</span>, ahead of the app. But turning predictions into promises doesn't beat the platform, because the platform keeps acting after the order.</p>`,r:["Slide 20","B2"]},
+{d:"Story",w:"Anyone",q:"What is the research question?",a:`<p class="say">Using only information available when an order is placed, how accurately can we predict delivery time, and what drives long deliveries?</p>`,r:["Slide 4"]},
+{d:"Story",w:"Anyone",q:"One sentence: what's the main conclusion?",a:`<p class="say">The limit is the information available at ordering, not the model: three very different models land within 0.3 min, and a better estimate isn't automatically a better promise.</p>`,r:["Slide 20"]},
+{d:"Story",w:"Anyone",q:"The pizza example: what are its numbers?",a:`<p>Real order <b>#85188</b>, Sunday 11:13, 3.2 km, a test day.</p><ul><li>App promised <b class="num">51</b>, we predicted <b class="num">45</b>, it took <b class="num">43</b>.</li><li>Rider accepts at +7, pickup at +12.5, then 31 min on the road.</li><li>The pizza itself is for illustration: the data doesn't say what was ordered.</li></ul>`,r:["Slide 3","B3"]},
+
+/* ---------- PROBLEM ---------- */
+{d:"Problem",w:"Lynn",q:"Why predict delivery time and not delay?",a:`<p>Delay = actual − the platform's promise, so a delay model would partly be learning Meituan's padding rule. Delivery time is what the customer experiences, and it lets us compare our estimate with the promise fairly. Delay is only used to describe the data and count late orders (proposal feedback 1).</p>`,r:["Slide 5","B1"]},
+{d:"Problem",w:"Lynn",q:"Where does the app's promise come from? Did you calculate it?",a:`<p class="say">The promise is in the dataset: Meituan's own estimated arrival time for each order. They don't publish how they compute it, so everything we say about the padding, like the 30-minute floor and the 8 minutes on average, we measured from the data.</p><ul><li>Column <code>estimate_arrived_time</code>, converted to minutes after <code>platform_order_time</code> (pizza: 11:13 → 12:04 = 51 min)</li><li>Baseline only, never a model input</li><li>Measured by us: never under 30 (35% exactly 30), mean 37.8 vs actual 29.6, average padding 8.2 (training days), per band ~10 / 7 / 12–14 min, ~15% still late</li></ul><p>If pushed: the column is an estimate we treat as the time shown at checkout. That's the standard reading, but the data doesn't literally record the customer's screen.</p>`,r:["Slide 5","B11"]},
+{d:"Problem",w:"Lynn",q:"Why only order-time information?",a:`<p>The promise is shown at checkout, before a courier is assigned. Anything recorded later (courier, dispatch, pickup) doesn't exist at that moment, so using it would be leakage.</p>`,r:["Slide 3","B4"]},
+{d:"Problem",w:"Lynn",q:"What were your success criteria, and were they met?",a:`<ul><li>≥ 20% lower MAE than the median predictor, with a bootstrap interval excluding zero: <b>met</b>, 31%.</li><li>Fewer late orders than the platform at the same average promise: <b>not met</b> (promise test).</li></ul><p>Both set before modelling.</p>`,r:["Slide 14","Slide 19"]},
+{d:"Problem",w:"Lynn",q:"Delivery time vs promise vs delay: define all three.",a:`<ul><li><b>Delivery time</b>: how long the food actually took, order → arrival. What we predict. Pizza: 43.</li><li><b>Promise</b>: what the app showed at checkout, deliberately padded. Pizza: 51.</li><li><b>Delay</b>: delivery time − promise. Only for describing data and counting late orders. Pizza: −8.</li></ul><p>Our <b>estimate</b> aims at the middle; our <b>promise</b> aims at the 80th percentile.</p>`,r:["B1"]},
+{d:"Problem",w:"Lynn",q:"Arriving early is good, so what's wrong with a padded promise?",a:`<p>For one customer, nothing. But long promises lose orders (people pick the app that says 30), customers plan badly, trust in the number wears off, and operations need the real time to plan riders. And the padding is blunt: one buffer for every order, too much at 1 km, too little at 7 km at lunch. That's why it's padded 8 min on average and still late ~15% of the time.</p>`,r:["B10","B24"]},
+{d:"Problem",w:"Lynn",q:"Why does padding \"work\" psychologically? (the analogy)",a:`<p>Houston airport: bags came no faster, but they moved the gates so people walked 6× longer, and complaints almost disappeared. Same wait, different feeling. The app promises 38 for a 28-min trip, so your pizza "arrives early". That's why we predict the real time, not the promise.</p>`,r:["B24"]},
+
+/* ---------- DATA ---------- */
+{d:"Data",w:"Sumaiya",q:"What's in the raw data?",a:`<p>Meituan's own dispatch log (INFORMS TSL 2024 challenge): one city, 8 days (17–24 Oct 2022), <b class="num">654,343</b> rows × 23 columns, all whole numbers, 0 blank cells. One row = one offer to a rider, not one order.</p>`,r:["Slide 6"]},
+{d:"Data",w:"Sumaiya",q:"How did you clean the data? (the steps)",a:`<ul><li>Refused dispatch attempts: <b class="num">−85,797</b> (13.1% of raw rows), keep the accepted one → 568,546 orders</li><li>No arrival time: −1</li><li>Pre-booked: <b class="num">−22,181</b> (3.9%), timed by the chosen slot, a different population</li><li>Over 3 h: −24, implausible</li></ul><p>→ <b class="num">546,340</b> orders; train 406,553 / test 139,787.</p>`,r:["Slide 7","B18"]},
+{d:"Data",w:"Sumaiya",q:"\"No blank cells\": so the data was clean?",a:`<p>No, that was the first problem. Missing values were stored as <b>0</b> (a time of 1 Jan 1970): 85,797 pickups, 9,874 prep estimates. And the same order could appear several times.</p>`,r:["Slide 6","B19"]},
+{d:"Data",w:"Sumaiya",q:"Why exclude pre-booked orders?",a:`<p>Their time follows the slot the customer picked, not the kitchen or the road, so they're a different population. They also hold <b class="num">4,073 of the 4,097</b> deliveries over 3 h.</p>`,r:["Slide 7","B18"]},
+{d:"Data",w:"Sumaiya",q:"What is the \"prep default\" thing?",a:`<p><b>13.8%</b> of prep "estimates" are under 5 min and almost all equal the moment the order enters the system, so they're a system default, not a forecast. We treat them as missing and flag them. They never equal the later dispatch time, so no leakage.</p>`,r:["Slide 7","B19"]},
+{d:"Data",w:"Sumaiya",q:"Why not just drop rows with a missing prep estimate?",a:`<p>They're not missing at random: those orders are longer trips and still 2–5 min slower at the same distance. Dropping them would bias the model, so we impute inside the pipeline and add a flag.</p>`,r:["Slide 7"]},
+{d:"Data",w:"Sumaiya",q:"How much was missing or duplicated?",a:`<ul><li>Exact duplicate rows: 0</li><li>Refused attempts: 13.1% of raw rows (removed)</li><li>Pre-booked: 3.9% of accepted (excluded); 1 with no arrival</li><li>Prep missing: 1.4% (7,439); prep default: 13.8% (75,361), both imputed + flagged</li></ul>`,r:["B19"]},
+{d:"Data",w:"Sumaiya",q:"What did the EDA find about distance?",a:`<p>About <b>+7 min per km</b> (+7.1 up to 3 km, 93% of orders), positive in all 23 districts (4.9–7.7). The spread widens with distance (13 → 24 min), which is why promises need a higher percentile.</p>`,r:["Slide 8"]},
+{d:"Data",w:"Sumaiya",q:"What did the EDA find about time of day and load?",a:`<p>Slowest at meal peaks: median <b class="num">33.5</b> min at 11:00 vs 27.8 overall; 11:00 holds 17% of orders. District order volume correlates 0.30 with delivery time but only <b>0.09</b> once district and hour are known: busy ≠ slow.</p>`,r:["Slide 9"]},
+{d:"Data",w:"Anyone",q:"What does \"busy ≠ slow\" mean? (slide 9)",a:`<p class="say">Lunchtime is busy and slow, so it looks like the busyness causes the slowness. But if you compare two lunchtimes in the same area, one with more orders and one with fewer, the delivery times are about the same. Extra orders on their own don't slow things down. What actually slows things down is not enough riders.</p><ul><li>All orders together: district order volume correlates 0.30 with delivery time</li><li>Same district, same hour: only 0.09. The hour and the place did the work, not the count</li><li>That's why district load is weak (+0.20 importance, Elastic-Net +1.1 at twice the usual load)</li><li>What matters is supply: over 3 orders per free rider → 36 vs 26 min (slide 10)</li></ul>`,r:["Slide 9","Slide 10"]},
+{d:"Data",w:"Sumaiya",q:"What matters, if not order volume?",a:`<p>Free riders. When more than 3 orders wait per free rider (19% of orders), median delivery is <b class="num">35.6 vs 26.4</b> min. Riders are counted from past deliveries only.</p>`,r:["Slide 10","B21"]},
+
+/* ---------- METHOD ---------- */
+{d:"Method",w:"Lynn",q:"Why a time split instead of a random split?",a:`<p>A random split lets the model train on orders from the same hour it's tested on, which flatters it. In practice it only sees the past, so we train on 17–22 Oct, test on 23–24 Oct, and use forward-chaining CV (each fold trains on earlier days, validates on the next: 4 folds).</p>`,r:["Slide 13"]},
+{d:"Method",w:"Lynn",q:"Did you look at the test set more than once?",a:`<p>No. All settings were frozen first, then <code>final.py</code> scored all five models on the test days in one run (9 Nov); the manifest records the commit. Re-scoring after tuning would make the test set training data.</p>`,r:["Slide 13"]},
+{d:"Method",w:"Lynn",q:"What are the features?",a:`<ul><li><b>Distance</b>: Haversine km (1 input)</li><li><b>Time of day</b>: sin/cos + lunch & dinner flags (4)</li><li><b>Prep estimate</b>: minutes + missing + placeholder flags (3)</li><li><b>District load</b>: last 15 min vs that district's usual, + flag (2)</li><li><b>District</b>: one-hot (23)</li></ul><p>10 numbers + district = <b>33 inputs</b>. Extended: 23 numbers + district = 46.</p>`,r:["Slide 12","B20","B22"]},
+{d:"Method",w:"Lynn",q:"Were all the features numeric?",a:`<p class="say">The model only sees numbers, but not everything started as one: there are continuous values like distance, 0/1 flags like lunch peak, and the district, which is a category, so we one-hot encoded it into 23 on/off columns.</p><ul><li><b>Continuous (5)</b>: distance km, time-of-day sin + cos, prep estimate min, district load</li><li><b>0/1 flags (5)</b>: lunch peak, dinner peak, prep missing, prep placeholder, load unknown (first 24 h)</li><li><b>Categorical (1)</b>: district. Stored as an ID, but district 16 isn't "bigger" than 5, so one-hot: 23 columns</li><li>5 + 5 + 23 = <b>33 inputs</b> ("10 numbers + district")</li><li>Restaurant ID never an input: 4,962 levels, so the extension uses its track record instead</li></ul>`,r:["Slide 12","B20","B22"]},
+{d:"Method",w:"Lynn",q:"How is time of day encoded?",a:`<p>Sine and cosine of the minute of the day, so 23:59 and 00:00 are neighbours (proposal feedback 3), plus lunch (11:00) and dinner (17:00–19:59) peak flags from the EDA.</p>`,r:["Slide 12","B20"]},
+{d:"Method",w:"Lynn",q:"Why did you drop the weekend feature?",a:`<p>Only one training day (Sat 22) is a weekend and folds 1–3 have none, so its effect can't be learned or validated. The only fold that could test it trains on just <b>14</b> "weekend" rows (Sunday orders arriving after midnight). The Elastic-Net jump 6.8 → 18.0 on the Saturday fold is a symptom, not the reason. Cost: Sunday is under-predicted by 2.1 min.</p>`,r:["Slide 13","B7","B8"]},
+{d:"Method",w:"Lynn",q:"How do you know preprocessing didn't leak?",a:`<p>Imputer, scaler and encoder sit inside each model's scikit-learn pipeline, refitted on the training rows of every fold. A unit test checks the imputer ignores validation days.</p>`,r:["Slide 12"]},
+{d:"Method",w:"Lynn",q:"Why MAE?",a:`<p>It's in minutes, easy for operations to read, and not dominated by a few extreme orders. We also report RMSE and R². Since we report MAE, the boosting search included absolute-error loss, and it won.</p>`,r:["Slide 13"]},
+{d:"Method",w:"Mahmoud",q:"How did you tune?",a:`<p>Random search on the CV folds: Elastic-Net 30 tries on all rows; boosting 20 tries on 150k rows; Random Forest 10 tries on 100k rows (slow), then refitted on all rows. The error curve shows big trees overfit: 511 leaves, train 2.45 vs CV 6.63.</p>`,r:["B6"]},
+{d:"Method",w:"Mahmoud",q:"Why 16 leaves on the curve but 76 in the final model?",a:`<p>The curve changes only the number of leaves with everything else at default. The tuned model also has a small learning rate (0.038), a big minimum leaf (70) and strong L2 (7.9), which control overfitting in other ways, so it can afford more leaves.</p>`,r:["B6"]},
+{d:"Method",w:"Lynn",q:"Why these three models?",a:`<p>A ladder from simple to flexible, each answering a question:</p><ul><li><b>Elastic-Net</b>: one weighted sum, effects read in minutes; L1/L2 handles correlated district columns. How far do straight lines get us?</li><li><b>Random Forest</b>: averages deep trees, picks up interactions, robust. Do non-linear effects help?</li><li><b>Gradient boosting</b>: each tree fixes the last one's errors, can optimise MAE directly. What's the best these features allow?</li></ul><p>All standard for tabular data, fast on 400k rows, explainable.</p>`,r:["Slide 11","B6"]},
+{d:"Method",w:"Lynn",q:"Why is the app's promise a baseline? Did you make your own?",a:`<p>Two baselines, one ours:</p><ul><li><b>Median predictor (ours)</b>: 27.8 min for every order, no features. The "do nothing" bar. Median, because it's the constant that minimises MAE.</li><li><b>The app's promise</b>: what customers see and Meituan runs on, so it's the business number. But it's padded, so we also compare against it de-padded (6.48 / 6.36) and in the promise test.</li></ul>`,r:["Slide 11","B2"]},
+{d:"Method",w:"Lynn",q:"Why didn't you remove padding from the median baseline too?",a:`<p class="say">The median baseline is the median of actual delivery times, so there's no padding in it to remove. It's the best constant for MAE, so shifting it either way only makes it worse. We de-pad the app's promise because it's deliberately set about 8 minutes above the real time. Padded against padded is the promise test.</p><ul><li>Median = 27.8 min, from actual times on the training days</li><li>Promise = padded on purpose (~8 min, never under 30), so its 9.62 is unfair without de-padding</li><li>Minus 8.2 → 19.6 for every order, far worse than 9.46</li><li>Unpadded vs unpadded: 6.49 vs 6.48 / 6.36 (median 9.46 already unpadded). Padded vs padded: q80 vs app at 38.2</li></ul>`,r:["Slide 14","B2"]},
+{d:"Method",w:"Lynn",q:"Was each step up in complexity worth it?",a:`<p>Test MAE from the median (9.46):</p><ul><li>→ Elastic-Net 6.80: <b>−2.66</b>, 90% of the total gain</li><li>→ Random Forest 6.54: −0.26</li><li>→ Boosting 6.49: −0.05, statistically real, practically nothing</li></ul><p>Complexity pays once, then returns shrink fast: the limit is information. The extension confirms it: all three gain the same ~0.3.</p>`,r:["Slide 14","B15"]},
+{d:"Method",w:"Lynn",q:"If they're so close, why not just use Elastic-Net?",a:`<p>For explanation, we do: its effects in minutes are in the report (Table VIII). For headline accuracy we report boosting because it's best and costs nothing extra. If a platform wanted something simple and auditable, Elastic-Net loses only 0.31 min.</p>`,r:["B14"]},
+{d:"Method",w:"Mahmoud",q:"Why not XGBoost, LightGBM or CatBoost?",a:`<p>We tried LightGBM with the same settings: CV <b class="num">6.247 vs 6.251</b>, the same. RF and Elastic-Net are within 0.3 too. The limit is information, not the algorithm.</p>`,r:["B6"]},
+{d:"Method",w:"Lynn",q:"Why not deep learning / a neural network like Uber?",a:`<p>Uber has a routing engine, live traffic and billions of trips. We have 10–23 tabular features and 400k training rows, where tree ensembles are the standard strong choice. And the three model families already agree within 0.3 min, so a bigger model would chase the same ceiling.</p>`,r:["B17"]},
+{d:"Method",w:"Lynn",q:"Your target is skewed. Did you try a log transform?",a:`<p>Yes. On CV the raw target beat the log one (Elastic-Net <b class="num">6.59 vs 6.73</b>), and since MAE targets the median, the skew matters less.</p>`,r:[]},
+{d:"Method",w:"Lynn",q:"Haversine or Manhattan distance?",a:`<p>No difference: CV 6.282 vs 6.284, difference −0.002 (CI −0.007 to +0.003, includes zero). Kept Haversine: simpler.</p>`,r:["B9"]},
+{d:"Method",w:"Lynn",q:"Is the prep estimate really known when the order is placed?",a:`<p>The file doesn't timestamp it, so we assume it is (the report says so). The placeholder defaults are written within seconds of the order, and none equals the dispatch time. If real estimates were set later, prep's +0.68 importance would be optimistic.</p>`,r:[]},
+{d:"Method",w:"Anyone",q:"Can we reproduce your results?",a:`<p>One command: <code>python -m experiments.reproduce</code> runs the tests, downloads the data, rebuilds every result, table and figure, and re-executes the notebooks (<code>--tune</code> reruns the searches). Pinned requirements, seed 42. Test days are never re-scored.</p>`,r:["Slide 21"]},
+
+/* ---------- RESULTS ---------- */
+{d:"Results",w:"Mahmoud",q:"What are the headline test results?",a:`<p>On 139,787 test orders (MAE, min):</p><ul><li>Boosting <b class="num">6.49</b> · RF 6.54 · Elastic-Net 6.80</li><li>Median 9.46 · App's promise 9.62</li><li>Promise minus its 8.2-min padding: 6.48 (level); per distance band: 6.36</li></ul><p>31% better than the median. Test ≈ validation + 0.2.</p>`,r:["Slide 14","B2"]},
+{d:"Results",w:"Mahmoud",q:"R² is only 0.49. Isn't that weak?",a:`<p>Half the variation comes from things nobody knows at ordering: traffic, weather, waiting at the door, which courier. With real-time features it rises to 0.57 (validation). Even a model allowed to cheat with after-order times only reaches 0.72. Three different models within 0.3 min says the limit is information. On MAE we beat both baselines clearly.</p>`,r:["Slide 20","B4"]},
+{d:"Results",w:"Mahmoud",q:"Is boosting really better than Random Forest?",a:`<p>By 0.05 min on test, CI <span class="num">−0.056 to −0.039</span>: statistically real, practically the same. We pick boosting for the lower MAE and speed; RF has slightly fewer big misses (lower RMSE).</p>`,r:["Slide 14"]},
+{d:"Results",w:"Mahmoud",q:"Why does the app's promise have a worse MAE than guessing the median?",a:`<p>It's padded on purpose (never under 30 min, mean 37.8 vs actual 29.6), so it isn't trying to be an unbiased estimate. That's why we also compare de-padded and in the promise test.</p>`,r:["Slide 5","B11"]},
+{d:"Results",w:"Mahmoud",q:"What drives long deliveries?",a:`<p>Grouped permutation importance (CV), MAE added when shuffled:</p><ul><li>Distance <b class="num">+3.10</b> (6.24 → 9.34)</li><li>Time of day +0.85 · District +0.84 · Prep +0.68</li><li>Load only +0.20</li></ul><p>The proposal was right on distance and peaks, wrong on load.</p>`,r:["Slide 15"]},
+{d:"Results",w:"Mahmoud",q:"Where does the model do worst?",a:`<ul><li>Long trips: 5.6 under 1 km → <b>14.4</b> over 7 km</li><li>Lunch peak: 7.2 vs 6.5 (the app wins here, 6.7)</li><li>Districts: 4.4 (district 18) to 9.0 (district 21)</li><li>Sunday 6.77 vs Monday 6.17</li></ul>`,r:["Slide 18","B12","B13"]},
+{d:"Results",w:"Mahmoud",q:"Does the model generalise?",a:`<p>Monday (6.17) sits inside the CV fold range (5.99–6.44); Sunday (6.77) is the outlier, because training had one weekend day. The model ranking is the same on test and CV.</p>`,r:["Slide 14","B8"]},
+{d:"Results",w:"Lynn",q:"Slide 15's 6.24: which model, and is it validation or test?",a:`<p class="say">It's our gradient boosting model's error on the validation folds, averaged over the four folds. Shuffling distance raises it to 9.34. We measured the drivers on validation so the test days stayed untouched until the one final run.</p><ul><li><b>Validation, not test</b>: 4 folds, 17–22 Oct. The test number is 6.49 (23–24 Oct), only on slide 14</li><li>Base model (33 inputs); 5 shuffles per group on each fold</li><li>6.24 = mean of the 4 fold MAEs; 6.25 = pooled over all CV orders. Same model, two averages</li><li>Slide 16's "app's 6.24" is different: the app's promise de-padded per distance band, on validation days. Same number by coincidence</li></ul>`,r:["Slide 15","Slide 16"]},
+{d:"Results",w:"Lynn",q:"Is shuffling inputs standard practice for finding which matter most?",a:`<p class="say">Yes, it's permutation importance, the standard method from Breiman's Random Forest paper, built into scikit-learn. We ran it on the validation folds and shuffled related features as groups, because correlated inputs can hide each other. Elastic-Net effects and partial dependence gave the same ranking.</p><ul><li>Shuffle a column so it carries no information, measure how much worse MAE gets</li><li>Works for any model, in our metric (+3.10 min), on held-out folds, no refitting</li><li>Grouped: time of day = sin, cos and both peak flags together; district = all 23 columns. "One input at a time" on the slide means one input group</li><li>Not causal: it shows what the model relies on, so we cross-checked (B14)</li><li>Why not impurity importance? Biased toward inputs with many distinct values, trees only. SHAP? Heavier; same global answer</li></ul>`,r:["Slide 15","B14"]},
+{d:"Results",w:"Mahmoud",q:"Permutation importance is unreliable with correlated features.",a:`<p>That's why we shuffle related features as groups (all time features together, etc.). We checked the interaction: time and load shuffled together cost 1.44 vs 1.05 separately. Elastic-Net effects and partial dependence give a consistent picture: distance first, load weak.</p>`,r:["Slide 15","B14"]},
+{d:"Results",w:"Mahmoud",q:"Why is load weak, when busy obviously means slow?",a:`<p>Raw load mostly measures district size and hour: within the same district and hour the correlation is only 0.09. What matters is riders: over 3 orders per free rider → median 35.6 vs 26.4. New orders don't slow things; too few riders does.</p>`,r:["Slide 9","Slide 10"]},
+{d:"Results",w:"Lynn",q:"Which model is interpretable, and what does it say?",a:`<p>Elastic-Net, in minutes: <b>+6.1 per km</b>, +4.8 at lunch, +3.6 at dinner, +0.66 per prep-estimate minute, +2.0–2.5 with no real prep estimate, only +1.1 at twice the usual load. Test 6.80, only 0.31 above boosting.</p>`,r:["B14"]},
+{d:"Results",w:"Mahmoud",q:"Coordinates are shifted for privacy. Aren't your distances wrong?",a:`<p>Approximate, which we state. But distance still has a strong, steady effect: ~7 min per km, positive in all 23 districts, the top driver by far. So they keep enough information to rank trips.</p>`,r:["Slide 8"]},
+{d:"Results",w:"Mahmoud",q:"Did you check for Simpson's paradox?",a:`<p>Yes: the distance slope stays positive inside every one of the 23 districts (4.9 to 7.7 min/km), so it isn't created by mixing districts.</p>`,r:["Slide 8"]},
+{d:"Results",w:"Mahmoud",q:"Why are default-prep orders slower?",a:`<p>We don't know the cause and didn't guess: they're 2–5 min slower at the same distance, so not missing at random. That's why we flagged them instead of deleting them.</p>`,r:["Slide 7"]},
+
+/* ---------- PROMISE ---------- */
+{d:"Promise",w:"Lynn",q:"How did you compare with the platform's promise fairly?",a:`<p>An 80th-percentile boosting model (quantile/pinball loss), shifted by a constant (<b>+2.7</b> min) so both promise the same average, <b class="num">38.2</b> min on test. Then count orders arriving more than 0, 5 and 10 min late, with bootstrap intervals.</p>`,r:["Slide 19"]},
+{d:"Promise",w:"Lynn",q:"What do you mean, a better estimate isn't a better promise?",a:`<p class="say">Guessing the delivery time well isn't the same as keeping a promise. The app still wins on promises, because it can speed up late orders after you've ordered, and we can't.</p><ul><li><b>Estimate</b> = most likely arrival, judged on MAE. <b>Promise</b> = a time you commit to, judged on how often you're late</li><li>As an estimate we're level with the app (6.49 vs 6.48; extended 5.92 vs 6.24 on validation)</li><li>As a promise, at the same 38.2-min average, the app is late less often: 5.0% vs 6.1% more than 5 min late</li><li>Why: the 8-minute cliff, the platform rushing late orders. And a promise needs the right buffer per order, not just an accurate middle</li><li>Analogy: a forecast says it will probably rain; a promise says you'll stay dry</li></ul>`,r:["Slide 19","B11"]},
+{d:"Promise",w:"Lynn",q:"So you lost to the platform?",a:`<p>At the same average promise, yes, slightly: <b>6.1% vs 5.0%</b> of orders more than 5 min late (gap +1.2 pp, CI +1.1 to +1.3). The proposal named this risk. The platform keeps acting after the order (reassigning couriers, prioritising late orders): there's a sharp drop at exactly 8 min late. Better estimates aren't automatically better promises. A clear negative result is a finding.</p>`,r:["Slide 19","B11"]},
+{d:"Promise",w:"Lynn",q:"So did you beat the platform or not?",a:`<ul><li>vs promise as shown: yes, 6.49 vs 9.62, but that's padding</li><li>minus average 8.2-min padding: <b>tie</b>, 6.48 vs 6.49 (CI −0.01 to +0.04)</li><li>minus per-band padding: app slightly better, 6.36. We still win under 1 km and over 3 km (38% of orders); app wins 1–3 km and at lunch</li><li>extended model, validation: we win 5.92 vs 6.24</li><li>promise test: app wins at its own average; we win below ~37 min</li></ul>`,r:["B2","B16"]},
+{d:"Promise",w:"Lynn",q:"What's the 8-minute cliff?",a:`<p>Late arrivals more than halve at exactly +8 min after the promise (798 → 336 orders), at every promise level. Someone starts rushing after the order: an operational rule our order-time model can't see, and why the app wins the promise test.</p>`,r:["Slide 19","B11"]},
+{d:"Promise",w:"Lynn",q:"Why remove the padding with an average, not per order?",a:`<p>One number measured on the training days is the simplest fair version that uses no test information. A smarter de-padding (per district or hour) would need its own model of the platform, which is what our model already is. We also show the per-distance-band version.</p>`,r:["B2"]},
+{d:"Promise",w:"Lynn",q:"Removing the padding uses actual times. Isn't that cheating for the app?",a:`<p>It uses the same information our model trains on: the six training days only, never test days. And we show the stricter per-band version, where the app does slightly better (6.36 vs 6.49). We report both.</p>`,r:["B2"]},
+{d:"Promise",w:"Lynn",q:"Isn't shifting your promises by +2.7 min tuning on the test set?",a:`<p>No: the shift only matches the average promise of the two systems, using promises, never actual delivery times. It makes the comparison fair at equal length; it can't see who was late.</p>`,r:["Slide 19"]},
+{d:"Promise",w:"Lynn",q:"Why the 80th percentile?",a:`<p>A promise has to cover most orders; the app's own cover about 85%, so q80 is in range. The test equalises the average promise anyway, so the exact quantile matters less than the shape of the predictions.</p>`,r:["Slide 19","B1"]},
+{d:"Promise",w:"Lynn",q:"Why are you better on short and long trips but worse in between?",a:`<p>The app's padding is close to a fixed rule with a 30-min floor: ~10 min under 1 km, 7 at 1–3 km, 12–14 beyond 4 km. Our model scales with distance. For common 1–3 km lunch trips, the app's real-time information likely helps.</p>`,r:["B2","B16"]},
+{d:"Promise",w:"Lynn",q:"Isn't order #85188 cherry-picked?",a:`<p>No: it sits at the median of the 634 Sunday 11:xx orders 3–5 km away (actual 45.3, promise 52.2, ours 45.2). In that group we're off by 8.4 min on average, the app by 11.0. Honest note: the de-padded promise for it (51 − 8.2 = 42.8) was even closer.</p>`,r:["B3"]},
+{d:"Promise",w:"Lynn",q:"Why MAE when late deliveries hurt more than early ones?",a:`<p>MAE answers "how far off is the estimate". Lateness is handled separately: we report the share more than 5 min late, and the promise test uses a quantile model built for "late is worse". Uber's DeepETA makes the same split with an asymmetric loss.</p>`,r:["Slide 19","B17"]},
+{d:"Promise",w:"Lynn",q:"Then what is your model useful for?",a:`<p>An estimate as good as the platform's own from public order-time data, built openly; a ranked list of what makes orders slow; an estimate that scales with distance; and a starting point for promises updated after dispatch (future work).</p>`,r:["Slide 20"]},
+{d:"Promise",w:"Lynn",q:"Your model ties the app. So what's the point?",a:`<p>It reaches the app's accuracy from public data alone, reproducibly. It explains <i>why</i> orders are slow, which the app doesn't. And with real-time features it beats the app on validation days, except at lunch, which tells the platform where post-order actions matter.</p>`,r:["B2"]},
+
+/* ---------- EXTENSION ---------- */
+{d:"Extension",w:"Lynn",q:"Did more features help?",a:`<p>Yes, on validation: free riders + restaurant history + recent delays take CV MAE <b class="num">6.25 → 5.92</b> (CI −0.34 to −0.32), R² 0.51 → 0.57, ahead of the de-padded app (6.24) in 5 of 7 segments, level on 1–3 km, not at lunch. Restaurant history gives most (−0.24), riders −0.05. Not scored on test: designed after the one test run.</p>`,r:["Slide 17","B15","B16"]},
+{d:"Extension",w:"Lynn",q:"Walk through the extension steps.",a:`<ul><li>Base 6.25</li><li>+ free riders 6.20 (−0.05): the instructor's question</li><li>+ restaurant record 5.96 (−0.24): half the wait is pre-pickup</li><li>+ recent delays 5.95 (−0.01): the app beat us at lunch</li><li>+ prep-estimate bias 5.92 (−0.03): some kitchens run late every time</li></ul>`,r:["Slide 17","B15","B21"]},
+{d:"Extension",w:"Lynn",q:"Did the new features only help the complex model?",a:`<p>No. Elastic-Net 6.60 → 6.27, RF 6.32 → 6.00, boosting 6.25 → 5.92: all ~−0.3. The gain is information, not complexity. Re-tuning chose the same settings.</p>`,r:["B15"]},
+{d:"Extension",w:"Lynn",q:"What do you mean by the restaurant's track record?",a:`<p class="say">For each order, we look at that restaurant's earlier orders that had already been delivered when it was placed: their average delivery time and their average time to pickup. So the model knows if a restaurant is usually slow. It's the biggest gain in the extension, 0.24 minutes, and it only uses what the platform already knows live.</p><p><b>What it is</b>: 4 numbers about this restaurant's earlier orders that had already been delivered:</p><ul><li><b>Average delivery time</b> of its past orders, order → arrival (<code>rest_hist_min</code>)</li><li><b>Average time to pickup</b>, mostly how slow the kitchen is (<code>rest_pickup_hist</code>)</li><li><b>How many past orders</b>, so the model knows how much to trust the averages (<code>rest_hist_n</code>)</li><li><b>"No history yet" flag</b>, e.g. its first order in the data (<code>rest_hist_missing</code>)</li></ul><p>Example: past orders took 40 min, waited 15 for pickup, over 120 orders → a slow restaurant, so predict longer.</p><p><b>"Helps the most"</b>: of the extension's 0.33-min gain, it gives 0.24 (about three quarters). Riders −0.05, recent delays −0.01, prep bias −0.03. Same −0.24 alone (6.25 → 6.01) or after riders (6.20 → 5.96).</p><ul><li>Cumulative since 17 Oct, not a 30-min window</li><li>Only orders already arrived before this one was placed; unit-tested</li><li>Why: 4,962 restaurants is too many to one-hot; half the wait is before pickup</li><li>Not the same as prep-estimate bias (how late vs its own prep estimate, ≥5 orders, only −0.03)</li></ul>`,r:["Slide 17","B21"]},
+{d:"Extension",w:"Lynn",q:"What do you mean by free riders? How did you measure them?",a:`<p class="say">For each order we count riders who just finished a delivery in that district, so they're free, and divide the waiting orders by them. Over 3 orders per free rider, deliveries take 36 minutes instead of 26. It only adds 0.05 to the model, because riders are scarce mostly at peak hours, which the model already knows.</p><p><b>What it is</b>: 3 numbers per order:</p><ul><li><b>Free riders</b>: distinct riders who finished a delivery in this district in the last 30 min (<code>riders_30m</code>)</li><li><b>Open orders</b>: district orders placed but not yet delivered, the queue they face (<code>open_orders</code>)</li><li><b>Orders per free rider</b> = open ÷ free, the key one (<code>orders_per_rider</code>)</li></ul><p>Example: 10 free riders, 40 waiting orders → 4 per rider → scarce, predict longer.</p><ul><li>Over 3 per rider (19% of orders): median 35.6 vs 26.4. Scarcest at 11:00 and 17–18:00</li><li>Only −0.05: scarcity overlaps with hour and district, which the model already has</li><li>Approximation: the data doesn't say who is idle, so inferred from finished deliveries (a stated limitation)</li><li>Not district load: load counts new orders (barely matters); free riders measure supply</li><li>Only deliveries finished before the order; unit-tested</li></ul>`,r:["Slide 10","Slide 17","B21"]},
+{d:"Extension",w:"Lynn",q:"Isn't restaurant history leakage? It uses delivery times.",a:`<p>Only of <i>other</i> orders already delivered before this one was placed, which the platform knows live. A unit test checks hand-computed cases. Sumaiya's review even caught a subtle case (open-order counts skipping orders that would later take over 3 h) and we fixed it.</p>`,r:["B21"]},
+{d:"Extension",w:"Lynn",q:"The extension was never tested on test days. How do you know it's not overfit?",a:`<ul><li>Every feature uses only deliveries finished before the order</li><li>Hyperparameters stayed frozen; re-tuning picked the same</li><li>All three models gain the same (−0.33, −0.31, −0.33)</li><li>Improves on every validation day</li><li>Test days deliberately not re-scored</li></ul><p>Claim: "better on validation days, to be confirmed on new days".</p>`,r:["Slide 17","B15"]},
+{d:"Extension",w:"Lynn",q:"Can more features close the gap to the leaky model?",a:`<p>Only partly. After-order times are worth 1.72 min (6.25 → 4.53). Our leakage-safe real-time features recover 0.33, about a fifth. The rest (pickup, the road) only exists after the order.</p>`,r:["Slide 20","B4"]},
+{d:"Extension",w:"Lynn",q:"Do weekends behave differently?",a:`<p>Same daily shape (hourly medians r = 0.92), but weekends run 1–3.5 min slower noon–18:00. One weekend day in training, so we can't learn it; Sunday was our hardest test day (6.77, 2.1 min too short). With more weeks, a day-of-week feature comes first.</p>`,r:["B8","B7"]},
+{d:"Extension",w:"Lynn",q:"Is the pattern drifting over time?",a:`<p>Not within the week: Mon 17 vs Mon 24 differ by 0.5 min per busy hour (max 1.3). Eight days can't show longer drift, so deployment needs monitoring and retraining.</p>`,r:["B8"]},
+{d:"Extension",w:"Lynn",q:"How does this compare with industry?",a:`<p>Ele.me's deployed model (KDD 2020) uses the same kinds of inputs we added (live supply–demand, restaurant backlog, nearby couriers) and cut MAE 9.8% online (complaints −19.3%). Uber's DeepETA uses an asymmetric loss so late costs more, like padding. Errors aren't comparable across companies.</p>`,r:["B17"]},
+{d:"Extension",w:"Lynn",q:"Why a 30-minute window for riders and recent delays?",a:`<p>A reasonable single choice, not tuned; kept fixed to avoid fitting the validation days with many variants. A fair next experiment.</p>`,r:["B21"]},
+{d:"Extension",w:"Lynn",q:"Did re-tuning help?",a:`<p>No: the same 20-try search on the new features picked the same settings. All the gain comes from the features.</p>`,r:["B15"]},
+{d:"Extension",w:"Lynn",q:"How many features do you have?",a:`<p>Main model (scored on test): 10 engineered + district one-hot = <b>33</b> inputs. Extended: 23 engineered = <b>46</b>. Every one is built from raw columns; none is a raw column used as is.</p>`,r:["Slide 12","B20","B21","B22"]},
+
+/* ---------- LEAKAGE & STAGES ---------- */
+{d:"Leakage",w:"Sumaiya",q:"What is the leakage audit?",a:`<p>The same frozen models with after-order times added. Boosting CV MAE <b class="num">6.25 → 4.53</b> (Elastic-Net 6.60 → 4.84), R² 0.51 → 0.72. One at a time: dispatch 5.86, accept 5.83, pickup 4.55 (almost the whole gap, partly by construction since pickup contains the other two). It shows how tempting leakage is, and how much error is information that doesn't exist at ordering.</p>`,r:["B4","Slide 20"]},
+{d:"Leakage",w:"Sumaiya",q:"Which part causes delays: the restaurant or the road?",a:`<p>Neither dominates. Order → pickup and pickup → arrival each take a median 13.1 min; after distance, the error splits ~51% / 47%. Both run ~2.7 min longer at peaks. Late orders lose more on the road in the 7 big districts (72% of late orders), more at pickup elsewhere and at night.</p>`,r:["B5"]},
+
+/* ---------- LIMITS & ETHICS ---------- */
+{d:"Limits",w:"Lynn",q:"What are the limitations?",a:`<p>Eight days; one weekend day for training; one platform, one city; no weather or traffic; rider availability only approximated from past deliveries; coordinates shifted for privacy; extension checked on validation days only.</p>`,r:["Slide 20"]},
+{d:"Limits",w:"Lynn",q:"What are the ethical concerns?",a:`<p>Errors differ by district (4.4–9.0 min), so some areas get worse estimates. Shorter promises pressure riders; padded ones shift the cost to customers. The 2020 "Delivery Riders, Trapped in the System" article covered Meituan. We'd judge any deployment on rider workload too, not just lateness.</p>`,r:["Slide 20","B12"]},
+{d:"Limits",w:"Lynn",q:"What would you do next / with another week?",a:`<p>Confirm the rider and restaurant features on new days, add a day-of-week feature once several weekends exist, combine the estimate with updates after dispatch, and test over weeks for drift with retraining and monitoring.</p>`,r:["Slide 20"]},
+{d:"Limits",w:"Lynn",q:"How would this be deployed?",a:`<p>Score at checkout (milliseconds), show an order-specific buffer instead of a flat one, retrain on a schedule, monitor input drift (distance mix, missing prep estimates). Combine with the app's after-order updates rather than replacing them.</p>`,r:[]},
+{d:"Limits",w:"Lynn",q:"What if you had weather and traffic data?",a:`<p>They'd help, up to a point. Even after-order times only take error 6.25 → 4.53, and our real-time features already recover a fifth of that. Rider pressure already acts partly as a congestion signal. We'd add weather as a past-only or forecast feature.</p>`,r:["B4"]},
+{d:"Limits",w:"Anyone",q:"Two test days, one a Sunday: is that enough to trust the result?",a:`<p>139,787 orders, but two days, so the real uncertainty is day to day. Monday (6.17) is inside the CV range (5.99–6.44), Sunday (6.77) is the outlier, same model ranking. Two days can't show drift over weeks; that's a stated limitation.</p>`,r:["B8"]},
+{d:"Limits",w:"Anyone",q:"What surprised you most?",a:`<p>The 8-minute cliff: late arrivals more than halve exactly 8 minutes after the promise, at every promise level. An operational rule kicking in after ordering, and it explains why the app wins the promise test.</p>`,r:["B11"]},
+
+/* ---------- HARDEST 5 ---------- */
+{d:"Hardest 5",w:"Anyone",q:"Your intervals are ±0.03 on 140k orders. Are orders independent? What's the real uncertainty?",a:`<p>No, they share days, districts, hours, couriers and restaurants. The bootstrap resamples orders, so it shows order-level noise only (the report says so). The honest view is per day:</p><ul><li>Boosting beats RF on 5 of 6 held-out days; ties Sunday, wins Monday (−0.10)</li><li>Day-to-day variation (6.77 vs 6.17) dwarfs any model gap</li></ul><p>So boosting ≈ RF, and both clearly beat the median (30% Sunday, 33% Monday).</p>`,r:["Slide 14"]},
+{d:"Hardest 5",w:"Anyone",q:"The promise is shown at checkout. Why isn't it an input, when the prep estimate is?",a:`<p>A choice, not leakage. We kept it out so our estimate stays independent and can be compared with it. Feeding it in would mostly copy the platform's internal estimate and the model would learn the padding rule. Combining the two would probably beat both on MAE: fair future work.</p>`,r:["Slide 3"]},
+{d:"Hardest 5",w:"Anyone",q:"Why drop the weekend flag? A jump from 6.8 to 18 looks like a bug.",a:`<p>Admit it: the jump was a symptom, not the reason.</p><ul><li>The Saturday fold trains on only 14 "weekend" rows (Sunday orders after midnight)</li><li>Scaling that near-constant column blew up the linear model</li><li>Real reason: one weekend day in training, one fold to test it</li><li>Cost: Sunday predicted 2.1 min too short, MAE 6.77</li></ul>`,r:["B7"]},
+{d:"Hardest 5",w:"Anyone",q:"Your q80 promise loses to the platform. Is that a fair test?",a:`<p>Not fully, and the report says so. Actual times were produced by a dispatcher working to the platform's own promise (the +8 cliff shows it acting after the order), so any other promise is judged on the platform's turf. Unshifted, our q80 covers only <b>76.6%</b> of test orders, mostly because Sunday ran slow. Below ~37-min average promises, ours is late less often at the 0-min threshold.</p>`,r:["Slide 19","B11"]},
+{d:"Hardest 5",w:"Anyone",q:"The extension was designed after the test run and scored on folds you tuned on. How much of the 0.33 is real?",a:`<ul><li>Every feature uses only deliveries finished before the order</li><li>Hyperparameters frozen; re-tuning picked the same</li><li>EN, RF and boosting gain the same (−0.33, −0.31, −0.33): information, not capacity</li><li>We deliberately didn't re-score the test days</li></ul><p>Claim: "better on validation days, to be confirmed on new days".</p>`,r:["Slide 17","B15"]},
+{d:"Hardest 5",w:"Anyone",q:"Why not just run the extended model on the test days and compare?",a:`<p class="say">We could run it, but those features were designed after our one test run, partly because of what the test showed, like losing at lunch. Scoring them on the same days would make the test set part of the design, so the number would be optimistic. That's why we report it on validation days, where all three models gain the same 0.3, and confirming it on fresh days is our first next step.</p><ul><li>Technically it works: the features only use deliveries finished before each order</li><li>But the test days already shaped the extension ("recent delays" exists because the app beat us at lunch)</li><li>A second look would cost us "frozen settings, one test run, recorded in the manifest" (Lec 7)</li><li>Legitimate version: score it on new days. If ever run on 23–24 Oct, label it a post-hoc second look, not a test result</li></ul>`,r:["Slide 17","B15"]},
+{d:"Hardest 5",w:"Anyone",q:"Why not use the app's promise as an input, like Uber corrects its routing ETA?",a:`<p>It would probably win, but it changes the question from "what can be predicted from the order itself?" to "how do we adjust Meituan's number?", and the model would partly learn the padding rule. A design choice.</p>`,r:["B17"]},
+{d:"Hardest 5",w:"Anyone",q:"Couldn't better predictions be used to push riders harder?",a:`<p>Yes, that's the ethics risk we name. Shorter promises put pressure on riders (the 2020 article covered Meituan). Errors also differ by district (4.4–9.0). We'd judge deployment on rider workload too, not just lateness.</p>`,r:["Slide 20"]},
+
+/* ---------- NUMBERS ---------- */
+{d:"Numbers",w:"Anyone",q:"Test MAE for all five (models + baselines)?",a:`<p class="num">Boosting 6.49 · RF 6.54 · Elastic-Net 6.80 · Median 9.46 · Promise 9.62</p>`,r:["Slide 14"]},
+{d:"Numbers",w:"Anyone",q:"De-padded promise numbers?",a:`<p><span class="num">6.48</span> minus average padding (8.2 min, training days) · <span class="num">6.36</span> per distance band. Tie CI −0.01 to +0.04.</p>`,r:["B2"]},
+{d:"Numbers",w:"Anyone",q:"Validation MAE: base, extended, leaky?",a:`<p class="num">6.25 → 5.92 → 4.53</p><p>R²: 0.51 → 0.57 → 0.72. Test R² 0.49. Fold mean 6.24; fold range 5.99–6.44.</p>`,r:["Slide 20"]},
+{d:"Numbers",w:"Anyone",q:"Row counts: raw, orders, modelling, train/test?",a:`<p class="num">654,343 rows → 568,546 orders → 546,340 modelling</p><p>Train 17–22 Oct: 406,553 · Test 23–24 Oct: 139,787</p>`,r:["B18"]},
+{d:"Numbers",w:"Anyone",q:"Promise vs reality: means, floor, lateness?",a:`<p>Actual median 27.9, mean 29.6 · promise mean <b>37.8</b>, never under 30 · ~8 min padding · ~15% late (14.9% test). 35% of promises sit at the 30-min floor.</p>`,r:["Slide 5","B11"]},
+{d:"Numbers",w:"Anyone",q:"Permutation importance numbers?",a:`<p class="num">Distance +3.10 · Time +0.85 · District +0.84 · Prep +0.68 · Load +0.20</p><p>Shuffling distance: 6.24 → 9.34.</p>`,r:["Slide 15"]},
+{d:"Numbers",w:"Anyone",q:"Promise test numbers?",a:`<p>Average promise 38.2 · shift +2.7 · more than 5 min late: ours <b>6.1%</b> vs app <b>5.0%</b> (+1.2 pp, CI +1.1 to +1.3) · q80 coverage unshifted 76.6% · we win below ~37 min.</p>`,r:["Slide 19"]},
+{d:"Numbers",w:"Anyone",q:"Error by segment numbers?",a:`<p>Under 1 km 5.6 → over 7 km 14.4 · lunch 7.2 vs 6.5 overall (app 6.7) · Sunday 6.77 vs Monday 6.17 · districts 4.4–9.0 · district 16: 7.54 CV, 7.83 test.</p>`,r:["Slide 18","B12","B13"]},
+{d:"Numbers",w:"Anyone",q:"Extended model vs app by segment (validation)?",a:`<ul class="num"><li>All: app 6.24 · ours 5.92</li><li>&lt;1 km (30%): 5.82 · 5.14</li><li>1–3 km (63%): 6.09 · 6.08 (level)</li><li>&gt;3 km (7%): 9.44 · 7.91</li><li>Lunch (17%): 6.66 · 6.75 (app)</li><li>Dinner (30%): 6.44 · 6.30</li><li>Saturday (27%): 6.30 · 6.01</li></ul>`,r:["B16"]},
+{d:"Numbers",w:"Anyone",q:"Test segments vs per-band de-padded app?",a:`<p>Under 1 km / over 3 km (38% of orders): ours 5.61 / 8.73 vs app 5.86 / 9.94. 1–3 km / lunch: ours 6.67 / 7.22 vs app 6.19 / 6.68.</p>`,r:["B2"]},
+{d:"Numbers",w:"Anyone",q:"Final model settings?",a:`<ul><li>Elastic-Net: α 0.002, L1 ratio 0.66 (30 tries)</li><li>RF: 200 trees, min leaf 6, 31% features, depth 20 (10 tries)</li><li>Boosting: absolute-error, lr 0.038, 76 leaves, min leaf 70, L2 7.9, 800 iters (20 tries)</li><li>q80: quantile, lr 0.055, 29 leaves, min leaf 126, 200 iters</li></ul>`,r:["B6"]},
+{d:"Numbers",w:"Anyone",q:"Peak and rider numbers?",a:`<p>11:00 median 33.5 vs 27.8 overall; 11:00 holds 17% of orders · load correlation 0.30 → 0.09 within district & hour · over 3 orders per free rider: 19% of orders, median 35.6 vs 26.4.</p>`,r:["Slide 9","Slide 10"]},
+{d:"Numbers",w:"Anyone",q:"Weekend numbers?",a:`<p>14 weekend rows in fold 4's training · EN Saturday fold 6.8 → 18.0 · Sunday under-predicted 2.1 min · weekend 1–3.5 min slower noon–18:00 · hourly r = 0.92 · Mon vs Mon 0.5 min (max 1.3).</p>`,r:["B7","B8"]},
+
+/* ---------- BACKUP FINDER ---------- */
+{d:"Backups",w:"Anyone",q:"Asked to define delivery time / promise / delay?",a:`<p><b>B1</b>: three words, with the pizza as the example (43 / 51 / −8), plus estimate vs promise.</p>`,r:["B1"]},
+{d:"Backups",w:"Anyone",q:"\"Did you beat the app or not?\"",a:`<p><b>B2</b>: the scorecard. As shown, de-padded average, per band, segments, extended model, promise test, each with a verdict.</p>`,r:["B2"]},
+{d:"Backups",w:"Anyone",q:"\"Is the pizza order cherry-picked?\"",a:`<p><b>B3</b>: it sits at the median of the 634 Sunday 11:xx orders 3–5 km away.</p>`,r:["B3"]},
+{d:"Backups",w:"Anyone",q:"Leakage / what if you used after-order times?",a:`<p><b>B4</b>: leakage audit, 6.25 → 5.86 → 5.83 → 4.55 → 4.53.</p>`,r:["B4"]},
+{d:"Backups",w:"Anyone",q:"\"Restaurant or road: where's the delay?\"",a:`<p><b>B5</b>: stages by district. 13.1 min each; 72% of late orders lose more on the road in the 7 big districts.</p>`,r:["B5"]},
+{d:"Backups",w:"Anyone",q:"Hyperparameters / tuning / 16 vs 76 leaves?",a:`<p><b>B6</b>: tuning and settings, plus the overfitting curve (511 leaves: 2.45 vs 6.63).</p>`,r:["B6"]},
+{d:"Backups",w:"Anyone",q:"\"Why no weekend flag?\"",a:`<p><b>B7</b>: folds 1–3 never see a weekend; 6.8 → 18.0 jump. Then <b>B8</b> for how weekends differ.</p>`,r:["B7","B8"]},
+{d:"Backups",w:"Anyone",q:"Weekday vs weekend, or drift over time?",a:`<p><b>B8</b>: same shape (r 0.92), weekend 1–3.5 slower noon–18:00; Mon 17 vs Mon 24 differ 0.5 min.</p>`,r:["B8"]},
+{d:"Backups",w:"Anyone",q:"Haversine vs Manhattan?",a:`<p><b>B9</b>: 6.282 vs 6.284, CI includes zero.</p>`,r:["B9"]},
+{d:"Backups",w:"Anyone",q:"\"Early is good, why is padding bad?\"",a:`<p><b>B10</b>: lost orders, trust, operations need the real time, one buffer for every order. <b>B24</b> for the Houston analogy.</p>`,r:["B10","B24"]},
+{d:"Backups",w:"Anyone",q:"How is the promise padded / the 8-min cliff?",a:`<p><b>B11</b>: 35% at the 30-min floor, median arrives 8.3 early, 14.7% late; late arrivals 798 → 336 across +8 min.</p>`,r:["B11"]},
+{d:"Backups",w:"Anyone",q:"Errors by district / fairness?",a:`<p><b>B12</b>: 4.4 (district 18) to 9.0 (district 21). 21 is bad only on Sunday; 16 is hard on CV and test.</p>`,r:["B12"]},
+{d:"Backups",w:"Anyone",q:"Errors by distance?",a:`<p><b>B13</b>: 5.6 under 1 km → 14.4 over 7 km. 70% of orders are under 2 km.</p>`,r:["B13"]},
+{d:"Backups",w:"Anyone",q:"\"What did the model learn?\" / interpretability",a:`<p><b>B14</b>: partial dependence (+24 min over distance, +6 for riders, +4 across the day, +3 slow vs fast restaurants) and Elastic-Net effects in minutes.</p>`,r:["B14"]},
+{d:"Backups",w:"Anyone",q:"Extension feature by feature, or per model?",a:`<p><b>B15</b>: step table (6.25 → 5.92) and per model (EN, RF, boosting all ~−0.3).</p>`,r:["B15"]},
+{d:"Backups",w:"Anyone",q:"Extended model vs app, by segment?",a:`<p><b>B16</b>: all, distance bands, lunch, dinner, Saturday, with order shares.</p>`,r:["B16"]},
+{d:"Backups",w:"Anyone",q:"How does industry do it?",a:`<p><b>B17</b>: Ele.me (KDD 2020) and Uber DeepETA vs ours.</p>`,r:["B17"]},
+{d:"Backups",w:"Anyone",q:"Every cleaning step with counts?",a:`<p><b>B18</b>: 654,343 → 568,546 → 568,545 → 546,364 → 546,340, then the split.</p>`,r:["B18"]},
+{d:"Backups",w:"Anyone",q:"% duplicates and missing, with reasons?",a:`<p><b>B19</b>: data issues table with rows, %, decision.</p>`,r:["B19"]},
+{d:"Backups",w:"Anyone",q:"Which features, built from what?",a:`<p><b>B20</b>: main model (column, raw source, how, why). <b>B21</b>: extension features. <b>B22</b>: three real rows as the model sees them.</p>`,r:["B20","B21","B22"]},
+{d:"Backups",w:"Anyone",q:"Instructor: \"Did you address my feedback?\"",a:`<p><b>B23</b>: each feedback point → where we answered it and what we did.</p>`,r:["B23"]},
+{d:"Backups",w:"Anyone",q:"How do you get to the backups during Q&A?",a:`<p>Slide 22 is the backup index: click any card to jump. Press <b>Home</b> to return to the start.</p>`,r:["Slide 22"]},
+
+/* ---------- LYNN'S SLIDES ---------- */
+{d:"My slides",w:"Lynn",q:"Slide 11 · Our Approach (~30 s): what do you say?",a:`<p class="say">Now that we have an idea of what drives delivery time, how do we predict it? We set two baselines to beat: a do-nothing baseline, which is the median time for every order, and the app's own promise. Then we trained three models. Elastic-Net is one weighted line, so every effect reads in minutes. Random Forest averages many trees, so it's stable. And gradient boosting adds trees one at a time, each fixing the last one's mistakes.</p><p>If asked: settings and tuning → B6.</p>`,r:["Slide 11","B6"]},
+{d:"My slides",w:"Lynn",q:"Slide 12 · Inside the models (~35 s): what do you say?",a:`<p class="say">All three models get the same inputs, and each one comes from something we found in the data. We give it these columns here, and that's ten numbers plus the district which was encoded, so 33 inputs. We left out a weekend flag, because we only have one weekend day, and anything after you order, like the rider. And the cleaning pipeline is refitted in every fold, so nothing leaks.</p><p>If asked: feature tables → B20, B21 · real rows → B22 · Elastic-Net in minutes → B14.</p>`,r:["Slide 12","B20","B21","B22","B14"]},
+{d:"My slides",w:"Lynn",q:"Slide 13 · Tested like real life (~30 s): what do you say?",a:`<p class="say">We tested it like real life: it only learns from the past. We train on earlier days and check on the next one, repeat that four times. The last two days stayed locked and were scored once, at the end. We used MAE as our metric. Tree size mattered in our case: very big trees were off by 2.5 minutes on days they'd seen, but 6.6 on new ones. That's overfitting, so we kept them smaller.</p><p>If asked: weekend flag → fold 4 trains on only 14 weekend rows; the 6.8 → 18.0 jump was scaling, not weekends (B7) · complexity curve → B6.</p>`,r:["Slide 13","B6","B7"]},
+{d:"My slides",w:"Lynn",q:"Slide 14 · Results (~35 s): what do you say?",a:`<p class="say">These are the results on 140 thousand orders the models had never seen. All three models land near six and a half, and boosting is best at 6.49, 31 percent better than guessing. The app's promise looks worse because it's padded. Take off its usual 8 minutes and it's 6.48, level with us. Removing the padding per distance band, which is fairer to the app, puts it slightly ahead, 6.36: we reach the app's level, not beyond it.</p><p>If asked: boosting vs RF −0.05 [−0.06, −0.04] · vs median −2.97 · scorecard → B2 · pizza is typical → B3.</p>`,r:["Slide 14","B2","B3"]},
+{d:"My slides",w:"Lynn",q:"Slide 15 · Distance drives delivery time most (~30 s): what do you say?",a:`<p class="say">So what makes a delivery slow? We shuffle one input at a time and see how much worse the model gets. Shuffle distance, and the error jumps from 6.24 to 9.34 minutes, so distance matters most by far. After that come time of day, the district and the prep estimate. How busy the district is barely matters.</p><p>If asked: permutation importance on the CV folds · stages by district → B5.</p>`,r:["Slide 15","B5"]},
+{d:"My slides",w:"Lynn",q:"Slide 16 · Key Insights (~20 s): what do you say?",a:`<p class="say">Distance dominates. Scarce riders go with slow deliveries, but once distance, hour and district are known they add only 0.05; the restaurant's track record adds the most, 0.24. With what the app knows live we reach 5.92, ahead of the app's 6.24: better on short and long trips, dinner and Saturday, tied mid-length, behind at lunch.</p>`,r:["Slide 16","B16"]},
+{d:"My slides",w:"Lynn",q:"Slide 17 · From base to extended (~30 s): what do you say?",a:`<p class="say">This shows how we got there, one group at a time. Free riders, which you asked us to check, give a small gain. The restaurant's track record gives the biggest. Recent delays and late kitchens add a little more. By the end we're below the app. Two honest notes: every model gains about the same, so again our bottleneck is the information. And these are validation days, because we built this after our one test run. Now I'll pass it on to Mahmoud.</p><p>If asked: feature by feature → B15 · features → B21.</p>`,r:["Slide 17","B15","B21"]},
+{d:"My slides",w:"Lynn",q:"Who presents what?",a:`<p>Three people, ~3 min each, ~9:30 total. Lynn: slides 11–17 (Approach → From base to extended). Slides 1–10 (problem, data, EDA) and 18–21 (struggles, promise test, conclusion) are the others'.</p>`,r:[]},
+];
+
+/* ================= APP ================= */
+const DECKS = [...new Set(CARDS.map(c=>c.d))];
+CARDS.forEach((c,i)=>c.id = i);
+const store = { get(k,f){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : f }catch(e){ return f } },
+                set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} } };
+
+let marks = store.get("eta-marks", {});
+let active = new Set(store.get("eta-decks", []));   // empty = all
+let onlyAgain = false, shuffled = false, listMode = false;
+let order = [], pos = 0, flipped = false;
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const pad = n => String(n+1).padStart(3,"0");
+
+function pool(){
+  return CARDS.filter(c => (active.size===0 || active.has(c.d)) && (!onlyAgain || marks[c.id]==="again"));
+}
+function rebuild(keepId){
+  const p = pool().map(c=>c.id);
+  if (shuffled) for (let i=p.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [p[i],p[j]]=[p[j],p[i]] }
+  order = p;
+  const k = keepId!=null ? order.indexOf(keepId) : -1;
+  pos = k>=0 ? k : 0; flipped = false;
+  render();
+}
+function chips(){
+  const el = $("chips"); el.innerHTML = "";
+  const mk = (label, key, n) => {
+    const b = document.createElement("button"); b.className = "chip";
+    const on = key===null ? active.size===0 : active.has(key);
+    b.setAttribute("aria-pressed", on); b.innerHTML = esc(label) + `<span class="n">${n}</span>`;
+    b.onclick = () => {
+      if (key===null) active.clear(); else { active.has(key) ? active.delete(key) : active.add(key) }
+      store.set("eta-decks",[...active]); chips(); rebuild();
+    };
+    el.appendChild(b);
+  };
+  mk("All", null, CARDS.length);
+  DECKS.forEach(d => mk(d, d, CARDS.filter(c=>c.d===d).length));
+}
+function refsHTML(c){
+  return c.r.length ? `<span class="label">Point to</span>` + c.r.map(x=>`<span class="ref">${esc(x)}</span>`).join("") : `<span class="label">No slide: answer verbally</span>`;
+}
+function render(){
+  const p = pool(), got = p.filter(c=>marks[c.id]==="got").length, ag = p.filter(c=>marks[c.id]==="again").length;
+  $("stats").textContent = `${order.length ? pos+1 : 0} / ${order.length}  ·  got ${got}  ·  again ${ag}`;
+  $("tg").style.width = p.length ? (got/p.length*100)+"%" : "0";
+  $("ta").style.width = p.length ? (ag/p.length*100)+"%" : "0";
+  $("study").hidden = listMode; $("controls").hidden = listMode; $("keys").hidden = listMode; $("list").hidden = !listMode;
+  if (listMode) return renderList(p);
+  const card = $("card");
+  if (!order.length){ card.innerHTML = `<div class="empty">${onlyAgain ? "Nothing marked “again” here. Nice." : "No cards in this selection."}</div>`; return }
+  const c = CARDS[order[pos]], m = marks[c.id];
+  const head = `<div class="tickhead"><span class="label">Card ${pad(c.id)} · ${esc(c.d)}</span><span class="who">${esc(c.w)}</span></div>`;
+  const badge = m ? `<span class="mark ${m}">${m==="got"?"GOT IT":"AGAIN"}</span>` : "";
+  card.classList.toggle("back", flipped);
+  card.innerHTML = badge + head + (flipped
+    ? `<p class="q">${esc(c.q)}</p><div class="ans">${c.a}</div><div class="refs">${refsHTML(c)}</div>`
+    : `<p class="q">${esc(c.q)}</p><span class="hint">Tap or press space to see the answer</span>`);
+}
+function renderList(p){
+  $("list").innerHTML = p.map(c=>`<div class="item"><div class="meta"><span class="label">Card ${pad(c.id)} · ${esc(c.d)}</span><span class="who">${esc(c.w)}</span></div><p class="q">${esc(c.q)}</p><div class="ans">${c.a}</div><div class="refs">${refsHTML(c)}</div></div>`).join("") || `<div class="empty">No cards in this selection.</div>`;
+}
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function flip(){
+  if (!order.length) return;
+  const card = $("card");
+  if (reduce){ flipped=!flipped; render(); return }
+  card.classList.add("turn");
+  setTimeout(()=>{ flipped=!flipped; render(); card.classList.remove("turn") }, 160);
+}
+function go(d){ if(!order.length) return; pos = (pos + d + order.length) % order.length; flipped=false; render() }
+function mark(v){
+  if (!order.length) return;
+  const id = order[pos]; marks[id] = v; store.set("eta-marks", marks);
+  if (onlyAgain && v==="got"){ rebuild(); return }
+  go(1);
+}
+$("card").onclick = flip;
+$("card").onkeydown = e => { if (e.key==="Enter"){ e.preventDefault(); flip() } };
+$("prev").onclick = ()=>go(-1); $("next").onclick = ()=>go(1);
+$("againBtn").onclick = ()=>mark("again"); $("gotBtn").onclick = ()=>mark("got");
+$("shuffle").onclick = e => { shuffled=!shuffled; e.currentTarget.setAttribute("aria-pressed",shuffled); rebuild() };
+$("onlyAgain").onclick = e => { onlyAgain=!onlyAgain; e.currentTarget.setAttribute("aria-pressed",onlyAgain); rebuild() };
+$("listBtn").onclick = e => { listMode=!listMode; e.currentTarget.setAttribute("aria-pressed",listMode); render() };
+$("reset").onclick = () => { marks = {}; store.set("eta-marks", marks); rebuild(order[pos]) };
+document.addEventListener("keydown", e => {
+  if (listMode || e.target.closest("button")) return;
+  if (e.key===" "){ e.preventDefault(); flip() }
+  else if (e.key==="ArrowRight") go(1);
+  else if (e.key==="ArrowLeft") go(-1);
+  else if (e.key==="1") mark("again");
+  else if (e.key==="2") mark("got");
+});
+chips(); rebuild();
+</script>
