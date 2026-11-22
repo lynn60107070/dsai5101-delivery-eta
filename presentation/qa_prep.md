@@ -617,3 +617,120 @@ untouched until the one final run."
   averaging.
 - Slide 16's "app's 6.24" is a different number: the app's promise de-padded per distance band, on the
   validation days. Same value by coincidence.
+
+## 10. Study questions (22 Nov) [everyone]
+
+Plain-language answers to questions that came up while rehearsing. Some overlap with earlier sections;
+these are the short versions to say out loud.
+
+**What's the difference between the estimate and the promise?**
+"The estimate is our best guess of when it will most likely arrive; the promise is that guess plus a
+safety buffer, a time it will almost certainly arrive by."
+- Estimate: gradient boosting, aims at the middle (about half of orders arrive after it). Judged on how
+  close it is: MAE 6.49.
+- Promise: boosting with quantile loss at the 80th percentile (about 80% arrive before it). Judged on how
+  often it's late: 6.1% vs the app's 5.0% more than 5 min late, at the same 38.2-min average.
+- Delay = actual − promise; only used to count late orders.
+- Pizza: estimate 45, our promise ~53 (+2.7 shift ≈ 56), app's promise 51, actual 43.
+
+**Why these three models, out of all the models that exist?**
+"One model from each main family for table data: linear, averaged trees and boosted trees, from simple
+to complex, so we could see whether complexity pays off."
+- Elastic-Net (linear): explainable in minutes, handles correlated inputs like the 23 district columns;
+  plain linear regression is the special case with no penalty.
+- Random Forest (bagging, averaged trees): captures curves and interactions, robust, little tuning.
+- Gradient boosting (sequential trees): usually the most accurate on tabular data; can optimise MAE.
+- Not chosen: a single tree (RF and boosting improve on it); k-NN and SVR (too slow on 400k rows, poor
+  with many 0/1 columns); neural networks (need more features and data to beat trees on tables, harder
+  to explain); XGBoost/LightGBM (same family: LightGBM gave 6.247 vs 6.251).
+- Result: median 9.46 → Elastic-Net 6.80 → RF 6.54 → boosting 6.49. The big gain is the first step.
+
+**Did the three models need different inputs? Trees can handle categories, Elastic-Net can't.**
+"In scikit-learn all three need numbers, so all three got the same 33 numeric inputs; only Elastic-Net
+was also scaled."
+- District is stored as an ID; a linear model would read "16 > 5", so it had to be one-hot encoded
+  (23 on/off columns). Using the same encoding for all three keeps the comparison fair.
+- Scaling only matters for the linear model (km vs minutes); trees split on thresholds, so units don't
+  matter. 23 columns is small, so one-hot is fine for trees.
+
+**How does the forward-chaining validation work, exactly?**
+"We practised four times, each time learning from earlier days and testing on the next day, then tested
+once on two days we'd kept locked."
+- Test days (Sun 23, Mon 24) locked away until the end.
+- Fold 1: train 17–18, check 19. Fold 2: train 17–19, check 20. Fold 3: 17–20 → 21. Fold 4: 17–21 → 22.
+- After each check: write down the MAE and throw that model away; the next fold starts a fresh model.
+  The model never learns from the check day; it's only an exam.
+- Average the four MAEs = the score for that setting.
+- Why not ordinary k-fold: random shuffling would train on Thursday and test on Wednesday, i.e. use the
+  future, and flatter the model.
+
+**What's the point of the score? What do you do with it?**
+"It's how we made every choice fairly: try the options, keep whichever scores best on days the model
+hadn't seen, without touching the test days."
+- Training error can't be used: big trees memorise (511 leaves: 2.45 on seen days, 6.63 on new days).
+- Test days can't be used: then the final exam would no longer be fair.
+- Choices made with it: tree size and learning rate (B6), Haversine vs Manhattan (tie, kept the
+  simpler), raw vs log target (raw, 6.59 vs 6.73), which load definition (relative), whether the
+  extension features help (6.25 → 5.92).
+- Like practice exams: pick the study method with the best practice score, then sit the real exam once.
+
+**So the folds were used for hyperparameter tuning?**
+Yes, that was the main use: each candidate setting was trained and scored on all four folds, and the
+lowest average won. The same folds also chose the features and design options above. Then: freeze,
+retrain on all six days, score the test days once (6.49).
+
+**Why random search and not grid search?**
+"A grid would have needed thousands of model fits; random search tries more different values of the
+settings that matter for a fraction of the cost, and tuning only moved the error by 0.03 minutes anyway."
+- Every try = 4 fits on hundreds of thousands of rows. 5 settings × 5 values = 3,125 combinations ×
+  4 folds = 12,500 fits; our boosting search was 20 tries = 80 fits.
+- Usually only one or two settings matter (e.g. learning rate). A grid re-tests the same few values of
+  those; random search gives a new value every try (Bergstra & Bengio, 2012).
+- It draws from ranges, so it finds values like 0.038 a grid would never try.
+- Budgets: Elastic-Net 30 tries (all rows), boosting 20 (150k rows), RF 10 (100k rows).
+
+**Was the missingness MCAR, MAR or MNAR?**
+"Not completely at random: missing prep estimates go with longer trips, and they're still slower at the
+same distance, so it may even be not at random. That's why we didn't drop them; we filled them in and
+added a flag."
+- MCAR = unrelated to anything; MAR = explained by observed columns; MNAR = depends on something unseen.
+- Not MCAR: missing/placeholder prep estimates (1.4% + 13.8%) are longer trips.
+- Distance doesn't explain it all: 2–5 min slower at the same distance (report Fig. 1), so something
+  unobserved is involved, pointing toward MNAR; it can't be proven, since the missing value is unseen.
+- Handling: median imputation inside each fold + "missing" and "placeholder" flags, so the model can
+  learn that these orders run slower.
+- Other gaps are missing by design (load in the first 24 h, restaurant history on a first order: flagged)
+  or removed with their rows (1 order without arrival; pickups on refused attempts).
+
+**How would you build a model that predicts the app's padding?**
+"Train a second model whose target is the app's promise, using the same order-time inputs; then remove
+each order's own predicted padding instead of one average."
+- Target: the promise itself, or padding = promise − our estimate. Inputs: distance, hour, district,
+  prep estimate, load, rider pressure; plus the 30-minute floor as a rule (max(30, ·)), since 35% of
+  promises sit exactly at 30.
+- Train on the training days only, and check it with the same forward-chaining folds.
+- Uses: per-order de-padding (fairer than one average or per distance band), and a readable description
+  of the app's rule (how much buffer for which orders).
+- Why we didn't: it models Meituan's business rule, not delivery time, so it's a different question; and
+  our per-distance-band de-padding (6.36) already gives the app most of that benefit. Fair future work.
+
+**If another delivery company in Qatar wanted to use this, what would they need to do?**
+"Reuse the pipeline and method, not the trained model: retrain on their own data, add local features,
+test it in the shadow of their current system, then monitor and retrain."
+1. Data: map their logs to the same columns (order time, restaurant and customer location, prep
+   estimate, zones, courier events) and run the same cleaning checks (duplicates, hidden zeros,
+   pre-booked, implausible times).
+2. Retrain from scratch on their orders: Doha's roads, couriers and restaurants differ from this city, so
+   Meituan's model weights don't transfer. Our numbers become the benchmark to beat, and the median and
+   their current ETA the baselines.
+3. Local features: Friday–Saturday weekend, Ramadan hours (iftar and suhoor peaks), heat and sandstorms
+   (weather), road distance from a routing service instead of straight-line, mall and compound addresses.
+   Collect several weeks first, so weekday effects can be learned (our one-weekend limit).
+4. Validate the same way: forward-chaining by day, test kept locked, error reported by zone (fairness).
+5. Deploy carefully: run in shadow mode next to their current ETA, then an A/B test on late rate and
+   complaints, not MAE alone.
+6. Drift: monitor the input mix (distance, zones, missing prep estimates) and live MAE by zone and hour;
+   retrain on a schedule (e.g. weekly on a rolling window) and whenever error drifts. Tree models aren't
+   fine-tuned like neural networks; you retrain on recent data.
+7. Promises: use the quantile model as the starting buffer, then update after dispatch, which is where the
+   platform's advantage came from. Track rider workload as well as lateness.
